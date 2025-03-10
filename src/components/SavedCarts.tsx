@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { SavedCart } from '@/utils/cartUtils';
-import { getCartItemCount } from '@/utils/cartUtils';
-import { ChevronDown, ChevronUp, CalendarDays, Clock, ShoppingBag, Tag } from 'lucide-react';
+import { getCartItemCount, formatCurrency, calculateTotal } from '@/utils/cartUtils';
+import { ChevronDown, ChevronUp, ShoppingBag } from 'lucide-react';
+import ReadOnlyCartItem from './ReadOnlyCartItem';
 
 interface SavedCartsProps {
   savedCarts: SavedCart[];
@@ -12,10 +13,19 @@ interface SavedCartsProps {
 
 const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDeleteCart }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [expandedCartId, setExpandedCartId] = useState<string | null>(null);
 
   if (savedCarts.length === 0) {
     return null;
   }
+
+  const toggleCartExpansion = (cartId: string) => {
+    if (expandedCartId === cartId) {
+      setExpandedCartId(null);
+    } else {
+      setExpandedCartId(cartId);
+    }
+  };
 
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in">
@@ -35,13 +45,13 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
       </div>
 
       {isExpanded && (
-        <div className="mt-4 space-y-3">
+        <div className="mt-4 space-y-6">
           {savedCarts.map((cart) => (
             <div 
               key={cart.id} 
-              className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-4 transition-all hover-scale"
+              className="bg-secondary/30 rounded-lg p-4 transition-all"
             >
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center space-x-4">
                   <div className="bg-primary/5 rounded-full p-2">
                     <ShoppingBag className="h-4 w-4 text-primary/70" />
@@ -53,10 +63,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                     </div>
                     
                     <div className="flex items-center text-xs text-muted-foreground">
-                      <CalendarDays className="h-3 w-3 mr-1" />
-                      <span className="mr-2">{cart.date.split(" at ")[0]}</span>
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>{cart.date.split(" at ")[1]}</span>
+                      <span className="mr-2">{cart.date}</span>
                     </div>
                   </div>
                 </div>
@@ -65,6 +72,16 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                   <div className="text-xs font-medium bg-primary/10 text-primary rounded-full px-2 py-1">
                     {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? 'item' : 'items'}
                   </div>
+                  
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleCartExpansion(cart.id);
+                    }}
+                    className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 font-medium rounded-md text-sm transition-colors"
+                  >
+                    {expandedCartId === cart.id ? 'Hide' : 'View'}
+                  </button>
                   
                   <button 
                     onClick={(e) => {
@@ -87,6 +104,24 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                   </button>
                 </div>
               </div>
+              
+              {expandedCartId === cart.id && (
+                <div className="mt-3 space-y-2 border-t pt-3 border-secondary">
+                  {cart.items.map((item) => (
+                    <ReadOnlyCartItem 
+                      key={item.id}
+                      item={item}
+                    />
+                  ))}
+                  
+                  <div className="mt-4 flex justify-end">
+                    <div className="bg-primary/5 rounded-lg p-3">
+                      <span className="text-muted-foreground mr-2">Total:</span>
+                      <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items))}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
