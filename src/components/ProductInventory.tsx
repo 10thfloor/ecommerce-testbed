@@ -86,24 +86,25 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
 
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in h-full">
-      <div className="mb-4 flex items-center">
-        <div className="bg-primary/10 rounded-lg p-1 mr-2">
-          <ShoppingCart className="h-4 w-4 text-primary" />
+      <div className="mb-6 flex items-center">
+        <div className="bg-primary/10 rounded-lg p-2 mr-3">
+          <ShoppingCart className="h-5 w-5 text-primary" />
         </div>
-        <h3 className="text-lg font-medium">Product Inventory</h3>
+        <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products.map((product) => (
           <div 
             key={product.id}
-            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10 cursor-not-allowed'} rounded-lg p-3 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''}`}
+            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10 cursor-not-allowed'} 
+              rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''}`}
             onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
           >
-            <div className="flex flex-col">
-              <div className="flex justify-between items-start">
-                <h4 className="font-medium text-sm mb-1">{product.name}</h4>
-                <div className={`text-xs font-medium rounded-full px-2 py-0.5 ${
+            <div className="flex flex-col h-full">
+              <div className="mb-2">
+                <h4 className="font-medium text-base mb-1">{product.name}</h4>
+                <div className={`text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 ${
                   product.inventory === 0 ? 'bg-destructive/10 text-destructive' :
                   product.inventory <= 3 ? 'bg-warning/10 text-warning' :
                   'bg-success/10 text-success'
@@ -112,24 +113,25 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
                    product.inventory <= 3 ? `Only ${product.inventory} left` : 
                    `${product.inventory} in stock`}
                 </div>
+                <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{product.description}</p>
               </div>
-              <p className="text-muted-foreground text-xs mb-2 line-clamp-1">{product.description}</p>
               
               <div className="flex justify-between items-center mt-auto">
                 <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
                 {product.inventory > 0 ? (
                   <button 
-                    className="p-1 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
+                    className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
                       onAddToCart(product.id, product.price);
                     }}
+                    aria-label="Add to cart"
                   >
-                    <Plus className="h-3 w-3 text-primary" />
+                    <Plus className="h-4 w-4 text-primary" />
                   </button>
                 ) : (
-                  <div className="p-1 bg-destructive/10 rounded-full">
-                    <AlertCircle className="h-3 w-3 text-destructive" />
+                  <div className="p-1.5 bg-destructive/10 rounded-full">
+                    <AlertCircle className="h-4 w-4 text-destructive" />
                   </div>
                 )}
               </div>
