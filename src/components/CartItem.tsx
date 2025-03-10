@@ -3,6 +3,7 @@ import React from 'react';
 import { Minus, Plus, Trash2, BookmarkPlus } from 'lucide-react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
+import { useProductName } from '@/hooks/useProductName';
 
 interface CartItemProps {
   item: CartItemType;
@@ -17,6 +18,8 @@ const CartItem: React.FC<CartItemProps> = ({
   onUpdateQuantity,
   onSaveForLater 
 }) => {
+  const productName = useProductName(item.productId);
+  
   const handleIncrement = () => {
     onUpdateQuantity(item.id, item.quantity + 1);
   };
@@ -34,8 +37,10 @@ const CartItem: React.FC<CartItemProps> = ({
           <span className="font-medium text-primary">{item.productId}</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-sm text-muted-foreground">Product ID</span>
-          <span className="font-medium">{item.productId}</span>
+          <span className="font-medium">{productName}</span>
+          <span className="text-xs text-muted-foreground">
+            {formatCurrency(item.price)} × {item.quantity}
+          </span>
         </div>
       </div>
       

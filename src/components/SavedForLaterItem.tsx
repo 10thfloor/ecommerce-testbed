@@ -3,6 +3,7 @@ import React from 'react';
 import { ShoppingCart, Trash2 } from 'lucide-react';
 import { CartItem } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
+import { useProductName } from '@/hooks/useProductName';
 
 interface SavedForLaterItemProps {
   item: CartItem;
@@ -15,6 +16,8 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
   onMoveToCart, 
   onRemove 
 }) => {
+  const productName = useProductName(item.productId);
+  
   return (
     <div className="card-glass p-3 mb-2 animate-fade-in flex items-center justify-between">
       <div className="flex items-center">
@@ -22,9 +25,8 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
           <span className="font-medium text-primary">{item.productId}</span>
         </div>
         <div className="flex flex-col">
-          <span className="text-sm text-muted-foreground">Product ID</span>
-          <span className="font-medium">{item.productId}</span>
-          <span className="text-xs text-muted-foreground mt-1">
+          <span className="font-medium">{productName}</span>
+          <span className="text-xs text-muted-foreground">
             {formatCurrency(item.price)} × {item.quantity}
           </span>
         </div>
