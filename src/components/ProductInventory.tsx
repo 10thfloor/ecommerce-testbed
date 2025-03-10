@@ -105,9 +105,9 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
               <div className="mb-2">
                 <h4 className="font-medium text-base mb-1">{product.name}</h4>
                 <div className={`text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 ${
-                  product.inventory === 0 ? 'bg-destructive/10 text-destructive' :
-                  product.inventory <= 3 ? 'bg-warning/10 text-warning' :
-                  'bg-success/10 text-success'
+                  product.inventory === 0 ? 'bg-destructive/20 text-destructive' :
+                  product.inventory <= 3 ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400' :
+                  'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
                 }`}>
                   {product.inventory === 0 ? 'Out of stock' : 
                    product.inventory <= 3 ? `Only ${product.inventory} left` : 
