@@ -21,11 +21,19 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
   return (
     <div className="card-glass p-3 mb-2 animate-fade-in">
       <div className="flex flex-col">
-        <div className="flex items-center mb-2">
-          <div className="bg-primary/10 rounded-lg p-2 mr-3">
-            <span className="font-medium text-primary">{item.productId}</span>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            <div className="bg-primary/10 rounded-lg p-2 mr-3">
+              <span className="font-medium text-primary">{item.productId}</span>
+            </div>
+            <span className="font-medium text-base">{productName}</span>
           </div>
-          <span className="font-medium text-base">{productName}</span>
+          
+          <div className="flex items-center">
+            <span className="text-xs text-muted-foreground px-2">
+              Qty: {item.quantity}
+            </span>
+          </div>
         </div>
         
         <div className="flex items-center justify-between">

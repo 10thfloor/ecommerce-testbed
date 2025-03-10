@@ -33,17 +33,13 @@ const CartItem: React.FC<CartItemProps> = ({
   return (
     <div className="card-glass p-4 mb-3 animate-fade-in">
       <div className="flex flex-col">
-        <div className="flex items-center mb-2">
-          <div className="bg-primary/10 rounded-lg p-2 mr-3">
-            <span className="font-medium text-primary">{item.productId}</span>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            <div className="bg-primary/10 rounded-lg p-2 mr-3">
+              <span className="font-medium text-primary">{item.productId}</span>
+            </div>
+            <span className="font-medium text-base">{productName}</span>
           </div>
-          <span className="font-medium text-base">{productName}</span>
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">
-            {formatCurrency(item.price)} × {item.quantity}
-          </span>
           
           <div className="flex items-center space-x-2">
             <div className="bg-secondary rounded-md flex items-center">
@@ -63,7 +59,15 @@ const CartItem: React.FC<CartItemProps> = ({
                 <Plus className="h-4 w-4" />
               </button>
             </div>
-            
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">
+            {formatCurrency(item.price)} × {item.quantity}
+          </span>
+          
+          <div className="flex items-center space-x-2">
             <div className="font-medium w-20 text-right">
               {formatCurrency(item.price * item.quantity)}
             </div>
