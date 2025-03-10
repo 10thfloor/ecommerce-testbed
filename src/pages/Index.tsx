@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import UserProfile from '@/components/UserProfile';
 import Cart from '@/components/Cart';
 import SavedCarts from '@/components/SavedCarts';
-import AddItemForm from '@/components/AddItemForm';
+import ProductInventory from '@/components/ProductInventory';
 import { 
   CartItem,
   SavedCart,
@@ -26,19 +25,28 @@ const Index = () => {
     });
   }, []);
 
-  const handleAddItem = (productId: string | number, quantity: number, price: number) => {
-    const newItem: CartItem = {
-      id: Date.now(),
-      productId,
-      quantity,
-      price
-    };
+  const handleAddToCart = (productId: number, price: number) => {
+    const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
     
-    setCartItems([...cartItems, newItem]);
+    if (existingItemIndex !== -1) {
+      // If item already exists in cart, increment quantity
+      const updatedItems = [...cartItems];
+      updatedItems[existingItemIndex].quantity += 1;
+      setCartItems(updatedItems);
+    } else {
+      // Otherwise add new item
+      const newItem: CartItem = {
+        id: Date.now(),
+        productId,
+        quantity: 1,
+        price
+      };
+      setCartItems([...cartItems, newItem]);
+    }
     
     toast({
       title: "Item Added",
-      description: `Added ${quantity} of product #${productId} to your cart.`,
+      description: `Added product #${productId} to your cart.`,
     });
   };
 
@@ -117,6 +125,10 @@ const Index = () => {
           </div>
           
           <div className="cart-section">
+            <ProductInventory onAddToCart={handleAddToCart} />
+          </div>
+          
+          <div className="cart-section">
             <SavedCarts 
               savedCarts={savedCarts}
               onLoadCart={handleLoadCart}
@@ -131,10 +143,6 @@ const Index = () => {
               onRemoveItem={handleRemoveItem}
               onUpdateQuantity={handleUpdateQuantity}
             />
-          </div>
-          
-          <div className="cart-section">
-            <AddItemForm onAddItem={handleAddItem} />
           </div>
         </div>
       </div>
