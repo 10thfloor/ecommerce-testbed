@@ -35,53 +35,53 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
       </div>
 
       {isExpanded && (
-        <div className="mt-4 grid gap-4 sm:grid-cols-1 md:grid-cols-2">
+        <div className="mt-4 space-y-3">
           {savedCarts.map((cart) => (
             <div 
               key={cart.id} 
               className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-4 transition-all hover-scale"
             >
-              <div className="flex flex-col h-full">
-                <div className="mb-3">
-                  <div className="flex items-center text-sm mb-2">
-                    <Tag className="h-4 w-4 mr-1.5 text-primary" />
-                    <span className="font-medium truncate">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-primary/5 rounded-full p-2">
+                    <ShoppingBag className="h-4 w-4 text-primary/70" />
+                  </div>
+                  
+                  <div>
+                    <div className="font-medium text-sm mb-0.5">
                       Cart {cart.id.substring(0, 8)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center text-xs text-muted-foreground mb-1">
-                    <CalendarDays className="h-3.5 w-3.5 mr-1.5" />
-                    <span>{cart.date.split(" at ")[0]}</span>
-                  </div>
-                  
-                  <div className="flex items-center text-xs text-muted-foreground">
-                    <Clock className="h-3.5 w-3.5 mr-1.5" />
-                    <span>{cart.date.split(" at ")[1]}</span>
+                    </div>
+                    
+                    <div className="flex items-center text-xs text-muted-foreground">
+                      <CalendarDays className="h-3 w-3 mr-1" />
+                      <span className="mr-2">{cart.date.split(" at ")[0]}</span>
+                      <Clock className="h-3 w-3 mr-1" />
+                      <span>{cart.date.split(" at ")[1]}</span>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="text-sm mt-auto mb-3">
-                  <span className="text-muted-foreground">Items: </span>
-                  <span className="font-medium">{getCartItemCount(cart.items)}</span>
-                </div>
-                
-                <div className="flex items-center space-x-2 mt-auto">
+                <div className="flex items-center space-x-2">
+                  <div className="text-xs font-medium bg-primary/10 text-primary rounded-full px-2 py-1">
+                    {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? 'item' : 'items'}
+                  </div>
+                  
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
                       onLoadCart(cart.id);
                     }}
-                    className="flex-1 py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-sm transition-colors"
+                    className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-sm transition-colors"
                   >
                     Load
                   </button>
+                  
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
                       onDeleteCart(cart.id);
                     }}
-                    className="flex-1 py-1.5 px-3 bg-destructive/10 hover:bg-destructive/20 text-destructive font-medium rounded-md text-sm transition-colors"
+                    className="py-1.5 px-3 bg-destructive/10 hover:bg-destructive/20 text-destructive font-medium rounded-md text-sm transition-colors"
                   >
                     Delete
                   </button>
