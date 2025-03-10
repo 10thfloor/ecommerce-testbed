@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCart, Plus } from 'lucide-react';
+import { ShoppingCart, Plus, AlertCircle } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 
 export interface Product {
@@ -9,6 +9,7 @@ export interface Product {
   price: number;
   description: string;
   image: string;
+  inventory: number;
 }
 
 interface ProductInventoryProps {
@@ -22,56 +23,64 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
       name: "Alpha SV Jacket",
       price: 799.99,
       description: "Premium waterproof hardshell for extreme alpine conditions",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 5
     },
     {
       id: 2,
       name: "Beta AR Pants",
       price: 499.99,
       description: "All-round mountaineering pants with GORE-TEX protection",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 8
     },
     {
       id: 3,
       name: "Atom LT Hoody",
       price: 259.99,
       description: "Lightweight insulated mid-layer with exceptional breathability",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 12
     },
     {
       id: 4,
       name: "Cerium Down Vest",
       price: 349.99,
       description: "Ultralight 850 fill-power down vest for alpine climbing",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 3
     },
     {
       id: 5,
       name: "Gamma MX Softshell",
       price: 349.99,
       description: "Versatile softshell jacket for mixed weather conditions",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 6
     },
     {
       id: 6,
       name: "Zeta SL Rain Jacket",
       price: 299.99,
       description: "Superlight emergency rain protection for hiking",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 0
     },
     {
       id: 7,
       name: "Covert Fleece",
       price: 179.99,
       description: "Classic fleece with a clean aesthetic for everyday wear",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 15
     },
     {
       id: 8,
       name: "Proton AR Insulated",
       price: 399.99,
       description: "Advanced breathable insulation for cold, active pursuits",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      inventory: 4
     }
   ];
 
@@ -88,24 +97,41 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
         {products.map((product) => (
           <div 
             key={product.id}
-            className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-3 transition-all hover-scale cursor-pointer"
-            onClick={() => onAddToCart(product.id, product.price)}
+            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10 cursor-not-allowed'} rounded-lg p-3 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''}`}
+            onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
           >
             <div className="flex flex-col">
-              <h4 className="font-medium text-sm mb-1">{product.name}</h4>
+              <div className="flex justify-between items-start">
+                <h4 className="font-medium text-sm mb-1">{product.name}</h4>
+                <div className={`text-xs font-medium rounded-full px-2 py-0.5 ${
+                  product.inventory === 0 ? 'bg-destructive/10 text-destructive' :
+                  product.inventory <= 3 ? 'bg-warning/10 text-warning' :
+                  'bg-success/10 text-success'
+                }`}>
+                  {product.inventory === 0 ? 'Out of stock' : 
+                   product.inventory <= 3 ? `Only ${product.inventory} left` : 
+                   `${product.inventory} in stock`}
+                </div>
+              </div>
               <p className="text-muted-foreground text-xs mb-2 line-clamp-1">{product.description}</p>
               
               <div className="flex justify-between items-center mt-auto">
                 <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
-                <button 
-                  className="p-1 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onAddToCart(product.id, product.price);
-                  }}
-                >
-                  <Plus className="h-3 w-3 text-primary" />
-                </button>
+                {product.inventory > 0 ? (
+                  <button 
+                    className="p-1 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAddToCart(product.id, product.price);
+                    }}
+                  >
+                    <Plus className="h-3 w-3 text-primary" />
+                  </button>
+                ) : (
+                  <div className="p-1 bg-destructive/10 rounded-full">
+                    <AlertCircle className="h-3 w-3 text-destructive" />
+                  </div>
+                )}
               </div>
             </div>
           </div>

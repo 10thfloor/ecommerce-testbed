@@ -15,11 +15,24 @@ import {
   generateCartId
 } from '@/utils/cartUtils';
 
+// Product inventory map to track available inventory
+const productInventory: Record<number, number> = {
+  1: 5,  // Alpha SV Jacket
+  2: 8,  // Beta AR Pants
+  3: 12, // Atom LT Hoody
+  4: 3,  // Cerium Down Vest
+  5: 6,  // Gamma MX Softshell
+  6: 0,  // Zeta SL Rain Jacket - Out of stock
+  7: 15, // Covert Fleece
+  8: 4   // Proton AR Insulated
+};
+
 const Index = () => {
   const { toast } = useToast();
   const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
   const [savedCarts, setSavedCarts] = useState<SavedCart[]>(mockSavedCarts);
   const [savedForLaterItems, setSavedForLaterItems] = useState<CartItem[]>(mockSavedForLaterItems);
+  const [inventory, setInventory] = useState<Record<number, number>>(productInventory);
   const [userId] = useState("user-123");
 
   // Add animation classes when component mounts
@@ -30,13 +43,37 @@ const Index = () => {
   }, []);
 
   const handleAddToCart = (productId: number, price: number) => {
+    // Check if product is in stock
+    if (inventory[productId] <= 0) {
+      toast({
+        title: "Out of Stock",
+        description: `Product #${productId} is currently out of stock.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
     
     if (existingItemIndex !== -1) {
-      // If item already exists in cart, increment quantity
-      const updatedItems = [...cartItems];
-      updatedItems[existingItemIndex].quantity += 1;
-      setCartItems(updatedItems);
+      // If item already exists in cart, increment quantity if inventory allows
+      if (cartItems[existingItemIndex].quantity < inventory[productId]) {
+        const updatedItems = [...cartItems];
+        updatedItems[existingItemIndex].quantity += 1;
+        setCartItems(updatedItems);
+        
+        // Update inventory
+        const updatedInventory = { ...inventory };
+        updatedInventory[productId] -= 1;
+        setInventory(updatedInventory);
+      } else {
+        toast({
+          title: "Inventory Limit Reached",
+          description: `Sorry, we only have ${inventory[productId]} of this item in stock.`,
+          variant: "destructive",
+        });
+        return;
+      }
     } else {
       // Otherwise add new item
       const newItem: CartItem = {
@@ -46,6 +83,11 @@ const Index = () => {
         price
       };
       setCartItems([...cartItems, newItem]);
+      
+      // Update inventory
+      const updatedInventory = { ...inventory };
+      updatedInventory[productId] -= 1;
+      setInventory(updatedInventory);
     }
     
     toast({
@@ -55,20 +97,53 @@ const Index = () => {
   };
 
   const handleUpdateQuantity = (id: string | number, quantity: number) => {
+    const cartItem = cartItems.find(item => item.id === id);
+    if (!cartItem) return;
+    
+    const productId = cartItem.productId;
+    const currentQuantity = cartItem.quantity;
+    
+    // Calculate available inventory (current inventory + what's already in cart)
+    const availableInventory = inventory[Number(productId)] + currentQuantity;
+    
+    if (quantity > availableInventory) {
+      toast({
+        title: "Inventory Limit Reached",
+        description: `Sorry, we only have ${availableInventory} of this item in stock.`,
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Update cart item quantity
     setCartItems(
       cartItems.map(item => 
         item.id === id ? { ...item, quantity } : item
       )
     );
+    
+    // Update inventory based on quantity change
+    const updatedInventory = { ...inventory };
+    updatedInventory[Number(productId)] = availableInventory - quantity;
+    setInventory(updatedInventory);
   };
 
   const handleRemoveItem = (id: string | number) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-    
-    toast({
-      title: "Item Removed",
-      description: "The item has been removed from your cart.",
-    });
+    const itemToRemove = cartItems.find(item => item.id === id);
+    if (itemToRemove) {
+      // Return items to inventory
+      const updatedInventory = { ...inventory };
+      updatedInventory[Number(itemToRemove.productId)] += itemToRemove.quantity;
+      setInventory(updatedInventory);
+      
+      // Remove from cart
+      setCartItems(cartItems.filter(item => item.id !== id));
+      
+      toast({
+        title: "Item Removed",
+        description: "The item has been removed from your cart.",
+      });
+    }
   };
 
   const handleSaveCart = () => {
@@ -95,7 +170,36 @@ const Index = () => {
     const cartToLoad = savedCarts.find(cart => cart.id === cartId);
     
     if (cartToLoad) {
+      // Check if there's enough inventory for all items in the saved cart
+      const tempInventory = { ...inventory };
+      let insufficientInventory = false;
+      
+      // First, return current cart items to inventory
+      cartItems.forEach(item => {
+        tempInventory[Number(item.productId)] += item.quantity;
+      });
+      
+      // Then check if we can load the saved cart
+      cartToLoad.items.forEach(item => {
+        if (tempInventory[Number(item.productId)] < item.quantity) {
+          insufficientInventory = true;
+        } else {
+          tempInventory[Number(item.productId)] -= item.quantity;
+        }
+      });
+      
+      if (insufficientInventory) {
+        toast({
+          title: "Insufficient Inventory",
+          description: "Some items in this saved cart are no longer available in sufficient quantity.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // If we have enough inventory, update the cart and inventory
       setCartItems([...cartToLoad.items]);
+      setInventory(tempInventory);
       
       toast({
         title: "Cart Loaded",
@@ -117,8 +221,11 @@ const Index = () => {
     const itemToSave = cartItems.find(item => item.id === id);
     
     if (itemToSave) {
+      // Add to saved items
       setSavedForLaterItems([...savedForLaterItems, itemToSave]);
-      setCartItems(cartItems.filter(item => item.id !== id));
+      
+      // Remove from cart and return items to inventory
+      handleRemoveItem(id);
       
       toast({
         title: "Item Saved",
@@ -131,10 +238,31 @@ const Index = () => {
     const itemToMove = savedForLaterItems.find(item => item.id === id);
     
     if (itemToMove) {
+      // Check inventory availability
+      const productId = Number(itemToMove.productId);
+      
       // Check if the product already exists in the cart
       const existingItemIndex = cartItems.findIndex(cartItem => 
         cartItem.productId === itemToMove.productId
       );
+      
+      const totalRequestedQuantity = existingItemIndex !== -1 
+        ? cartItems[existingItemIndex].quantity + itemToMove.quantity 
+        : itemToMove.quantity;
+      
+      if (inventory[productId] < itemToMove.quantity) {
+        toast({
+          title: "Insufficient Inventory",
+          description: `Sorry, we only have ${inventory[productId]} of this item available.`,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Update inventory
+      const updatedInventory = { ...inventory };
+      updatedInventory[productId] -= itemToMove.quantity;
+      setInventory(updatedInventory);
       
       if (existingItemIndex !== -1) {
         // If the product already exists, increment quantity
