@@ -9,9 +9,16 @@ interface CartProps {
   onSaveCart: () => void;
   onRemoveItem: (id: string | number) => void;
   onUpdateQuantity: (id: string | number, quantity: number) => void;
+  onSaveForLater: (id: string | number) => void;
 }
 
-const Cart: React.FC<CartProps> = ({ items, onSaveCart, onRemoveItem, onUpdateQuantity }) => {
+const Cart: React.FC<CartProps> = ({ 
+  items, 
+  onSaveCart, 
+  onRemoveItem, 
+  onUpdateQuantity,
+  onSaveForLater 
+}) => {
   const total = calculateTotal(items);
   
   return (
@@ -46,6 +53,7 @@ const Cart: React.FC<CartProps> = ({ items, onSaveCart, onRemoveItem, onUpdateQu
                 item={item}
                 onRemove={onRemoveItem}
                 onUpdateQuantity={onUpdateQuantity}
+                onSaveForLater={onSaveForLater}
               />
             ))}
           </div>

@@ -25,6 +25,9 @@ export const mockSavedCarts: SavedCart[] = [
   }
 ];
 
+// Mock data for saved for later items
+export const mockSavedForLaterItems: CartItem[] = [];
+
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

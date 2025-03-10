@@ -4,12 +4,14 @@ import { useToast } from "@/components/ui/use-toast";
 import UserProfile from '@/components/UserProfile';
 import Cart from '@/components/Cart';
 import SavedCarts from '@/components/SavedCarts';
+import SavedForLater from '@/components/SavedForLater';
 import ProductInventory from '@/components/ProductInventory';
 import { 
   CartItem,
   SavedCart,
   mockCartItems,
   mockSavedCarts,
+  mockSavedForLaterItems,
   generateCartId
 } from '@/utils/cartUtils';
 
@@ -17,6 +19,7 @@ const Index = () => {
   const { toast } = useToast();
   const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
   const [savedCarts, setSavedCarts] = useState<SavedCart[]>(mockSavedCarts);
+  const [savedForLaterItems, setSavedForLaterItems] = useState<CartItem[]>(mockSavedForLaterItems);
   const [userId] = useState("user-123");
 
   // Add animation classes when component mounts
@@ -110,6 +113,43 @@ const Index = () => {
     });
   };
 
+  const handleSaveForLater = (id: string | number) => {
+    const itemToSave = cartItems.find(item => item.id === id);
+    
+    if (itemToSave) {
+      setSavedForLaterItems([...savedForLaterItems, itemToSave]);
+      setCartItems(cartItems.filter(item => item.id !== id));
+      
+      toast({
+        title: "Item Saved",
+        description: "Item has been saved for later.",
+      });
+    }
+  };
+
+  const handleMoveToCart = (id: string | number) => {
+    const itemToMove = savedForLaterItems.find(item => item.id === id);
+    
+    if (itemToMove) {
+      setCartItems([...cartItems, itemToMove]);
+      setSavedForLaterItems(savedForLaterItems.filter(item => item.id !== id));
+      
+      toast({
+        title: "Item Moved",
+        description: "Item has been moved to your cart.",
+      });
+    }
+  };
+
+  const handleRemoveSavedItem = (id: string | number) => {
+    setSavedForLaterItems(savedForLaterItems.filter(item => item.id !== id));
+    
+    toast({
+      title: "Item Removed",
+      description: "The saved item has been removed.",
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/50 px-4 py-8">
       <div className="max-w-6xl mx-auto">
@@ -139,13 +179,24 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="cart-section md:col-span-5">
-            <Cart 
-              items={cartItems}
-              onSaveCart={handleSaveCart}
-              onRemoveItem={handleRemoveItem}
-              onUpdateQuantity={handleUpdateQuantity}
-            />
+          <div className="md:col-span-5 space-y-4">
+            <div className="cart-section">
+              <Cart 
+                items={cartItems}
+                onSaveCart={handleSaveCart}
+                onRemoveItem={handleRemoveItem}
+                onUpdateQuantity={handleUpdateQuantity}
+                onSaveForLater={handleSaveForLater}
+              />
+            </div>
+            
+            <div className="cart-section">
+              <SavedForLater
+                items={savedForLaterItems}
+                onMoveToCart={handleMoveToCart}
+                onRemoveItem={handleRemoveSavedItem}
+              />
+            </div>
           </div>
         </div>
       </div>
