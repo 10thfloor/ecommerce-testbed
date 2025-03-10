@@ -29,11 +29,9 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
             <span className="font-medium text-base">{productName}</span>
           </div>
           
-          <div className="flex items-center">
-            <span className="text-xs text-muted-foreground px-2">
-              Qty: {item.quantity}
-            </span>
-          </div>
+          <span className="text-xs text-muted-foreground px-2 bg-secondary py-1 rounded-md">
+            Qty: {item.quantity}
+          </span>
         </div>
         
         <div className="flex items-center justify-between">
@@ -41,7 +39,7 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
             {formatCurrency(item.price)} × {item.quantity}
           </span>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <button 
               onClick={() => onMoveToCart(item.id)}
               className="btn-primary text-xs py-1 px-2 flex items-center"

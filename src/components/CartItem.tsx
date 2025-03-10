@@ -41,24 +41,22 @@ const CartItem: React.FC<CartItemProps> = ({
             <span className="font-medium text-base">{productName}</span>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <div className="bg-secondary rounded-md flex items-center">
-              <button 
-                onClick={handleDecrement}
-                className="p-1 hover:bg-muted rounded-l-md transition-colors"
-                aria-label="Decrease quantity"
-              >
-                <Minus className="h-4 w-4" />
-              </button>
-              <span className="px-3 font-medium">{item.quantity}</span>
-              <button 
-                onClick={handleIncrement}
-                className="p-1 hover:bg-muted rounded-r-md transition-colors"
-                aria-label="Increase quantity"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
-            </div>
+          <div className="bg-secondary rounded-md flex items-center">
+            <button 
+              onClick={handleDecrement}
+              className="p-1 hover:bg-muted rounded-l-md transition-colors"
+              aria-label="Decrease quantity"
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+            <span className="px-3 font-medium">{item.quantity}</span>
+            <button 
+              onClick={handleIncrement}
+              className="p-1 hover:bg-muted rounded-r-md transition-colors"
+              aria-label="Increase quantity"
+            >
+              <Plus className="h-4 w-4" />
+            </button>
           </div>
         </div>
         
@@ -67,28 +65,30 @@ const CartItem: React.FC<CartItemProps> = ({
             {formatCurrency(item.price)} × {item.quantity}
           </span>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             <div className="font-medium w-20 text-right">
               {formatCurrency(item.price * item.quantity)}
             </div>
             
-            {onSaveForLater && (
+            <div className="flex items-center space-x-2">
+              {onSaveForLater && (
+                <button 
+                  onClick={() => onSaveForLater(item.id)}
+                  className="p-1.5 text-primary hover:bg-primary/10 rounded-md transition-colors"
+                  aria-label="Save for later"
+                >
+                  <BookmarkPlus className="h-4 w-4" />
+                </button>
+              )}
+              
               <button 
-                onClick={() => onSaveForLater(item.id)}
-                className="p-1.5 text-primary hover:bg-primary/10 rounded-md transition-colors"
-                aria-label="Save for later"
+                onClick={() => onRemove(item.id)}
+                className="p-1.5 text-destructive hover:bg-destructive/10 rounded-md transition-colors"
+                aria-label="Remove item"
               >
-                <BookmarkPlus className="h-4 w-4" />
+                <Trash2 className="h-4 w-4" />
               </button>
-            )}
-            
-            <button 
-              onClick={() => onRemove(item.id)}
-              className="p-1.5 text-destructive hover:bg-destructive/10 rounded-md transition-colors"
-              aria-label="Remove item"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            </div>
           </div>
         </div>
       </div>
