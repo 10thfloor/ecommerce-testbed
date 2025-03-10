@@ -76,7 +76,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
   ];
 
   return (
-    <div className="card-glass p-4 mb-6 animate-fade-in">
+    <div className="card-glass p-4 mb-6 animate-fade-in h-full">
       <div className="mb-4 flex items-center">
         <div className="bg-primary/10 rounded-lg p-1 mr-2">
           <ShoppingCart className="h-4 w-4 text-primary" />
@@ -84,30 +84,30 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
         <h3 className="text-lg font-medium">Product Inventory</h3>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {products.map((product) => (
           <div 
             key={product.id}
-            className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-4 transition-all hover-scale cursor-pointer"
+            className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-3 transition-all hover-scale cursor-pointer"
             onClick={() => onAddToCart(product.id, product.price)}
           >
-            <div className="bg-primary/10 w-full aspect-square rounded-lg mb-3 flex items-center justify-center">
-              <div className="text-2xl font-semibold text-primary">{product.image.charAt(0).toUpperCase()}</div>
+            <div className="bg-primary/10 w-full aspect-square rounded-lg mb-2 flex items-center justify-center" style={{maxHeight: "60px", height: "60px"}}>
+              <div className="text-lg font-semibold text-primary">{product.image.charAt(0).toUpperCase()}</div>
             </div>
             
-            <h4 className="font-medium mb-1">{product.name}</h4>
-            <p className="text-muted-foreground text-sm mb-2 line-clamp-2">{product.description}</p>
+            <h4 className="font-medium text-sm mb-1">{product.name}</h4>
+            <p className="text-muted-foreground text-xs mb-2 line-clamp-1">{product.description}</p>
             
             <div className="flex justify-between items-center mt-auto">
-              <span className="font-bold">{formatCurrency(product.price)}</span>
+              <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
               <button 
-                className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
+                className="p-1 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
                 onClick={(e) => {
                   e.stopPropagation();
                   onAddToCart(product.id, product.price);
                 }}
               >
-                <Plus className="h-4 w-4 text-primary" />
+                <Plus className="h-3 w-3 text-primary" />
               </button>
             </div>
           </div>
