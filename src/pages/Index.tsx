@@ -131,7 +131,22 @@ const Index = () => {
     const itemToMove = savedForLaterItems.find(item => item.id === id);
     
     if (itemToMove) {
-      setCartItems([...cartItems, itemToMove]);
+      // Check if the product already exists in the cart
+      const existingItemIndex = cartItems.findIndex(cartItem => 
+        cartItem.productId === itemToMove.productId
+      );
+      
+      if (existingItemIndex !== -1) {
+        // If the product already exists, increment quantity
+        const updatedCartItems = [...cartItems];
+        updatedCartItems[existingItemIndex].quantity += itemToMove.quantity;
+        setCartItems(updatedCartItems);
+      } else {
+        // If not, add as a new item
+        setCartItems([...cartItems, itemToMove]);
+      }
+      
+      // Remove from saved for later
       setSavedForLaterItems(savedForLaterItems.filter(item => item.id !== id));
       
       toast({
