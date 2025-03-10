@@ -31,24 +31,26 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   return (
-    <div className="card-glass p-4 mb-3 animate-fade-in flex items-center justify-between">
-      <div className="flex items-center">
-        <div className="bg-primary/10 rounded-lg p-2 mr-3">
+    <div className="card-glass p-5 mb-4 animate-fade-in flex items-center justify-between">
+      <div className="flex items-center space-x-4">
+        <div className="bg-primary/10 rounded-lg p-2.5 min-w-12 flex items-center justify-center">
           <span className="font-medium text-primary">{item.productId}</span>
         </div>
         <div className="flex flex-col">
-          <span className="font-medium">{productName}</span>
-          <span className="text-xs text-muted-foreground">
+          <span className="font-medium text-base whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px] md:max-w-[250px]">
+            {productName}
+          </span>
+          <span className="text-xs text-muted-foreground mt-1">
             {formatCurrency(item.price)} × {item.quantity}
           </span>
         </div>
       </div>
       
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-3">
         <div className="bg-secondary rounded-md flex items-center">
           <button 
             onClick={handleDecrement}
-            className="p-1 hover:bg-muted rounded-l-md transition-colors"
+            className="p-1.5 hover:bg-muted rounded-l-md transition-colors"
             aria-label="Decrease quantity"
           >
             <Minus className="h-4 w-4" />
@@ -56,7 +58,7 @@ const CartItem: React.FC<CartItemProps> = ({
           <span className="px-3 font-medium">{item.quantity}</span>
           <button 
             onClick={handleIncrement}
-            className="p-1 hover:bg-muted rounded-r-md transition-colors"
+            className="p-1.5 hover:bg-muted rounded-r-md transition-colors"
             aria-label="Increase quantity"
           >
             <Plus className="h-4 w-4" />
