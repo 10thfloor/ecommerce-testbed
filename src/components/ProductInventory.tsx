@@ -22,56 +22,56 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
       name: "Alpha SV Jacket",
       price: 799.99,
       description: "Premium waterproof hardshell for extreme alpine conditions",
-      image: "jacket"
+      image: "/placeholder.svg"
     },
     {
       id: 2,
       name: "Beta AR Pants",
       price: 499.99,
       description: "All-round mountaineering pants with GORE-TEX protection",
-      image: "pants"
+      image: "/placeholder.svg"
     },
     {
       id: 3,
       name: "Atom LT Hoody",
       price: 259.99,
       description: "Lightweight insulated mid-layer with exceptional breathability",
-      image: "hoody"
+      image: "/placeholder.svg"
     },
     {
       id: 4,
       name: "Cerium Down Vest",
       price: 349.99,
       description: "Ultralight 850 fill-power down vest for alpine climbing",
-      image: "vest"
+      image: "/placeholder.svg"
     },
     {
       id: 5,
       name: "Gamma MX Softshell",
       price: 349.99,
       description: "Versatile softshell jacket for mixed weather conditions",
-      image: "softshell"
+      image: "/placeholder.svg"
     },
     {
       id: 6,
       name: "Zeta SL Rain Jacket",
       price: 299.99,
       description: "Superlight emergency rain protection for hiking",
-      image: "rain"
+      image: "/placeholder.svg"
     },
     {
       id: 7,
       name: "Covert Fleece",
       price: 179.99,
       description: "Classic fleece with a clean aesthetic for everyday wear",
-      image: "fleece"
+      image: "/placeholder.svg"
     },
     {
       id: 8,
       name: "Proton AR Insulated",
       price: 399.99,
       description: "Advanced breathable insulation for cold, active pursuits",
-      image: "insulated"
+      image: "/placeholder.svg"
     }
   ];
 
@@ -91,8 +91,16 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
             className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-3 transition-all hover-scale cursor-pointer"
             onClick={() => onAddToCart(product.id, product.price)}
           >
-            <div className="bg-primary/10 w-full aspect-square rounded-lg mb-2 flex items-center justify-center" style={{maxHeight: "60px", height: "60px"}}>
-              <div className="text-lg font-semibold text-primary">{product.image.charAt(0).toUpperCase()}</div>
+            <div className="bg-primary/10 w-full aspect-square rounded-lg mb-2 flex items-center justify-center overflow-hidden">
+              <img 
+                src={product.image} 
+                alt={product.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/placeholder.svg";
+                }}
+              />
             </div>
             
             <h4 className="font-medium text-sm mb-1">{product.name}</h4>
