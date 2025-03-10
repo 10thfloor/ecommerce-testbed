@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { ShoppingCart, SaveAll, Mail } from 'lucide-react';
+import { ShoppingCart, SaveAll } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
+import ShareMenu from './ShareMenu';
 
 interface CartProps {
   items: CartItemType[];
@@ -33,14 +34,10 @@ const Cart: React.FC<CartProps> = ({
           <h3 className="text-lg font-medium">Your Cart</h3>
         </div>
         <div className="flex space-x-2">
-          <button 
-            onClick={onEmailCart}
-            className="btn-secondary flex items-center space-x-1 hover-scale"
-            disabled={items.length === 0}
-          >
-            <Mail className="h-4 w-4 mr-1" />
-            <span>Email</span>
-          </button>
+          <ShareMenu 
+            items={items} 
+            title="My Shopping Cart" 
+          />
           <button 
             onClick={onSaveCart}
             className="btn-primary flex items-center space-x-1 hover-scale"

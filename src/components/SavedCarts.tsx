@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import { SavedCart } from '@/utils/cartUtils';
 import { getCartItemCount, formatCurrency, calculateTotal } from '@/utils/cartUtils';
-import { ChevronDown, ChevronUp, ShoppingBag, Share2, Mail } from 'lucide-react';
+import { ChevronDown, ChevronUp, ShoppingBag } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import { useToast } from "@/hooks/use-toast";
+import ShareMenu from './ShareMenu';
 
 interface SavedCartsProps {
   savedCarts: SavedCart[];
@@ -27,76 +28,6 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
     } else {
       setExpandedCartId(cartId);
     }
-  };
-
-  const handleShareCart = (cart: SavedCart, e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    // Create a shareable content with cart details
-    const cartItems = cart.items.map(item => {
-      return `${item.productId} - Qty: ${item.quantity} - ${formatCurrency(item.price * item.quantity)}`;
-    }).join('\n');
-    
-    const shareText = `Shared Cart (${cart.id.substring(0, 8)})\n${cart.date}\n\nItems:\n${cartItems}\n\nTotal: ${formatCurrency(calculateTotal(cart.items))}`;
-    
-    // Use the Web Share API if available
-    if (navigator.share) {
-      navigator.share({
-        title: `Shared Cart (${cart.id.substring(0, 8)})`,
-        text: shareText
-      })
-      .then(() => {
-        toast({
-          title: "Cart Shared",
-          description: "The cart has been shared successfully.",
-        });
-      })
-      .catch((error) => {
-        console.error('Error sharing:', error);
-        fallbackShare(shareText);
-      });
-    } else {
-      fallbackShare(shareText);
-    }
-  };
-  
-  const fallbackShare = (text: string) => {
-    // Fallback to clipboard if Web Share API is not available
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        toast({
-          title: "Cart Copied",
-          description: "Cart details copied to clipboard. You can now paste and share it.",
-        });
-      })
-      .catch(err => {
-        console.error('Failed to copy:', err);
-        toast({
-          title: "Sharing Failed",
-          description: "Could not share the cart. Please try again.",
-          variant: "destructive",
-        });
-      });
-  };
-
-  const handleEmailCart = (cart: SavedCart, e: React.MouseEvent) => {
-    e.stopPropagation();
-    
-    // Create email content with cart details
-    const cartItems = cart.items.map(item => {
-      return `${item.productId} - Qty: ${item.quantity} - ${formatCurrency(item.price * item.quantity)}`;
-    }).join('%0D%0A');
-    
-    const emailSubject = `Shared Cart (${cart.id.substring(0, 8)})`;
-    const emailBody = `Cart from ${cart.date}%0D%0A%0D%0AItems:%0D%0A${cartItems}%0D%0A%0D%0ATotal: ${formatCurrency(calculateTotal(cart.items))}`;
-    
-    // Open default email client with pre-filled content
-    window.location.href = `mailto:?subject=${emailSubject}&body=${emailBody}`;
-    
-    toast({
-      title: "Email Prepared",
-      description: "Your email client should open with the cart details.",
-    });
   };
 
   return (
@@ -145,27 +76,11 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                     {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? 'item' : 'items'}
                   </div>
                   
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleShareCart(cart, e);
-                    }}
-                    className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 font-medium rounded-md text-sm transition-colors"
-                    title="Share this cart"
-                  >
-                    <Share2 className="h-4 w-4" />
-                  </button>
-                  
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleEmailCart(cart, e);
-                    }}
-                    className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 font-medium rounded-md text-sm transition-colors"
-                    title="Email this cart"
-                  >
-                    <Mail className="h-4 w-4" />
-                  </button>
+                  <ShareMenu 
+                    items={cart.items} 
+                    title={`Shared Cart (${cart.id.substring(0, 8)})`}
+                    date={cart.date}
+                  />
                   
                   <button 
                     onClick={(e) => {
