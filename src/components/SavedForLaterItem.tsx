@@ -19,28 +19,26 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
   const productName = useProductName(item.productId);
   
   return (
-    <div className="card-glass p-4 mb-3 animate-fade-in flex items-center justify-between">
-      <div className="flex items-center space-x-4">
-        <div className="bg-primary/10 rounded-lg p-2.5 min-w-12 flex items-center justify-center">
+    <div className="card-glass p-3 mb-2 animate-fade-in flex items-center justify-between">
+      <div className="flex items-center">
+        <div className="bg-primary/10 rounded-lg p-2 mr-3">
           <span className="font-medium text-primary">{item.productId}</span>
         </div>
         <div className="flex flex-col">
-          <span className="font-medium text-base whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px] md:max-w-[250px]">
-            {productName}
-          </span>
-          <span className="text-xs text-muted-foreground mt-1">
+          <span className="font-medium">{productName}</span>
+          <span className="text-xs text-muted-foreground">
             {formatCurrency(item.price)} × {item.quantity}
           </span>
         </div>
       </div>
       
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-2">
         <button 
           onClick={() => onMoveToCart(item.id)}
-          className="btn-primary text-xs py-1.5 px-3 flex items-center"
+          className="btn-primary text-xs py-1 px-2 flex items-center"
           aria-label="Move to cart"
         >
-          <ShoppingCart className="h-3 w-3 mr-1.5" />
+          <ShoppingCart className="h-3 w-3 mr-1" />
           <span>Move to Cart</span>
         </button>
         
