@@ -19,59 +19,59 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
   const products: Product[] = [
     {
       id: 1,
-      name: "Wireless Earbuds",
-      price: 59.99,
-      description: "Premium wireless earbuds with noise cancellation",
-      image: "headphones"
+      name: "Alpha SV Jacket",
+      price: 799.99,
+      description: "Premium waterproof hardshell for extreme alpine conditions",
+      image: "jacket"
     },
     {
       id: 2,
-      name: "Smart Watch",
-      price: 129.99,
-      description: "Fitness tracker with heart rate monitoring",
-      image: "watch"
+      name: "Beta AR Pants",
+      price: 499.99,
+      description: "All-round mountaineering pants with GORE-TEX protection",
+      image: "pants"
     },
     {
       id: 3,
-      name: "Bluetooth Speaker",
-      price: 45.99,
-      description: "Portable speaker with 10-hour battery life",
-      image: "speaker"
+      name: "Atom LT Hoody",
+      price: 259.99,
+      description: "Lightweight insulated mid-layer with exceptional breathability",
+      image: "hoody"
     },
     {
       id: 4,
-      name: "Laptop Sleeve",
-      price: 19.99,
-      description: "Protective sleeve for 13-15 inch laptops",
-      image: "laptop"
+      name: "Cerium Down Vest",
+      price: 349.99,
+      description: "Ultralight 850 fill-power down vest for alpine climbing",
+      image: "vest"
     },
     {
       id: 5,
-      name: "Phone Charger",
-      price: 14.99,
-      description: "Fast charging cable with multiple adapters",
-      image: "charger"
+      name: "Gamma MX Softshell",
+      price: 349.99,
+      description: "Versatile softshell jacket for mixed weather conditions",
+      image: "softshell"
     },
     {
       id: 6,
-      name: "Wireless Mouse",
-      price: 29.99,
-      description: "Ergonomic wireless mouse with silent clicks",
-      image: "mouse"
+      name: "Zeta SL Rain Jacket",
+      price: 299.99,
+      description: "Superlight emergency rain protection for hiking",
+      image: "rain"
     },
     {
       id: 7,
-      name: "Power Bank",
-      price: 34.99,
-      description: "10000mAh portable charger with dual USB ports",
-      image: "battery"
+      name: "Covert Fleece",
+      price: 179.99,
+      description: "Classic fleece with a clean aesthetic for everyday wear",
+      image: "fleece"
     },
     {
       id: 8,
-      name: "Mechanical Keyboard",
-      price: 79.99,
-      description: "RGB backlit mechanical keyboard with customizable keys",
-      image: "keyboard"
+      name: "Proton AR Insulated",
+      price: 399.99,
+      description: "Advanced breathable insulation for cold, active pursuits",
+      image: "insulated"
     }
   ];
 

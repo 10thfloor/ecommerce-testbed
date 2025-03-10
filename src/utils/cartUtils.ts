@@ -14,14 +14,14 @@ export interface SavedCart {
 
 // Mock data for the shopping cart
 export const mockCartItems: CartItem[] = [
-  { id: 1, productId: 4, quantity: 1, price: 10.00 }
+  { id: 1, productId: 1, quantity: 1, price: 799.99 }
 ];
 
 export const mockSavedCarts: SavedCart[] = [
   {
     id: "d0b4f43b34bdc5c2",
     date: "3/8/2025 at 3:50:00 PM",
-    items: [{ id: 1, productId: 4, quantity: 1, price: 10.00 }]
+    items: [{ id: 1, productId: 1, quantity: 1, price: 799.99 }]
   }
 ];
 
