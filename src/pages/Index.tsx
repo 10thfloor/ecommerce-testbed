@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "@/components/ui/use-toast";
 import UserProfile from '@/components/UserProfile';
@@ -22,7 +21,6 @@ const Index = () => {
   const [savedForLaterItems, setSavedForLaterItems] = useState<CartItem[]>(mockSavedForLaterItems);
   const [userId] = useState("user-123");
 
-  // Add animation classes when component mounts
   useEffect(() => {
     document.querySelectorAll('.cart-section').forEach((el, i) => {
       (el as HTMLElement).style.animationDelay = `${i * 0.1}s`;
@@ -33,12 +31,10 @@ const Index = () => {
     const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
     
     if (existingItemIndex !== -1) {
-      // If item already exists in cart, increment quantity
       const updatedItems = [...cartItems];
       updatedItems[existingItemIndex].quantity += 1;
       setCartItems(updatedItems);
     } else {
-      // Otherwise add new item
       const newItem: CartItem = {
         id: Date.now(),
         productId,
@@ -151,7 +147,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/50 px-4 py-8">
+    <div className="min-h-screen px-4 py-8">
       <div className="max-w-6xl mx-auto">
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground animate-fade-in">
