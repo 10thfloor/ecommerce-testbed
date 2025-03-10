@@ -124,8 +124,8 @@ const Index = () => {
           <UserProfile userId={userId} />
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-7 space-y-6">
             <div className="cart-section">
               <ProductInventory onAddToCart={handleAddToCart} />
             </div>
@@ -139,7 +139,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="cart-section">
+          <div className="cart-section md:col-span-5">
             <Cart 
               items={cartItems}
               onSaveCart={handleSaveCart}

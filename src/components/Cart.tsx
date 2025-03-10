@@ -15,7 +15,7 @@ const Cart: React.FC<CartProps> = ({ items, onSaveCart, onRemoveItem, onUpdateQu
   const total = calculateTotal(items);
   
   return (
-    <div className="card-glass p-4 mb-6 animate-fade-in">
+    <div className="card-glass p-4 mb-6 animate-fade-in h-full">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <div className="bg-primary/10 rounded-lg p-1 mr-2">
