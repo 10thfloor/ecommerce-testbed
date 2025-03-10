@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PackagePlus, ShoppingCart, Plus } from 'lucide-react';
+import { ShoppingCart, Plus } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 
 export interface Product {
@@ -84,39 +84,29 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
         <h3 className="text-lg font-medium">Product Inventory</h3>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {products.map((product) => (
           <div 
             key={product.id}
             className="bg-secondary/30 hover:bg-secondary/50 rounded-lg p-3 transition-all hover-scale cursor-pointer"
             onClick={() => onAddToCart(product.id, product.price)}
           >
-            <div className="bg-primary/10 w-full aspect-square rounded-lg mb-2 flex items-center justify-center overflow-hidden">
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "/placeholder.svg";
-                }}
-              />
-            </div>
-            
-            <h4 className="font-medium text-sm mb-1">{product.name}</h4>
-            <p className="text-muted-foreground text-xs mb-2 line-clamp-1">{product.description}</p>
-            
-            <div className="flex justify-between items-center mt-auto">
-              <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
-              <button 
-                className="p-1 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onAddToCart(product.id, product.price);
-                }}
-              >
-                <Plus className="h-3 w-3 text-primary" />
-              </button>
+            <div className="flex flex-col">
+              <h4 className="font-medium text-sm mb-1">{product.name}</h4>
+              <p className="text-muted-foreground text-xs mb-2 line-clamp-1">{product.description}</p>
+              
+              <div className="flex justify-between items-center mt-auto">
+                <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
+                <button 
+                  className="p-1 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddToCart(product.id, product.price);
+                  }}
+                >
+                  <Plus className="h-3 w-3 text-primary" />
+                </button>
+              </div>
             </div>
           </div>
         ))}
