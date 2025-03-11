@@ -93,6 +93,7 @@ const Index = () => {
         onMoveToCart={handleMoveToCart}
         onRemoveSavedItem={handleRemoveSavedItem}
         onRemoveFromWatch={handleRemoveFromWatch}
+        onWatchItem={handleWatchItem}
         onUndoCart={undoCartLoad}
         hasCartHistory={hasCartHistory}
       />

@@ -34,7 +34,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     const productId = product.id;
     const productName = product.name;
     
-    if (notifiedItems.includes(productId)) {
+    if (notifiedItems.includes(productId) || watchedItems.includes(productId)) {
       toast({
         title: "Already Subscribed",
         description: `You'll be notified when ${productName} is back in stock.`,
@@ -52,6 +52,10 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       title: "Notification Set",
       description: `You'll be notified when ${productName} is back in stock.`,
     });
+  };
+
+  const isItemWatched = (productId: number): boolean => {
+    return notifiedItems.includes(productId) || watchedItems.includes(productId);
   };
 
   const products: Product[] = [
@@ -172,13 +176,13 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    className={`h-7 w-7 p-0 rounded-full transition-all animate-pulse-subtle ${
-                      notifiedItems.includes(product.id) || watchedItems.includes(product.id)
-                        ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400' 
+                    className={`h-7 w-7 p-0 rounded-full transition-all ${
+                      isItemWatched(product.id)
+                        ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
                         : 'bg-secondary/70 hover:bg-secondary'
                     }`}
                     onClick={(e) => handleNotifyMe(product, e)}
-                    aria-label={notifiedItems.includes(product.id) ? "Notification set" : "Notify me when back in stock"}
+                    aria-label={isItemWatched(product.id) ? "Notification set" : "Notify me when back in stock"}
                   >
                     <Bell className="h-3.5 w-3.5" />
                   </Button>

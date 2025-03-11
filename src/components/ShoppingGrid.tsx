@@ -27,6 +27,7 @@ interface ShoppingGridProps {
   onMoveToCart: (id: string | number) => void;
   onRemoveSavedItem: (id: string | number) => void;
   onRemoveFromWatch: (productId: number) => void;
+  onWatchItem?: (product: Product) => void;
   onUndoCart?: () => void;
   hasCartHistory?: boolean;
 }
@@ -49,9 +50,13 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onMoveToCart,
   onRemoveSavedItem,
   onRemoveFromWatch,
+  onWatchItem,
   onUndoCart,
   hasCartHistory = false
 }) => {
+  // Extract just the IDs from stock watch items for simplified passing to ProductInventory
+  const watchedItemIds = stockWatchItems.map(item => item.id);
+  
   return (
     <>
       <div className="cart-section mb-6">
@@ -61,7 +66,11 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         <div className="md:col-span-7 space-y-6">
           <div className="cart-section">
-            <ProductInventory onAddToCart={onAddToCart} />
+            <ProductInventory 
+              onAddToCart={onAddToCart} 
+              watchedItems={watchedItemIds}
+              onWatchItem={onWatchItem}
+            />
           </div>
           
           <div className="cart-section">
