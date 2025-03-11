@@ -7,6 +7,8 @@ import {
   generateCartId,
   getCartMnemonic
 } from '@/utils/cartUtils';
+import { useCartComparison } from './useCartComparison';
+import { useInventoryValidation } from './useInventoryValidation';
 
 interface UseSavedCartsProps {
   initialSavedCarts: SavedCart[];
@@ -29,28 +31,8 @@ export const useSavedCarts = ({
   const [savedCarts, setSavedCarts] = useState<SavedCart[]>(initialSavedCarts);
   const [lastLoadedCartId, setLastLoadedCartId] = useState<string | null>(null);
   
-  const areCartsIdentical = (cart1: CartItem[], cart2: CartItem[]): boolean => {
-    if (cart1.length !== cart2.length) return false;
-    
-    const getCartMap = (cart: CartItem[]) => {
-      const map = new Map<number | string, number>();
-      cart.forEach(item => {
-        map.set(item.productId, (map.get(item.productId) || 0) + item.quantity);
-      });
-      return map;
-    };
-    
-    const cart1Map = getCartMap(cart1);
-    const cart2Map = getCartMap(cart2);
-    
-    if (cart1Map.size !== cart2Map.size) return false;
-    
-    for (const [productId, quantity] of cart1Map.entries()) {
-      if (cart2Map.get(productId) !== quantity) return false;
-    }
-    
-    return true;
-  };
+  const { areCartsIdentical } = useCartComparison();
+  const { validateInventoryForCart } = useInventoryValidation({ inventory });
 
   const handleSaveCart = () => {
     if (cartItems.length === 0) return;
@@ -91,29 +73,9 @@ export const useSavedCarts = ({
         saveToHistory([...cartItems], {...inventory});
       }
       
-      const tempInventory = { ...inventory };
-      let insufficientInventory = false;
+      const { isValid, tempInventory } = validateInventoryForCart(cartItems, cartToLoad.items);
       
-      cartItems.forEach(item => {
-        tempInventory[Number(item.productId)] += item.quantity;
-      });
-      
-      cartToLoad.items.forEach(item => {
-        if (tempInventory[Number(item.productId)] < item.quantity) {
-          insufficientInventory = true;
-        } else {
-          tempInventory[Number(item.productId)] -= item.quantity;
-        }
-      });
-      
-      if (insufficientInventory) {
-        toast({
-          title: "Insufficient Inventory",
-          description: "Some items in this saved cart are no longer available in sufficient quantity.",
-          variant: "destructive",
-        });
-        return;
-      }
+      if (!isValid) return;
       
       setCartItems([...cartToLoad.items]);
       setInventory(tempInventory);
@@ -134,45 +96,35 @@ export const useSavedCarts = ({
       let addedItemsCount = 0;
       let skippedItemsCount = 0;
       
-      // Create a new cart with the existing items
       const updatedCartItems = [...cartItems];
       const updatedInventory = { ...inventory };
       
-      // Check each item in the saved cart
       cartToAddFrom.items.forEach(itemToAdd => {
-        // Check if there's enough inventory for this item
         if (tempInventory[Number(itemToAdd.productId)] >= itemToAdd.quantity) {
-          // There's enough inventory, so add/update the item
           const existingItemIndex = updatedCartItems.findIndex(
             item => item.productId === itemToAdd.productId
           );
           
           if (existingItemIndex !== -1) {
-            // Update existing item quantity
             updatedCartItems[existingItemIndex].quantity += itemToAdd.quantity;
           } else {
-            // Add as new item
             updatedCartItems.push({
               ...itemToAdd,
               id: Date.now() + Math.random()
             });
           }
           
-          // Update inventory
           updatedInventory[Number(itemToAdd.productId)] -= itemToAdd.quantity;
           tempInventory[Number(itemToAdd.productId)] -= itemToAdd.quantity;
           addedItemsCount++;
         } else {
-          // Not enough inventory for this item
           skippedItemsCount++;
         }
       });
       
-      // Update the cart and inventory
       setCartItems(updatedCartItems);
       setInventory(updatedInventory);
       
-      // Show appropriate toast message
       if (addedItemsCount > 0 && skippedItemsCount > 0) {
         toast({
           title: "Items Partially Added",
@@ -210,3 +162,4 @@ export const useSavedCarts = ({
     handleDeleteCart
   };
 };
+
