@@ -11,6 +11,8 @@ import { useSavedForLater } from './cart/useSavedForLater';
 import { useStockWatch } from './cart/useStockWatch';
 import { useCartHistory } from './cart/useCartHistory';
 import { useInventoryManagement } from './cart/useInventoryManagement';
+import { useProductOperations } from './cart/useProductOperations';
+import { useCartSynchronization } from './cart/useCartSynchronization';
 
 interface UseCartManagementProps {
   initialCartItems: CartItem[];
@@ -50,6 +52,15 @@ export const useCartManagement = ({
     saveToHistory
   });
 
+  // Use cart synchronization hook
+  const cartSync = useCartSynchronization({
+    cartItems: cartOperations.cartItems,
+    inventory: inventoryManagement.inventory,
+    setCartItems: cartOperations.setCartItems,
+    setInventory: inventoryManagement.setInventory,
+    saveToHistory
+  });
+
   // Use stock watch hook
   const stockWatch = useStockWatch({
     initialStockWatchItems,
@@ -75,68 +86,20 @@ export const useCartManagement = ({
     setInventory: inventoryManagement.setInventory
   });
 
+  // Use product operations hook
+  const productOps = useProductOperations({
+    savedForLaterItems: savedForLater.savedForLaterItems,
+    stockWatchItems: stockWatch.stockWatchItems,
+    inventory: inventoryManagement.inventory,
+    setSavedForLaterItems: savedForLater.setSavedForLaterItems,
+    handleWatchItem: stockWatch.handleWatchItem,
+    handleRemoveFromWatch: stockWatch.handleRemoveFromWatch
+  });
+
   // Override handleSaveForLater to coordinate between cart operations and saved for later
   const handleSaveForLater = (id: string | number) => {
     // We'll use savedForLater's implementation directly now as it handles removing from cart
     savedForLater.handleSaveForLater(id);
-  };
-
-  // New function to handle saving products directly from inventory
-  const handleSaveProductForLater = (product: Product) => {
-    const newSavedItem: CartItem = {
-      id: Date.now() + Math.random(),
-      productId: product.id,
-      quantity: 1,
-      price: product.price
-    };
-    
-    // Check if this product is already in saved for later
-    const existingItem = savedForLater.savedForLaterItems.find(item => 
-      Number(item.productId) === product.id
-    );
-    
-    if (existingItem) {
-      return; // Item already saved
-    }
-    
-    savedForLater.setSavedForLaterItems([...savedForLater.savedForLaterItems, newSavedItem]);
-  };
-
-  // Coordinate handleWatchProductId to access cart items and saved for later items for price
-  const handleWatchProductId = (productId: number) => {
-    const isAlreadyWatching = stockWatch.stockWatchItems.some(item => item.id === productId);
-    
-    if (isAlreadyWatching) {
-      stockWatch.handleRemoveFromWatch(productId);
-      return;
-    }
-    
-    const isOutOfStock = inventoryManagement.inventory[productId] === 0;
-    
-    if (!isOutOfStock) {
-      return; // The toast is already shown in the stock watch hook
-    }
-    
-    const productName = `Product #${productId}`;
-    const newWatchItem: Product = {
-      id: productId,
-      name: productName,
-      price: 0,
-      inventory: 0,
-      description: "Out of stock product",
-      image: "/placeholder.svg"
-    };
-    
-    const cartItem = cartOperations.cartItems.find(item => Number(item.productId) === productId);
-    const savedItem = savedForLater.savedForLaterItems.find(item => Number(item.productId) === productId);
-    
-    if (cartItem) {
-      newWatchItem.price = cartItem.price;
-    } else if (savedItem) {
-      newWatchItem.price = savedItem.price;
-    }
-    
-    stockWatch.handleWatchItem(newWatchItem);
   };
 
   return {
@@ -157,11 +120,11 @@ export const useCartManagement = ({
     handleRemoveSavedItem: savedForLater.handleRemoveSavedItem,
     handleEmailCurrentCart: cartOperations.handleEmailCurrentCart,
     handleWatchItem: stockWatch.handleWatchItem,
-    handleWatchProductId,
+    handleWatchProductId: productOps.handleWatchProductId,
     handleRemoveFromWatch: stockWatch.handleRemoveFromWatch,
     simulateInventoryChange: inventoryManagement.simulateInventoryChange,
     undoCartLoad,
     hasCartHistory,
-    handleSaveProductForLater
+    handleSaveProductForLater: productOps.handleSaveProductForLater
   };
 };
