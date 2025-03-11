@@ -1,11 +1,10 @@
-
 import React from 'react';
 import { ShoppingCart, SaveAll, History } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
 import { Button } from "@/components/ui/button";
-import { Product } from '@/components/ProductInventory';
+import { Product } from '@/components/product/types';
 
 interface CartProps {
   items: CartItemType[];

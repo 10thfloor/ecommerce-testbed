@@ -1,7 +1,6 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
-import { Product } from '@/components/ProductInventory';
+import { Product } from '@/components/product/types';
 
 interface UseStockWatchProps {
   initialStockWatchItems: Product[];

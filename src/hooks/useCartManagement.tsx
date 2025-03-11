@@ -1,9 +1,10 @@
+
 import { useState } from 'react';
 import { 
   CartItem,
   SavedCart
 } from '@/utils/cartUtils';
-import { Product } from '@/components/ProductInventory';
+import { Product } from '@/components/product/types';
 import { useCartOperations } from './cart/useCartOperations';
 import { useSavedCarts } from './cart/useSavedCarts';
 import { useSavedForLater } from './cart/useSavedForLater';

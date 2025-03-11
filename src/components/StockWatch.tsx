@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, Plus, Mail } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
-import { Product } from '@/components/ProductInventory';
+import { Product } from '@/components/product/types';
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 

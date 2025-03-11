@@ -1,4 +1,3 @@
-
 import React from 'react';
 import UserProfile from '@/components/UserProfile';
 import Cart from '@/components/Cart';
@@ -7,7 +6,7 @@ import SavedForLater from '@/components/SavedForLater';
 import ProductInventory from '@/components/ProductInventory';
 import StockWatch from '@/components/StockWatch';
 import { CartItem, SavedCart } from '@/utils/cartUtils';
-import { Product } from '@/components/ProductInventory';
+import { Product } from '@/components/product/types';
 
 interface ShoppingGridProps {
   userId: string;

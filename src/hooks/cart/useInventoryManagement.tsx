@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { Product } from '@/components/ProductInventory';
+import { Product } from '@/components/product/types';
 
 interface UseInventoryManagementProps {
   initialInventory: Record<number, number>;
