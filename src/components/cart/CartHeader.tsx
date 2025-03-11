@@ -29,8 +29,8 @@ const CartHeader: React.FC<CartHeaderProps> = ({
           <ShoppingCart className="h-4 w-4 text-primary" />
         </div>
         <h3 className="text-lg font-medium">Your Cart</h3>
-        <span className="ml-2 text-sm text-muted-foreground">
-          ({itemCount} {itemCount === 1 ? 'item' : 'items'})
+        <span className="ml-2 text-xs bg-secondary px-1.5 py-0.5 rounded-md">
+          {itemCount} {itemCount === 1 ? 'item' : 'items'}
         </span>
         
         {hasHistory && onUndoCart && (

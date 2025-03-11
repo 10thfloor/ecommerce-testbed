@@ -56,8 +56,8 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
             {formatCurrency(item.price * item.quantity)}
           </div>
           
-          <div className="bg-secondary/30 rounded-md flex items-center h-7 px-2">
-            <span className="text-xs text-muted-foreground">Qty: {item.quantity}</span>
+          <div className="text-xs bg-secondary px-1.5 py-0.5 rounded-md">
+            Qty: {item.quantity}
           </div>
 
           {isOutOfStock && onWatchItem && (

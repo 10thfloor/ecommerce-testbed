@@ -23,8 +23,8 @@ const SavedCartsHeader: React.FC<SavedCartsHeaderProps> = ({
           <ShoppingBag className="h-4 w-4 text-primary" />
         </div>
         <h3 className="text-lg font-medium">Saved Carts</h3>
-        <span className="ml-2 text-sm text-muted-foreground">
-          ({cartCount} {cartCount === 1 ? 'cart' : 'carts'})
+        <span className="ml-2 text-xs bg-secondary px-1.5 py-0.5 rounded-md">
+          {cartCount} {cartCount === 1 ? 'cart' : 'carts'}
         </span>
       </div>
       <button className="p-1 hover:bg-secondary rounded transition-colors">
