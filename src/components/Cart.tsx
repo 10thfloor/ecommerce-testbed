@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { ShoppingCart, SaveAll, History, Tag, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ShoppingCart, SaveAll, History, Tag, Check, Clock } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
@@ -39,6 +39,33 @@ const Cart: React.FC<CartProps> = ({
   const [showDiscountInput, setShowDiscountInput] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState<string | null>(null);
+  const [timeRemaining, setTimeRemaining] = useState<number>(30 * 60); // 30 minutes in seconds
+  
+  useEffect(() => {
+    // Only start the countdown if there are items in the cart
+    if (items.length === 0) {
+      setTimeRemaining(30 * 60); // Reset to 30 minutes
+      return;
+    }
+    
+    const timer = setInterval(() => {
+      setTimeRemaining(prevTime => {
+        if (prevTime <= 0) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [items.length]);
+  
+  const formatTimeRemaining = (seconds: number): string => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
   
   const handleApplyDiscount = () => {
     if (discountCode.trim() === '') return;
@@ -181,6 +208,20 @@ const Cart: React.FC<CartProps> = ({
                 appliedDiscount ? 'text-green-600 dark:text-green-400' : ''
               }`}>
                 {formatCurrency(finalTotal)}
+              </div>
+            </div>
+            
+            {/* Reservation countdown timer */}
+            <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+              <div className="flex items-center text-sm text-amber-600 dark:text-amber-400">
+                <Clock className="h-4 w-4 mr-2" />
+                <span>Items reserved for:</span>
+              </div>
+              <div className={`font-mono font-medium rounded-md px-3 py-1 ${
+                timeRemaining < 300 ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400' : 
+                'bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400'
+              }`}>
+                {formatTimeRemaining(timeRemaining)}
               </div>
             </div>
           </div>
