@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, Eye, BookmarkPlus, Star, Award, Fire, Gem, Zap } from 'lucide-react';
+import { Plus, Eye, BookmarkPlus, Star, Award, Flame, Gem, Zap } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '../ui/button';
 import { Product } from '@/components/product/types';
@@ -19,7 +19,7 @@ const getProductBadge = (productId: number) => {
   const badges = [
     { icon: Star, text: "Top Rated", color: "text-yellow-500", bg: "bg-yellow-100 dark:bg-yellow-900/30" },
     { icon: Award, text: "Best Seller", color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30" },
-    { icon: Fire, text: "Hot Item", color: "text-orange-500", bg: "bg-orange-100 dark:bg-orange-900/30" },
+    { icon: Flame, text: "Hot Item", color: "text-orange-500", bg: "bg-orange-100 dark:bg-orange-900/30" },
     { icon: Gem, text: "Premium", color: "text-purple-500", bg: "bg-purple-100 dark:bg-purple-900/30" },
     { icon: Zap, text: "Flash Deal", color: "text-green-500", bg: "bg-green-100 dark:bg-green-900/30" },
   ];
