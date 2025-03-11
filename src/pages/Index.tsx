@@ -14,8 +14,8 @@ const productInventory: Record<number, number> = {
   1: 5,  // Alpha SV Jacket
   2: 8,  // Beta AR Pants
   3: 12, // Atom LT Hoody
-  4: 3,  // Cerium Down Vest
-  5: 6,  // Gamma MX Softshell
+  4: 3,  // Cerium Down Vest - Low stock
+  5: 2,  // Gamma MX Softshell - Low stock 
   6: 0,  // Zeta SL Rain Jacket - Out of stock
   7: 15, // Covert Fleece
   8: 4   // Proton AR Insulated
@@ -35,7 +35,7 @@ const initialStockWatchItems = [
     id: 5,
     name: "Gamma MX Softshell",
     price: 349.99,
-    inventory: 6,
+    inventory: 2,
     description: "Versatile softshell jacket for mixed mountain conditions",
     image: "/placeholder.svg"
   }
