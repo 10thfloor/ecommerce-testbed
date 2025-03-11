@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Eye, Trash2, Plus } from 'lucide-react';
+import { Eye, EyeOff, Plus } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/components/ProductInventory';
@@ -93,7 +93,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
                   className="h-7 w-7 p-0 rounded-full"
                   onClick={() => onRemoveFromWatch(product.id)}
                 >
-                  <Trash2 className="h-3.5 w-3.5 text-destructive" />
+                  <EyeOff className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
