@@ -55,6 +55,7 @@ const Index = () => {
     handleRemoveItem,
     handleSaveCart,
     handleLoadCart,
+    handleAddCartItems,
     handleDeleteCart,
     handleSaveForLater,
     handleMoveToCart,
@@ -89,6 +90,7 @@ const Index = () => {
         onSaveForLater={handleSaveForLater}
         onEmailCart={handleEmailCurrentCart}
         onLoadCart={handleLoadCart}
+        onAddCartItems={handleAddCartItems}
         onDeleteCart={handleDeleteCart}
         onMoveToCart={handleMoveToCart}
         onRemoveSavedItem={handleRemoveSavedItem}

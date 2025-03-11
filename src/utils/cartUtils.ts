@@ -1,4 +1,3 @@
-
 export interface CartItem {
   id: string | number;
   productId: string | number;
@@ -82,4 +81,31 @@ export const getCartMnemonic = (cartId: string): string => {
   const noun = nouns[nounIndex % nouns.length];
   
   return `${adjective} ${noun}`;
+};
+
+// Merge items function to combine items from a saved cart with current items
+export const mergeCartItems = (currentItems: CartItem[], savedItems: CartItem[]): CartItem[] => {
+  const mergedItems = [...currentItems];
+  
+  savedItems.forEach(savedItem => {
+    const existingItemIndex = mergedItems.findIndex(item => 
+      item.productId === savedItem.productId
+    );
+    
+    if (existingItemIndex !== -1) {
+      // If item exists, increase quantity
+      mergedItems[existingItemIndex] = {
+        ...mergedItems[existingItemIndex],
+        quantity: mergedItems[existingItemIndex].quantity + savedItem.quantity
+      };
+    } else {
+      // Otherwise add as new item with new ID
+      mergedItems.push({
+        ...savedItem,
+        id: Date.now() + Math.random()
+      });
+    }
+  });
+  
+  return mergedItems;
 };

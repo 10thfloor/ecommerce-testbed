@@ -5,7 +5,8 @@ import {
   SavedCart,
   generateCartId,
   formatCurrency,
-  calculateTotal
+  calculateTotal,
+  mergeCartItems
 } from '@/utils/cartUtils';
 import { Product } from '@/components/ProductInventory';
 
@@ -258,6 +259,60 @@ export const useCartManagement = ({
     }
   };
 
+  const handleAddCartItems = (cartId: string) => {
+    const cartToAddFrom = savedCarts.find(cart => cart.id === cartId);
+    
+    if (cartToAddFrom) {
+      const tempInventory = { ...inventory };
+      let insufficientInventory = false;
+      
+      cartToAddFrom.items.forEach(itemToAdd => {
+        const existingItemIndex = cartItems.findIndex(item => item.productId === itemToAdd.productId);
+        const existingQuantity = existingItemIndex !== -1 ? cartItems[existingItemIndex].quantity : 0;
+        const totalNeeded = existingQuantity + itemToAdd.quantity;
+        
+        if (tempInventory[Number(itemToAdd.productId)] < itemToAdd.quantity) {
+          insufficientInventory = true;
+        }
+      });
+      
+      if (insufficientInventory) {
+        toast({
+          title: "Insufficient Inventory",
+          description: "Some items cannot be added due to insufficient inventory.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const updatedInventory = { ...inventory };
+      const updatedCartItems = [...cartItems];
+      
+      cartToAddFrom.items.forEach(itemToAdd => {
+        const existingItemIndex = updatedCartItems.findIndex(item => item.productId === itemToAdd.productId);
+        
+        if (existingItemIndex !== -1) {
+          updatedCartItems[existingItemIndex].quantity += itemToAdd.quantity;
+        } else {
+          updatedCartItems.push({
+            ...itemToAdd,
+            id: Date.now() + Math.random()
+          });
+        }
+        
+        updatedInventory[Number(itemToAdd.productId)] -= itemToAdd.quantity;
+      });
+      
+      setCartItems(updatedCartItems);
+      setInventory(updatedInventory);
+      
+      toast({
+        title: "Items Added",
+        description: `Items from "${getCartMnemonic(cartId)}" have been added to your cart.`,
+      });
+    }
+  };
+
   const handleDeleteCart = (cartId: string) => {
     setSavedCarts(savedCarts.filter(cart => cart.id !== cartId));
     
@@ -420,6 +475,7 @@ export const useCartManagement = ({
     handleRemoveItem,
     handleSaveCart,
     handleLoadCart,
+    handleAddCartItems,
     handleDeleteCart,
     handleSaveForLater,
     handleMoveToCart,

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SavedCart } from '@/utils/cartUtils';
 import { getCartItemCount, formatCurrency, calculateTotal, getCartMnemonic } from '@/utils/cartUtils';
-import { ChevronDown, ChevronUp, ShoppingBag, Trash2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, ShoppingBag, Trash2, Plus } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import { useToast } from "@/hooks/use-toast";
 import ShareMenu from './ShareMenu';
@@ -21,12 +21,14 @@ interface SavedCartsProps {
   savedCarts: SavedCart[];
   onLoadCart: (cartId: string) => void;
   onDeleteCart: (cartId: string) => void;
+  onAddCartItems?: (cartId: string) => void;
 }
 
-const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDeleteCart }) => {
+const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDeleteCart, onAddCartItems }) => {
   const { toast } = useToast();
   const [isExpanded, setIsExpanded] = useState(true);
   const [cartToLoad, setCartToLoad] = useState<string | null>(null);
+  const [cartToAddItems, setCartToAddItems] = useState<string | null>(null);
 
   if (savedCarts.length === 0) {
     return null;
@@ -36,10 +38,23 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
     setCartToLoad(cartId);
   };
 
+  const handleAddItemsClick = (cartId: string) => {
+    if (onAddCartItems) {
+      setCartToAddItems(cartId);
+    }
+  };
+
   const confirmLoadCart = () => {
     if (cartToLoad) {
       onLoadCart(cartToLoad);
       setCartToLoad(null);
+    }
+  };
+
+  const confirmAddItems = () => {
+    if (cartToAddItems && onAddCartItems) {
+      onAddCartItems(cartToAddItems);
+      setCartToAddItems(null);
     }
   };
 
@@ -95,6 +110,19 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                     date={cart.date}
                   />
                   
+                  {onAddCartItems && (
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddItemsClick(cart.id);
+                      }}
+                      className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium rounded-md text-sm transition-colors flex items-center"
+                    >
+                      <Plus className="h-3.5 w-3.5 mr-1" />
+                      Add Items
+                    </button>
+                  )}
+                  
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
@@ -102,7 +130,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                     }}
                     className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-sm transition-colors"
                   >
-                    Load
+                    Use Cart
                   </button>
                   
                   <button 
@@ -149,6 +177,21 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={confirmLoadCart}>Replace Cart</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={cartToAddItems !== null} onOpenChange={(open) => !open && setCartToAddItems(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Add items to current cart?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will add the items from the saved cart to your current cart without replacing existing items.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmAddItems}>Add Items</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
