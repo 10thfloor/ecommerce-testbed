@@ -125,8 +125,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
                   onClick={handleAddToCart}
                   aria-label="Add to cart"
+                  disabled={!selectedSize}
                 >
-                  <Plus className="h-4 w-4 text-primary" />
+                  <Plus className={`h-4 w-4 ${selectedSize ? 'text-primary' : 'text-primary/50'}`} />
                 </button>
               )}
               

@@ -1,13 +1,15 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Star } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
-import { Product } from './types';
+import { Product, ProductSize } from './types';
+import SizeSelector from './SizeSelector';
+import { useToast } from '@/hooks/use-toast';
 
 interface FeaturedProductBannerProps {
   products: Product[];
-  onAddToCart: (productId: number, price: number) => void;
+  onAddToCart: (productId: number, price: number, size?: string) => void;
 }
 
 const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({ 
@@ -19,7 +21,32 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
     .filter(product => product.inventory > 0) // Only show in-stock products
     .slice(0, 2);
   
+  const [selectedSizes, setSelectedSizes] = useState<Record<number, ProductSize['name'] | undefined>>({});
+  const { toast } = useToast();
+  
   if (featuredProducts.length === 0) return null;
+
+  const handleSizeSelect = (productId: number, size: ProductSize['name']) => {
+    setSelectedSizes(prev => ({
+      ...prev,
+      [productId]: size
+    }));
+  };
+
+  const handleAddToCart = (productId: number, price: number) => {
+    const selectedSize = selectedSizes[productId];
+    
+    if (!selectedSize) {
+      toast({
+        title: "Select a Size",
+        description: "Please select a size before adding to cart",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    onAddToCart(productId, price, selectedSize);
+  };
 
   return (
     <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl p-4 mb-6 animate-fade-in">
@@ -41,7 +68,13 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
                 <h4 className="font-medium text-base">{product.name}</h4>
                 <p className="text-muted-foreground text-sm line-clamp-2 mb-3">{product.description}</p>
                 
-                <div className="mb-3 flex items-center">
+                <SizeSelector
+                  sizes={product.sizes}
+                  selectedSize={selectedSizes[product.id]}
+                  onSelectSize={(size) => handleSizeSelect(product.id, size)}
+                />
+                
+                <div className="mb-3 flex items-center mt-2">
                   <span className="font-bold mr-3">{formatCurrency(product.price)}</span>
                   {product.inventory <= 3 && (
                     <div className="text-xs font-medium rounded-full px-2 py-0.5 bg-amber-500/20 text-amber-700 dark:text-amber-400">
@@ -53,12 +86,15 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
               
               <div className="mt-auto">
                 <Button 
-                  onClick={() => onAddToCart(product.id, product.price)}
+                  onClick={() => handleAddToCart(product.id, product.price)}
                   variant="outline"
-                  className="w-full group hover:bg-primary/10 border-primary/20"
+                  className={`w-full group hover:bg-primary/10 border-primary/20 ${!selectedSizes[product.id] ? 'opacity-70' : ''}`}
+                  disabled={!selectedSizes[product.id]}
                 >
                   <ShoppingCart className="h-4 w-4 mr-2 group-hover:text-primary" />
-                  <span className="group-hover:text-primary">Add to Cart</span>
+                  <span className="group-hover:text-primary">
+                    {selectedSizes[product.id] ? 'Add to Cart' : 'Select Size First'}
+                  </span>
                 </Button>
               </div>
             </div>
