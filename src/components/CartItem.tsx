@@ -26,7 +26,7 @@ const CartItem: React.FC<CartItemProps> = ({
 }) => {
   const productName = useProductName(item.productId);
   const isOutOfStock = inventory[Number(item.productId)] === 0;
-  const lowStock = inventory[Number(item.productId)] > 0 && inventory[Number(item.productId)] < 3;
+  const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
   
   const handleIncrement = () => {
