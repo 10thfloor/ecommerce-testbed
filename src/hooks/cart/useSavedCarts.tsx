@@ -56,7 +56,7 @@ export const useSavedCarts = ({
     if (cartItems.length === 0) return;
     
     const date = new Date();
-    const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} at ${date.toLocaleTimeString()}`;
+    const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     
     const newSavedCart: SavedCart = {
       id: generateCartId(),

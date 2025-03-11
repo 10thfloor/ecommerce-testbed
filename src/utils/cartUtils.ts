@@ -21,7 +21,7 @@ export const mockCartItems: CartItem[] = [
 export const mockSavedCarts: SavedCart[] = [
   {
     id: "d0b4f43b34bdc5c2",
-    date: "3/8/2025 at 3:50:00 PM",
+    date: "3/8/2025",
     items: [
       { id: 1, productId: 1, quantity: 1, price: 799.99 },
       { id: 2, productId: 6, quantity: 1, price: 399.99 }, // Out of stock item
@@ -30,7 +30,7 @@ export const mockSavedCarts: SavedCart[] = [
   },
   {
     id: "e5c3f28a9d71b4e6",
-    date: "3/10/2025 at 2:25:00 PM",
+    date: "3/10/2025",
     items: [
       { id: 4, productId: 2, quantity: 2, price: 449.99 },
       { id: 5, productId: 3, quantity: 1, price: 299.99 }
