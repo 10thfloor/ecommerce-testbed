@@ -9,6 +9,8 @@ import StockWatch from '@/components/StockWatch';
 import RecommendedItems from '@/components/RecommendedItems';
 import { CartItem, SavedCart } from '@/utils/cartUtils';
 import { Product } from '@/components/product/types';
+import { useLayout } from '@/contexts/LayoutContext';
+import { cn } from '@/lib/utils';
 
 interface ShoppingGridProps {
   userId: string;
@@ -65,6 +67,45 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
 }) => {
   // Extract just the IDs from stock watch items for simplified passing to ProductInventory
   const watchedItemIds = stockWatchItems.map(item => item.id);
+  const { layout } = useLayout();
+  
+  // Layout classes based on the current layout
+  const getGridClasses = () => {
+    switch (layout) {
+      case 'compact':
+        return "grid-cols-1 md:grid-cols-3";
+      case 'wide':
+        return "grid-cols-1 md:grid-cols-1";
+      case 'default':
+      default:
+        return "grid-cols-1 md:grid-cols-12";
+    }
+  };
+  
+  // Column span classes based on the current layout
+  const getLeftColumnClasses = () => {
+    switch (layout) {
+      case 'compact':
+        return "md:col-span-2";
+      case 'wide':
+        return "md:col-span-1";
+      case 'default':
+      default:
+        return "md:col-span-7";
+    }
+  };
+  
+  const getRightColumnClasses = () => {
+    switch (layout) {
+      case 'compact':
+        return "md:col-span-1";
+      case 'wide':
+        return "md:col-span-1";
+      case 'default':
+      default:
+        return "md:col-span-5";
+    }
+  };
   
   return (
     <>
@@ -72,8 +113,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
         <UserProfile userId={userId} />
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div className="md:col-span-7 space-y-6">
+      <div className={cn("grid gap-6", getGridClasses())}>
+        <div className={cn("space-y-6", getLeftColumnClasses())}>
           <div className="cart-section">
             <ProductInventory 
               onAddToCart={onAddToCart} 
@@ -94,7 +135,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
           </div>
         </div>
         
-        <div className="md:col-span-5 space-y-4">
+        <div className={cn("space-y-4", getRightColumnClasses())}>
           <div className="cart-section">
             <Cart 
               items={cartItems}

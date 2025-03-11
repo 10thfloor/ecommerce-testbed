@@ -1,5 +1,6 @@
 
 import React, { useEffect } from 'react';
+import LayoutSwitcher from './LayoutSwitcher';
 
 interface ShoppingLayoutProps {
   title: string;
@@ -16,11 +17,15 @@ const ShoppingLayout: React.FC<ShoppingLayoutProps> = ({ title, children }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/50 px-4 py-8">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground animate-fade-in">
-            {title}
-          </h1>
-          <div className="h-1 w-24 bg-primary rounded animate-pulse-subtle"></div>
+        <header className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground animate-fade-in">
+              {title}
+            </h1>
+            <div className="h-1 w-24 bg-primary rounded animate-pulse-subtle"></div>
+          </div>
+          
+          <LayoutSwitcher />
         </header>
         
         {children}
