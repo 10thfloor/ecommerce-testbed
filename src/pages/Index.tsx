@@ -23,7 +23,14 @@ const productInventory: Record<number, number> = {
 
 // Initial stock watch items
 const initialStockWatchItems = [
-  { id: 6, name: "Zeta SL Rain Jacket", price: 399.99, inventory: 0 }
+  { 
+    id: 6, 
+    name: "Zeta SL Rain Jacket", 
+    price: 399.99, 
+    inventory: 0,
+    description: "Superlight emergency rain protection for hiking",
+    image: "/placeholder.svg"
+  }
 ];
 
 const Index = () => {
