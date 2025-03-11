@@ -6,6 +6,16 @@ import { ChevronDown, ChevronUp, ShoppingBag } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import { useToast } from "@/hooks/use-toast";
 import ShareMenu from './ShareMenu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface SavedCartsProps {
   savedCarts: SavedCart[];
@@ -17,6 +27,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
   const { toast } = useToast();
   const [isExpanded, setIsExpanded] = useState(true);
   const [expandedCartId, setExpandedCartId] = useState<string | null>(null);
+  const [cartToLoad, setCartToLoad] = useState<string | null>(null);
 
   if (savedCarts.length === 0) {
     return null;
@@ -27,6 +38,17 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
       setExpandedCartId(null);
     } else {
       setExpandedCartId(cartId);
+    }
+  };
+
+  const handleLoadCartClick = (cartId: string) => {
+    setCartToLoad(cartId);
+  };
+
+  const confirmLoadCart = () => {
+    if (cartToLoad) {
+      onLoadCart(cartToLoad);
+      setCartToLoad(null);
     }
   };
 
@@ -95,7 +117,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      onLoadCart(cart.id);
+                      handleLoadCartClick(cart.id);
                     }}
                     className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-sm transition-colors"
                   >
@@ -135,6 +157,21 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
           ))}
         </div>
       )}
+
+      <AlertDialog open={cartToLoad !== null} onOpenChange={(open) => !open && setCartToLoad(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Replace current cart?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will replace your current cart with the saved cart. Your current cart items will be saved in history.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmLoadCart}>Replace Cart</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

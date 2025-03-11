@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import UserProfile from '@/components/UserProfile';
@@ -34,12 +35,51 @@ const Index = () => {
   const [savedForLaterItems, setSavedForLaterItems] = useState<CartItem[]>(mockSavedForLaterItems);
   const [inventory, setInventory] = useState<Record<number, number>>(productInventory);
   const [userId] = useState("user-123");
+  const [cartHistory, setCartHistory] = useState<CartItem[][]>([]);
+  const [showUndoToast, setShowUndoToast] = useState(false);
 
   useEffect(() => {
     document.querySelectorAll('.cart-section').forEach((el, i) => {
       (el as HTMLElement).style.animationDelay = `${i * 0.1}s`;
     });
   }, []);
+
+  // Save the current cart to history before replacing it
+  const saveToHistory = (items: CartItem[]) => {
+    if (items.length > 0) {
+      setCartHistory(prev => [...prev, [...items]]);
+    }
+  };
+
+  // Revert to the previous cart
+  const undoCartLoad = () => {
+    if (cartHistory.length > 0) {
+      const prevCart = cartHistory[cartHistory.length - 1];
+      
+      // Adjust inventory
+      const tempInventory = { ...inventory };
+      
+      // Return current cart items to inventory
+      cartItems.forEach(item => {
+        tempInventory[Number(item.productId)] += item.quantity;
+      });
+      
+      // Remove previous cart items from inventory
+      prevCart.forEach(item => {
+        tempInventory[Number(item.productId)] -= item.quantity;
+      });
+      
+      setInventory(tempInventory);
+      setCartItems(prevCart);
+      setCartHistory(prev => prev.slice(0, -1));
+      setShowUndoToast(false);
+      
+      toast({
+        title: "Cart Restored",
+        description: "Your previous cart has been restored.",
+      });
+    }
+  };
 
   const handleAddToCart = (productId: number, price: number) => {
     if (inventory[productId] <= 0) {
@@ -162,10 +202,15 @@ const Index = () => {
       const tempInventory = { ...inventory };
       let insufficientInventory = false;
       
+      // Save current cart to history before replacing it
+      saveToHistory([...cartItems]);
+      
+      // Return current cart items to inventory
       cartItems.forEach(item => {
         tempInventory[Number(item.productId)] += item.quantity;
       });
       
+      // Check if all items in the saved cart are available
       cartToLoad.items.forEach(item => {
         if (tempInventory[Number(item.productId)] < item.quantity) {
           insufficientInventory = true;
@@ -189,7 +234,17 @@ const Index = () => {
       toast({
         title: "Cart Loaded",
         description: "The saved cart has been loaded successfully.",
+        action: cartHistory.length > 0 ? (
+          <button 
+            onClick={undoCartLoad}
+            className="bg-primary text-primary-foreground px-3 py-1 rounded-md text-xs"
+          >
+            Undo
+          </button>
+        ) : undefined
       });
+      
+      setShowUndoToast(true);
     }
   };
 
