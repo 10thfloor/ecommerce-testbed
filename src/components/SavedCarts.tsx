@@ -76,7 +76,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
   };
 
   return (
-    <div className="card-glass p-4 mb-6 animate-fade-in">
+    <div className={`card-glass p-4 ${isExpanded ? 'mb-6' : 'mb-0'} animate-fade-in`}>
       <div 
         className="flex justify-between items-center cursor-pointer mb-4"
         onClick={() => setIsExpanded(!isExpanded)}
