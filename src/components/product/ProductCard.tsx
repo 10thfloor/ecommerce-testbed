@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, Eye, Bookmark } from 'lucide-react';
+import { Plus, Eye, BookmarkPlus } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '../ui/button';
 import { Product } from '@/components/product/types';
@@ -66,7 +66,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 onClick={handleSaveForLater}
                 aria-label="Save for later"
               >
-                <Bookmark className="h-4 w-4 text-blue-500" />
+                <BookmarkPlus className="h-4 w-4 text-blue-500" />
               </button>
             )}
             
