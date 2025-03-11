@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Define layout types
 export type LayoutType = 'default' | 'compact' | 'wide';
@@ -16,7 +16,7 @@ const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [layout, setLayout] = useState<LayoutType>('default');
   const { toast } = useToast();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   
   // Reset to default layout on mobile
   useEffect(() => {

@@ -4,12 +4,12 @@ import { LayoutType, useLayout } from '@/contexts/LayoutContext';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { LayoutDashboard, LayoutGrid, LayoutList } from 'lucide-react';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 
 const LayoutSwitcher: React.FC = () => {
   const { layout, setLayout } = useLayout();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   if (isMobile) return null;
 
