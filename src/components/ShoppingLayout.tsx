@@ -15,14 +15,14 @@ const ShoppingLayout: React.FC<ShoppingLayoutProps> = ({ title, children }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/50 px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-background to-background/95 px-4 py-8">
       <div className="max-w-6xl mx-auto">
         <header className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground animate-fade-in">
+            <h1 className="text-3xl md:text-4xl font-light mb-2 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70 animate-fade-in tracking-tight">
               {title}
             </h1>
-            <div className="h-1 w-24 bg-primary rounded animate-pulse-subtle"></div>
+            <div className="h-0.5 w-16 bg-primary rounded animate-pulse-subtle opacity-70"></div>
           </div>
           
           <LayoutSwitcher />
