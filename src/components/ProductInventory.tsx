@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import ProductsGrid from './product/ProductsGrid';
 import { products } from './product/productData';
 import { Product } from './product/types';
+import SocialProofToast from './product/SocialProofToast';
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
@@ -76,6 +77,9 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         onWatchItem={handleWatchItem}
         onSaveForLater={handleSaveForLater}
       />
+      
+      {/* Social Proof Component - will show toast notifications of recent purchases */}
+      <SocialProofToast products={products} />
     </div>
   );
 };

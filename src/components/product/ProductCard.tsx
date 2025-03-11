@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, Eye, BookmarkPlus } from 'lucide-react';
+import { Plus, Eye, BookmarkPlus, Star, Award, Fire, Gem, Zap } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '../ui/button';
 import { Product } from '@/components/product/types';
@@ -12,6 +12,22 @@ interface ProductCardProps {
   onWatchItem?: (product: Product) => void;
   onSaveForLater?: (product: Product) => void;
 }
+
+// Helper function to get a random badge for a product
+const getProductBadge = (productId: number) => {
+  // Use product ID to deterministically assign a badge type
+  const badges = [
+    { icon: Star, text: "Top Rated", color: "text-yellow-500", bg: "bg-yellow-100 dark:bg-yellow-900/30" },
+    { icon: Award, text: "Best Seller", color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30" },
+    { icon: Fire, text: "Hot Item", color: "text-orange-500", bg: "bg-orange-100 dark:bg-orange-900/30" },
+    { icon: Gem, text: "Premium", color: "text-purple-500", bg: "bg-purple-100 dark:bg-purple-900/30" },
+    { icon: Zap, text: "Flash Deal", color: "text-green-500", bg: "bg-green-100 dark:bg-green-900/30" },
+  ];
+  
+  // Use product ID to consistently select the same badge for a product
+  const badgeIndex = productId % badges.length;
+  return badges[badgeIndex];
+};
 
 const ProductCard: React.FC<ProductCardProps> = ({ 
   product, 
@@ -34,6 +50,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
   };
 
+  // Only show product badges for products with ID 1, 3, 7 (to showcase the feature without overwhelming the UI)
+  const showBadge = [1, 3, 7].includes(product.id);
+  const badge = showBadge ? getProductBadge(product.id) : null;
+
   return (
     <div 
       key={product.id}
@@ -41,6 +61,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
         rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''} relative`}
       onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
     >
+      {badge && (
+        <div className={`absolute top-2 right-2 ${badge.bg} ${badge.color} rounded-full px-2.5 py-1 flex items-center gap-1 text-xs font-semibold z-10`}>
+          <badge.icon className="h-3.5 w-3.5" />
+          {badge.text}
+        </div>
+      )}
+      
       <div className="flex flex-col h-full">
         <div className="mb-2">
           <h4 className="font-medium text-base mb-1">{product.name}</h4>
