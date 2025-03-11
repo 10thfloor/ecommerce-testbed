@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShoppingCart, Plus, Bell } from 'lucide-react';
+import { ShoppingCart, Plus, Eye } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from './ui/button';
@@ -36,7 +36,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     
     if (notifiedItems.includes(productId) || watchedItems.includes(productId)) {
       toast({
-        title: "Already Subscribed",
+        title: "Already Watching",
         description: `You'll be notified when ${productName} is back in stock.`,
       });
       return;
@@ -49,7 +49,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }
     
     toast({
-      title: "Notification Set",
+      title: "Stock Watch Added",
       description: `You'll be notified when ${productName} is back in stock.`,
     });
   };
@@ -182,9 +182,9 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
                         : 'bg-secondary/70 hover:bg-secondary'
                     }`}
                     onClick={(e) => handleNotifyMe(product, e)}
-                    aria-label={isItemWatched(product.id) ? "Notification set" : "Notify me when back in stock"}
+                    aria-label={isItemWatched(product.id) ? "Watching stock" : "Watch for stock updates"}
                   >
-                    <Bell className="h-3.5 w-3.5" />
+                    <Eye className="h-3.5 w-3.5" />
                   </Button>
                 )}
               </div>
