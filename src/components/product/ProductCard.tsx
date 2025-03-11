@@ -19,11 +19,11 @@ interface ProductCardProps {
 const getProductBadge = (productId: number) => {
   // Use product ID to deterministically assign a badge type
   const badges = [
-    { icon: Star, text: "Top Rated", color: "text-yellow-500", bg: "bg-yellow-100 dark:bg-yellow-900/30", borderPulse: "animate-pulse-subtle border border-yellow-500" },
-    { icon: Award, text: "Best Seller", color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30", borderPulse: "animate-pulse-subtle border border-blue-500" },
-    { icon: Flame, text: "Hot Item", color: "text-orange-500", bg: "bg-orange-100 dark:bg-orange-900/30", borderPulse: "animate-pulse-subtle border border-orange-500" },
-    { icon: Gem, text: "Premium", color: "text-purple-500", bg: "bg-purple-100 dark:bg-purple-900/30", borderPulse: "animate-pulse-subtle border border-purple-500" },
-    { icon: Zap, text: "Flash Deal", color: "text-green-500", bg: "bg-green-100 dark:bg-green-900/30", borderPulse: "animate-pulse-subtle border border-green-500" },
+    { icon: Star, text: "Top Rated", color: "text-yellow-500", bg: "bg-yellow-100 dark:bg-yellow-900/30", borderColor: "border-yellow-500" },
+    { icon: Award, text: "Best Seller", color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30", borderColor: "border-blue-500" },
+    { icon: Flame, text: "Hot Item", color: "text-orange-500", bg: "bg-orange-100 dark:bg-orange-900/30", borderColor: "border-orange-500" },
+    { icon: Gem, text: "Premium", color: "text-purple-500", bg: "bg-purple-100 dark:bg-purple-900/30", borderColor: "border-purple-500" },
+    { icon: Zap, text: "Flash Deal", color: "text-green-500", bg: "bg-green-100 dark:bg-green-900/30", borderColor: "border-green-500" },
   ];
   
   // Use product ID to consistently select the same badge for a product
@@ -79,11 +79,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Calculate if any size has inventory
   const hasSizeInStock = product.sizes.some(size => size.inventory > 0);
 
+  // Determine if we should add the pulsing border
+  const pulsingBorderClass = badge ? `border-2 ${badge.borderColor} animate-pulse-subtle` : '';
+
   return (
     <div 
       key={product.id}
       className={`${hasSizeInStock ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-amber-500/10 border border-amber-500/30'} 
-        rounded-lg p-4 transition-all relative`}
+        rounded-lg p-4 transition-all relative ${pulsingBorderClass}`}
     >
       <div className="flex flex-col h-full">
         <div className="mb-2">
@@ -154,7 +157,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
           
           {badge && (
-            <div className={`${badge.bg} ${badge.color} ${badge.borderPulse} rounded-full px-2.5 py-1 flex items-center gap-1 text-xs font-semibold w-fit`}>
+            <div className={`${badge.bg} ${badge.color} rounded-full px-2.5 py-1 flex items-center gap-1 text-xs font-semibold w-fit`}>
               <badge.icon className="h-3.5 w-3.5" />
               {badge.text}
             </div>
@@ -166,3 +169,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 export default ProductCard;
+
