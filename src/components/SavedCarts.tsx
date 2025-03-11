@@ -26,20 +26,11 @@ interface SavedCartsProps {
 const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDeleteCart }) => {
   const { toast } = useToast();
   const [isExpanded, setIsExpanded] = useState(true);
-  const [expandedCartId, setExpandedCartId] = useState<string | null>(null);
   const [cartToLoad, setCartToLoad] = useState<string | null>(null);
 
   if (savedCarts.length === 0) {
     return null;
   }
-
-  const toggleCartExpansion = (cartId: string) => {
-    if (expandedCartId === cartId) {
-      setExpandedCartId(null);
-    } else {
-      setExpandedCartId(cartId);
-    }
-  };
 
   const handleLoadCartClick = (cartId: string) => {
     setCartToLoad(cartId);
@@ -107,16 +98,6 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleCartExpansion(cart.id);
-                    }}
-                    className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 font-medium rounded-md text-sm transition-colors"
-                  >
-                    {expandedCartId === cart.id ? 'Hide' : 'View'}
-                  </button>
-                  
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
                       handleLoadCartClick(cart.id);
                     }}
                     className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-sm transition-colors"
@@ -137,23 +118,21 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                 </div>
               </div>
               
-              {expandedCartId === cart.id && (
-                <div className="mt-3 space-y-2 border-t pt-3 border-secondary">
-                  {cart.items.map((item) => (
-                    <ReadOnlyCartItem 
-                      key={item.id}
-                      item={item}
-                    />
-                  ))}
-                  
-                  <div className="mt-4 flex justify-end">
-                    <div className="bg-primary/5 rounded-lg p-3">
-                      <span className="text-muted-foreground mr-2">Total:</span>
-                      <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items))}</span>
-                    </div>
+              <div className="mt-3 space-y-2 border-t pt-3 border-secondary">
+                {cart.items.map((item) => (
+                  <ReadOnlyCartItem 
+                    key={item.id}
+                    item={item}
+                  />
+                ))}
+                
+                <div className="mt-4 flex justify-end">
+                  <div className="bg-primary/5 rounded-lg p-3">
+                    <span className="text-muted-foreground mr-2">Total:</span>
+                    <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items))}</span>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
