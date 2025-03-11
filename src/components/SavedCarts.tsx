@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { SavedCart } from '@/utils/cartUtils';
-import { getCartItemCount, formatCurrency, calculateTotal } from '@/utils/cartUtils';
+import { getCartItemCount, formatCurrency, calculateTotal, getCartMnemonic } from '@/utils/cartUtils';
 import { ChevronDown, ChevronUp, ShoppingBag, Trash2 } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import { useToast } from "@/hooks/use-toast";
@@ -75,7 +75,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                   
                   <div>
                     <div className="font-medium text-sm mb-0.5">
-                      Cart {cart.id.substring(0, 8)}
+                      {getCartMnemonic(cart.id)}
                     </div>
                     
                     <div className="flex items-center text-xs text-muted-foreground">
@@ -91,7 +91,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                   
                   <ShareMenu 
                     items={cart.items} 
-                    title={`Shared Cart (${cart.id.substring(0, 8)})`}
+                    title={`${getCartMnemonic(cart.id)} Cart`}
                     date={cart.date}
                   />
                   

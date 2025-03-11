@@ -47,3 +47,39 @@ export const getCartItemCount = (items: CartItem[]): number => {
 export const generateCartId = (): string => {
   return Math.random().toString(16).slice(2, 18);
 };
+
+// List of adjectives and nouns for mnemonic cart names
+const adjectives = [
+  "Happy", "Bright", "Swift", "Clever", "Gentle", "Bold", "Calm", "Brave", 
+  "Eager", "Kind", "Proud", "Wise", "Loyal", "Noble", "Quiet", "Smart"
+];
+
+const nouns = [
+  "Tiger", "Eagle", "Panda", "Dolphin", "Wolf", "Lion", "Falcon", "Bear", 
+  "Hawk", "Whale", "Fox", "Deer", "Owl", "Rabbit", "Turtle", "Horse"
+];
+
+// Generate a consistent mnemonic name from a cart id
+export const getCartMnemonic = (cartId: string): string => {
+  // Use the first 8 chars of the id to create a stable hash
+  const idFragment = cartId.substring(0, 8);
+  
+  // Convert to numbers we can use as indices
+  let adjIndex = 0;
+  let nounIndex = 0;
+  
+  // Simple hashing algorithm to get consistent indices
+  for (let i = 0; i < 4; i++) {
+    adjIndex += idFragment.charCodeAt(i);
+  }
+  
+  for (let i = 4; i < 8; i++) {
+    nounIndex += idFragment.charCodeAt(i);
+  }
+  
+  // Get adjective and noun using modulo to stay within array bounds
+  const adjective = adjectives[adjIndex % adjectives.length];
+  const noun = nouns[nounIndex % nouns.length];
+  
+  return `${adjective} ${noun}`;
+};
