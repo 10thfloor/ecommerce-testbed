@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ShoppingCart, Star } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
@@ -74,16 +73,12 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
                     sizes={product.sizes}
                     selectedSize={selectedSizes[product.id]}
                     onSelectSize={(size) => handleSizeSelect(product.id, size)}
+                    showInventory={true}
                   />
                 </div>
                 
                 <div className="mb-3 flex items-center mt-2">
                   <span className="font-bold mr-3">{formatCurrency(product.price)}</span>
-                  {product.inventory <= 3 && (
-                    <div className="text-xs font-medium rounded-full px-2 py-0.5 bg-amber-500/20 text-amber-700 dark:text-amber-400">
-                      Only {product.inventory} left
-                    </div>
-                  )}
                 </div>
               </div>
               

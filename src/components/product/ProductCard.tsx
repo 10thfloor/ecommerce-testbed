@@ -94,6 +94,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             sizes={product.sizes}
             selectedSize={selectedSize}
             onSelectSize={handleSizeSelect}
+            showInventory={true}
           />
           
           {!hasSizeInStock && (
