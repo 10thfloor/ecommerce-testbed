@@ -25,7 +25,7 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
 }) => {
   const productName = useProductName(item.productId);
   const isOutOfStock = inventory[Number(item.productId)] === 0;
-  const lowStock = inventory[Number(item.productId)] === 1;
+  const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
   
   return (
@@ -51,15 +51,17 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
                   <PackageX className="h-3 w-3" />
                 </div>
               )}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-muted-foreground">
+                {formatCurrency(item.price)}
+              </span>
               {lowStock && !isOutOfStock && (
-                <span className="ml-2 text-amber-600 dark:text-amber-400 text-xs font-medium">
-                  Only 1 left
+                <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                  Only {inventory[Number(item.productId)]} left
                 </span>
               )}
             </div>
-            <span className="text-xs text-muted-foreground">
-              {formatCurrency(item.price)}
-            </span>
           </div>
         </div>
         
