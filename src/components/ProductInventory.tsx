@@ -97,13 +97,11 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      {/* Only show featured products when not searching */}
-      {!searchQuery && (
-        <FeaturedProductBanner 
-          products={featuredProducts} 
-          onAddToCart={onAddToCart} 
-        />
-      )}
+      {/* Always show featured products regardless of search status */}
+      <FeaturedProductBanner 
+        products={featuredProducts} 
+        onAddToCart={onAddToCart} 
+      />
       
       <ProductSearch onSearch={handleSearch} />
       
