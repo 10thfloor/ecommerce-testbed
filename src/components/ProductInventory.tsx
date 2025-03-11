@@ -115,14 +115,33 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {products.map((product) => (
           <div 
             key={product.id}
             className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10'} 
-              rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''}`}
+              rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''} relative`}
             onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
           >
+            {product.inventory === 0 && (
+              <Button
+                variant="outline"
+                size="icon"
+                className={`absolute top-2 right-2 h-8 w-8 z-10 rounded-full transition-all ${
+                  notifiedItems.includes(product.id) 
+                    ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400' 
+                    : 'bg-secondary/70 hover:bg-secondary'
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNotifyMe(product.id, product.name);
+                }}
+                aria-label={notifiedItems.includes(product.id) ? "Notification set" : "Notify me when back in stock"}
+              >
+                <Bell className="h-4 w-4" />
+              </Button>
+            )}
+            
             <div className="flex flex-col h-full">
               <div className="mb-2">
                 <h4 className="font-medium text-base mb-1">{product.name}</h4>
@@ -140,7 +159,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
               
               <div className="flex justify-between items-center mt-auto">
                 <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
-                {product.inventory > 0 ? (
+                {product.inventory > 0 && (
                   <button 
                     className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
                     onClick={(e) => {
@@ -151,23 +170,6 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
                   >
                     <Plus className="h-4 w-4 text-primary" />
                   </button>
-                ) : (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className={`text-xs px-3 py-1 h-8 transition-all ${
-                      notifiedItems.includes(product.id) 
-                        ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400' 
-                        : 'bg-secondary/50 hover:bg-secondary/70'
-                    }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNotifyMe(product.id, product.name);
-                    }}
-                  >
-                    <Bell className="h-3 w-3 mr-1.5" />
-                    {notifiedItems.includes(product.id) ? 'Notified' : 'Notify Me'}
-                  </Button>
                 )}
               </div>
             </div>
