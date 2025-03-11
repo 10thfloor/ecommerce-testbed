@@ -1,4 +1,3 @@
-
 import { Product } from './types';
 
 export const products: Product[] = [
@@ -8,7 +7,13 @@ export const products: Product[] = [
     price: 799.99,
     description: "Premium waterproof hardshell for extreme alpine conditions",
     image: "/placeholder.svg",
-    inventory: 5
+    inventory: 5,
+    sizes: [
+      { name: 'SM', inventory: 2 },
+      { name: 'MD', inventory: 0 },
+      { name: 'LG', inventory: 2 },
+      { name: 'XL', inventory: 1 }
+    ]
   },
   {
     id: 2,
@@ -16,7 +21,13 @@ export const products: Product[] = [
     price: 499.99,
     description: "All-round mountaineering pants with GORE-TEX protection",
     image: "/placeholder.svg",
-    inventory: 8
+    inventory: 8,
+    sizes: [
+      { name: 'SM', inventory: 3 },
+      { name: 'MD', inventory: 2 },
+      { name: 'LG', inventory: 3 },
+      { name: 'XL', inventory: 0 }
+    ]
   },
   {
     id: 3,
@@ -24,7 +35,13 @@ export const products: Product[] = [
     price: 259.99,
     description: "Lightweight insulated mid-layer with exceptional breathability",
     image: "/placeholder.svg",
-    inventory: 12
+    inventory: 12,
+    sizes: [
+      { name: 'SM', inventory: 3 },
+      { name: 'MD', inventory: 4 },
+      { name: 'LG', inventory: 3 },
+      { name: 'XL', inventory: 2 }
+    ]
   },
   {
     id: 4,
@@ -32,7 +49,13 @@ export const products: Product[] = [
     price: 349.99,
     description: "Ultralight 850 fill-power down vest for alpine climbing",
     image: "/placeholder.svg",
-    inventory: 3
+    inventory: 3,
+    sizes: [
+      { name: 'SM', inventory: 1 },
+      { name: 'MD', inventory: 1 },
+      { name: 'LG', inventory: 1 },
+      { name: 'XL', inventory: 0 }
+    ]
   },
   {
     id: 5,
@@ -40,7 +63,13 @@ export const products: Product[] = [
     price: 349.99,
     description: "Versatile softshell jacket for mixed weather conditions",
     image: "/placeholder.svg",
-    inventory: 2
+    inventory: 2,
+    sizes: [
+      { name: 'SM', inventory: 0 },
+      { name: 'MD', inventory: 1 },
+      { name: 'LG', inventory: 1 },
+      { name: 'XL', inventory: 0 }
+    ]
   },
   {
     id: 6,
@@ -48,7 +77,13 @@ export const products: Product[] = [
     price: 299.99,
     description: "Superlight emergency rain protection for hiking",
     image: "/placeholder.svg",
-    inventory: 0
+    inventory: 0,
+    sizes: [
+      { name: 'SM', inventory: 0 },
+      { name: 'MD', inventory: 0 },
+      { name: 'LG', inventory: 0 },
+      { name: 'XL', inventory: 0 }
+    ]
   },
   {
     id: 7,
@@ -56,7 +91,13 @@ export const products: Product[] = [
     price: 179.99,
     description: "Classic fleece with a clean aesthetic for everyday wear",
     image: "/placeholder.svg",
-    inventory: 15
+    inventory: 15,
+    sizes: [
+      { name: 'SM', inventory: 4 },
+      { name: 'MD', inventory: 4 },
+      { name: 'LG', inventory: 4 },
+      { name: 'XL', inventory: 3 }
+    ]
   },
   {
     id: 8,
@@ -64,6 +105,12 @@ export const products: Product[] = [
     price: 399.99,
     description: "Advanced breathable insulation for cold, active pursuits",
     image: "/placeholder.svg",
-    inventory: 4
+    inventory: 4,
+    sizes: [
+      { name: 'SM', inventory: 1 },
+      { name: 'MD', inventory: 1 },
+      { name: 'LG', inventory: 1 },
+      { name: 'XL', inventory: 1 }
+    ]
   }
 ];
