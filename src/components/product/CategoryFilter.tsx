@@ -33,16 +33,18 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           <h3 className="text-xs font-medium text-muted-foreground">Categories</h3>
         </div>
         
-        {hasFilters && (
-          <Button
-            variant="ghost"
-            size="xs"
-            className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-xs transition-colors"
-            onClick={onClearCategories}
-          >
-            Clear all
-          </Button>
-        )}
+        <div className="h-7">
+          {hasFilters && (
+            <Button
+              variant="ghost"
+              size="xs"
+              className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-xs transition-colors"
+              onClick={onClearCategories}
+            >
+              Clear all
+            </Button>
+          )}
+        </div>
       </div>
       
       <div className="flex flex-nowrap overflow-x-auto gap-1.5 pb-1">
