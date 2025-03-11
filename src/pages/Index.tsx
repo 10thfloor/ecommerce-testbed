@@ -96,19 +96,6 @@ const Index = () => {
         onUndoCart={undoCartLoad}
         hasCartHistory={hasCartHistory}
       />
-
-      {/* For demo purposes only - button to simulate an item coming back in stock */}
-      {stockWatchItems.length > 0 && 
-        stockWatchItems.some(item => item.id === 6 && item.inventory === 0) && (
-        <div className="fixed bottom-4 right-4">
-          <button 
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg"
-            onClick={() => simulateInventoryChange(6, 3)}
-          >
-            Simulate Item Back in Stock
-          </button>
-        </div>
-      )}
     </ShoppingLayout>
   );
 };
