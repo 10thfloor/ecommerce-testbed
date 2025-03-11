@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
-import { Eye, EyeOff, Plus, Mail, MailX } from 'lucide-react';
+import { Eye, EyeOff, Plus, Mail } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/components/ProductInventory';
 import { useToast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 interface StockWatchProps {
   items: Product[];
@@ -20,7 +21,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
   inventory
 }) => {
   const { toast } = useToast();
-  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(true);
 
   const toggleEmailNotifications = () => {
     const newState = !emailNotifications;
@@ -62,25 +63,15 @@ const StockWatch: React.FC<StockWatchProps> = ({
           <h3 className="text-xl font-medium">Stock Watch</h3>
         </div>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 px-2 flex items-center gap-1"
-          onClick={toggleEmailNotifications}
-          aria-label={emailNotifications ? "Turn off email notifications" : "Turn on email notifications"}
-        >
-          {emailNotifications ? (
-            <>
-              <Mail className="h-4 w-4 text-blue-400" />
-              <span className="text-xs font-medium text-blue-400">Emails On</span>
-            </>
-          ) : (
-            <>
-              <MailX className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs font-medium text-muted-foreground">Emails Off</span>
-            </>
-          )}
-        </Button>
+        <div className="flex items-center gap-2">
+          <Mail className="h-4 w-4 text-primary" />
+          <span className="text-xs font-medium">Emails</span>
+          <Switch
+            checked={emailNotifications}
+            onCheckedChange={toggleEmailNotifications}
+            aria-label={emailNotifications ? "Turn off email notifications" : "Turn on email notifications"}
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
