@@ -87,16 +87,14 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
             />
           </div>
           
-          {stockWatchItems.length > 0 && (
-            <div className="cart-section">
-              <StockWatch 
-                items={stockWatchItems}
-                onRemoveFromWatch={onRemoveFromWatch}
-                onAddToCart={onAddToCart}
-                inventory={inventory}
-              />
-            </div>
-          )}
+          <div className="cart-section">
+            <StockWatch 
+              items={stockWatchItems}
+              onRemoveFromWatch={onRemoveFromWatch}
+              onAddToCart={onAddToCart}
+              inventory={inventory}
+            />
+          </div>
           
           <div className="cart-section">
             <SavedForLater

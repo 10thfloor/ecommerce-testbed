@@ -21,6 +21,11 @@ const productInventory: Record<number, number> = {
   8: 4   // Proton AR Insulated
 };
 
+// Initial stock watch items
+const initialStockWatchItems = [
+  { id: 6, name: "Zeta SL Rain Jacket", price: 399.99, inventory: 0 }
+];
+
 const Index = () => {
   const [userId] = useState("user-123");
   
@@ -49,7 +54,8 @@ const Index = () => {
     initialCartItems: mockCartItems,
     initialSavedCarts: mockSavedCarts,
     initialSavedForLaterItems: mockSavedForLaterItems,
-    initialInventory: productInventory
+    initialInventory: productInventory,
+    initialStockWatchItems: initialStockWatchItems
   });
 
   return (
