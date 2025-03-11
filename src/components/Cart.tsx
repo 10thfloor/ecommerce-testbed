@@ -43,6 +43,9 @@ const Cart: React.FC<CartProps> = ({
     inventory[Number(item.productId)] > 0
   );
   
+  // Calculate total quantity by summing up quantities of all available items
+  const totalQuantity = availableItems.reduce((sum, item) => sum + item.quantity, 0);
+  
   useEffect(() => {
     if (items.length === 0) {
       setTimeRemaining(30 * 60); // Reset to 30 minutes
@@ -92,7 +95,7 @@ const Cart: React.FC<CartProps> = ({
     
     toast({
       title: "Checkout Initiated",
-      description: `Processing ${availableItems.length} ${availableItems.length === 1 ? 'item' : 'items'} for ${formatCurrency(availableFinalTotal)}`,
+      description: `Processing ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'} for ${formatCurrency(availableFinalTotal)}`,
     });
   };
   
@@ -136,7 +139,7 @@ const Cart: React.FC<CartProps> = ({
             finalTotal={finalTotal}
             appliedDiscount={appliedDiscount}
             discountAmount={discountAmount}
-            availableItems={availableItems.length}
+            availableItems={totalQuantity}
             totalItems={items.length}
             formatCurrency={formatCurrency}
             onApplyDiscount={handleApplyDiscount}
