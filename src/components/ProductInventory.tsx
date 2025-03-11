@@ -1,7 +1,9 @@
 
-import React from 'react';
-import { ShoppingCart, Plus, AlertCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingCart, Plus, AlertCircle, Bell } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
+import { useToast } from "@/hooks/use-toast";
+import { Button } from './ui/button';
 
 export interface Product {
   id: number;
@@ -17,6 +19,26 @@ interface ProductInventoryProps {
 }
 
 const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
+  const { toast } = useToast();
+  const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
+
+  const handleNotifyMe = (productId: number, productName: string) => {
+    if (notifiedItems.includes(productId)) {
+      toast({
+        title: "Already Subscribed",
+        description: `You'll be notified when ${productName} is back in stock.`,
+      });
+      return;
+    }
+
+    setNotifiedItems([...notifiedItems, productId]);
+    
+    toast({
+      title: "Notification Set",
+      description: `You'll be notified when ${productName} is back in stock.`,
+    });
+  };
+
   const products: Product[] = [
     {
       id: 1,
@@ -97,7 +119,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
         {products.map((product) => (
           <div 
             key={product.id}
-            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10 cursor-not-allowed'} 
+            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10'} 
               rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''}`}
             onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
           >
@@ -130,8 +152,19 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
                     <Plus className="h-4 w-4 text-primary" />
                   </button>
                 ) : (
-                  <div className="p-1.5 bg-destructive/10 rounded-full">
-                    <AlertCircle className="h-4 w-4 text-destructive" />
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`text-xs ${notifiedItems.includes(product.id) ? 'bg-primary/10' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNotifyMe(product.id, product.name);
+                      }}
+                    >
+                      <Bell className="h-3 w-3 mr-1" />
+                      {notifiedItems.includes(product.id) ? 'Notified' : 'Notify Me'}
+                    </Button>
                   </div>
                 )}
               </div>

@@ -12,6 +12,7 @@ interface ShoppingGridProps {
   cartItems: CartItem[];
   savedCarts: SavedCart[];
   savedForLaterItems: CartItem[];
+  inventory?: Record<number, number>;
   onAddToCart: (productId: number, price: number) => void;
   onSaveCart: () => void;
   onRemoveItem: (id: string | number) => void;
@@ -31,6 +32,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   cartItems,
   savedCarts,
   savedForLaterItems,
+  inventory,
   onAddToCart,
   onSaveCart,
   onRemoveItem,

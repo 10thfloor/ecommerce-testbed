@@ -28,6 +28,7 @@ const Index = () => {
     cartItems,
     savedCarts,
     savedForLaterItems,
+    inventory,
     handleAddToCart,
     handleUpdateQuantity,
     handleRemoveItem,
@@ -54,6 +55,7 @@ const Index = () => {
         cartItems={cartItems}
         savedCarts={savedCarts}
         savedForLaterItems={savedForLaterItems}
+        inventory={inventory}
         onAddToCart={handleAddToCart}
         onSaveCart={handleSaveCart}
         onRemoveItem={handleRemoveItem}
