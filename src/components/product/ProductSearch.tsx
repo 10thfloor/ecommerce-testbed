@@ -46,7 +46,7 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onSearch }) => {
 
   return (
     <div className="relative mb-4">
-      <div className="flex items-center bg-secondary/50 rounded-md px-3 focus-within:ring-2 focus-within:ring-primary/40">
+      <div className="flex items-center bg-background border border-input rounded-lg px-3 focus-within:ring-2 focus-within:ring-primary/40 shadow-sm">
         <Search className="h-4 w-4 text-muted-foreground mr-2 flex-shrink-0" />
         <Input
           type="text"
@@ -77,8 +77,8 @@ const ProductSearch: React.FC<ProductSearchProps> = ({ onSearch }) => {
               <Button
                 key={term}
                 variant="outline"
-                size="sm"
-                className="h-6 px-2 text-xs bg-accent/50 border-accent/50 hover:bg-accent"
+                size="xs"
+                className="h-6 px-2 text-xs bg-primary/5 border-primary/10 hover:bg-primary/10 hover:border-primary/20"
                 onClick={() => handlePopularSearchClick(term)}
               >
                 {term}

@@ -31,7 +31,6 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     setSearchQuery(query);
   };
 
-  // Calculate product count by category
   const productCountByCategory = useMemo(() => {
     return products.reduce((acc, product) => {
       const { categoryId } = product;
@@ -43,16 +42,13 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }, {} as Record<number, number>);
   }, []);
 
-  // Filter products based on search query and selected category
   const filteredProducts = useMemo(() => {
     let filtered = products;
     
-    // Filter by category if selected
     if (selectedCategory !== null) {
       filtered = filtered.filter(product => product.categoryId === selectedCategory);
     }
     
-    // Then filter by search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(product => 
@@ -64,8 +60,6 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     return filtered;
   }, [searchQuery, selectedCategory]);
 
-  // Choose featured products from ALL products, not filtered ones
-  // Featured products are not affected by filters
   const featuredProducts = useMemo(() => {
     const availableProducts = products.filter(p => p.inventory > 0);
       
@@ -109,7 +103,6 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }
   };
 
-  // Combine watched items from props and local state
   const allWatchedItems = [...new Set([...watchedItems, ...notifiedItems])];
 
   return (
@@ -121,39 +114,41 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      {/* Featured products - not affected by filters */}
       {featuredProducts.length > 0 && (
-        <FeaturedProductBanner 
-          products={featuredProducts} 
-          onAddToCart={onAddToCart} 
-        />
-      )}
-      
-      {/* Search placed above filters */}
-      <ProductSearch onSearch={handleSearch} />
-      
-      {/* Category filters moved below search */}
-      <CategoryFilter
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        productCountByCategory={productCountByCategory}
-      />
-      
-      {filteredProducts.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
-          <p>No products found {searchQuery ? `matching "${searchQuery}"` : "in this category"}</p>
+        <div className="mb-6">
+          <FeaturedProductBanner 
+            products={featuredProducts} 
+            onAddToCart={onAddToCart} 
+          />
         </div>
-      ) : (
-        <ProductsGrid 
-          products={filteredProducts}
-          watchedItems={allWatchedItems}
-          onAddToCart={onAddToCart}
-          onWatchItem={handleWatchItem}
-          onSaveForLater={handleSaveForLater}
-        />
       )}
       
-      {/* Social Proof Component */}
+      <div className="space-y-4">
+        <ProductSearch onSearch={handleSearch} />
+        
+        <CategoryFilter
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+          productCountByCategory={productCountByCategory}
+        />
+        
+        {filteredProducts.length === 0 ? (
+          <div className="bg-secondary/20 text-center py-8 rounded-lg text-muted-foreground mt-4">
+            <p>No products found {searchQuery ? `matching "${searchQuery}"` : "in this category"}</p>
+          </div>
+        ) : (
+          <div className="mt-4">
+            <ProductsGrid 
+              products={filteredProducts}
+              watchedItems={allWatchedItems}
+              onAddToCart={onAddToCart}
+              onWatchItem={handleWatchItem}
+              onSaveForLater={handleSaveForLater}
+            />
+          </div>
+        )}
+      </div>
+      
       <SocialProofToast products={products} />
     </div>
   );
