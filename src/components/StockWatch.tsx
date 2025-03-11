@@ -61,11 +61,14 @@ const StockWatch: React.FC<StockWatchProps> = ({
             <Eye className="h-5 w-5 text-primary" />
           </div>
           <h3 className="text-xl font-medium">Stock Watch</h3>
+          <span className="ml-2 text-sm text-muted-foreground">
+            ({items.length} {items.length === 1 ? 'item' : 'items'})
+          </span>
         </div>
 
         <div className="flex items-center gap-2">
           <Mail className="h-4 w-4 text-primary" />
-          <span className="text-xs font-medium">Emails</span>
+          <span className="text-xs font-medium">Notify</span>
           <Switch
             checked={emailNotifications}
             onCheckedChange={toggleEmailNotifications}
