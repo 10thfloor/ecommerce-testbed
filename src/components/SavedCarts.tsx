@@ -82,15 +82,15 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center">
-          <div className="bg-primary/10 rounded-lg p-2 mr-3">
-            <ShoppingBag className="h-5 w-5 text-primary" />
+          <div className="bg-primary/10 rounded-lg p-1 mr-2">
+            <ShoppingBag className="h-4 w-4 text-primary" />
           </div>
-          <h3 className="text-xl font-medium">Saved Carts</h3>
+          <h3 className="text-lg font-medium">Saved Carts</h3>
           <span className="ml-2 text-sm text-muted-foreground">
             ({savedCarts.length} {savedCarts.length === 1 ? 'cart' : 'carts'})
           </span>
         </div>
-        <button className="p-1.5 hover:bg-secondary/70 rounded-full transition-colors">
+        <button className="p-1 hover:bg-secondary rounded transition-colors">
           {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </button>
       </div>
