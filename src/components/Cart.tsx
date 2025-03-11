@@ -246,14 +246,14 @@ const Cart: React.FC<CartProps> = ({
             </Button>
             
             <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
-              <div className="flex items-center text-sm text-purple-600 dark:text-purple-400">
+              <div className="flex items-center text-sm text-primary dark:text-primary">
                 <Clock className="h-4 w-4 mr-2" />
                 <span>Items reserved for:</span>
               </div>
               <div className={`font-mono font-medium rounded-md px-3 py-1 ${
                 timeRemaining < 300 
-                  ? 'bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/30' 
-                  : 'bg-purple-50 dark:bg-purple-900/10 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800/20'
+                  ? 'bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary border border-primary/20 dark:border-primary/30' 
+                  : 'bg-primary/5 dark:bg-primary/10 text-primary dark:text-primary border border-primary/10 dark:border-primary/20'
               }`}>
                 {formatTimeRemaining(timeRemaining)}
               </div>
