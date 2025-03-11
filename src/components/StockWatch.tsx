@@ -93,13 +93,9 @@ const StockWatch: React.FC<StockWatchProps> = ({
                     <h4 className="font-medium text-sm">{product.name}</h4>
                     <p className="text-sm text-muted-foreground">{formatCurrency(product.price)}</p>
                     
-                    {isInStock ? (
+                    {isInStock && (
                       <div className="text-xs font-medium text-green-600 dark:text-green-400 mt-1">
                         Now in stock!
-                      </div>
-                    ) : (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Out of stock
                       </div>
                     )}
                   </div>
