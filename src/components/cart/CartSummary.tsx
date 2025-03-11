@@ -70,7 +70,9 @@ const CartSummary: React.FC<CartSummaryProps> = ({
         disabled={availableItems === 0}
       >
         <CreditCard className="h-5 w-5" />
-        <span className="font-medium">Checkout{hasUnavailableItems ? ` (${availableItems} items)` : ''}</span>
+        <span className="font-medium">
+          Checkout{availableItems > 0 ? ` (${availableItems} ${availableItems === 1 ? 'item' : 'items'})` : ''}
+        </span>
       </Button>
     </div>
   );
