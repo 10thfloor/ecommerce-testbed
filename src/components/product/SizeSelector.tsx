@@ -22,7 +22,8 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
       {sizes.map((size) => {
         const isSelected = selectedSize === size.name;
         const isOutOfStock = size.inventory === 0;
-        const isLimitedStock = size.inventory > 0 && size.inventory <= 3;
+        // Only mark as limited stock if inventory is exactly 1, to reduce the number of items showing limited stock
+        const isLimitedStock = size.inventory === 1;
         
         return (
           <div key={size.name} className="relative">

@@ -1,3 +1,4 @@
+
 import { Product } from './types';
 
 export const products: Product[] = [
@@ -51,9 +52,9 @@ export const products: Product[] = [
     image: "/placeholder.svg",
     inventory: 3,
     sizes: [
-      { name: 'SM', inventory: 1 },
+      { name: 'SM', inventory: 0 },
       { name: 'MD', inventory: 1 },
-      { name: 'LG', inventory: 1 },
+      { name: 'LG', inventory: 2 },
       { name: 'XL', inventory: 0 }
     ]
   },
@@ -63,12 +64,12 @@ export const products: Product[] = [
     price: 349.99,
     description: "Versatile softshell jacket for mixed weather conditions",
     image: "/placeholder.svg",
-    inventory: 2,
+    inventory: 8,
     sizes: [
-      { name: 'SM', inventory: 0 },
-      { name: 'MD', inventory: 1 },
-      { name: 'LG', inventory: 1 },
-      { name: 'XL', inventory: 0 }
+      { name: 'SM', inventory: 2 },
+      { name: 'MD', inventory: 2 },
+      { name: 'LG', inventory: 3 },
+      { name: 'XL', inventory: 1 }
     ]
   },
   {
