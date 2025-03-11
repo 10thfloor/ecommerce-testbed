@@ -61,13 +61,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
         rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''} relative`}
       onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
     >
-      {badge && (
-        <div className={`absolute top-2 right-2 ${badge.bg} ${badge.color} rounded-full px-2.5 py-1 flex items-center gap-1 text-xs font-semibold z-10`}>
-          <badge.icon className="h-3.5 w-3.5" />
-          {badge.text}
-        </div>
-      )}
-      
       <div className="flex flex-col h-full">
         <div className="mb-2">
           <h4 className="font-medium text-base mb-1">{product.name}</h4>
@@ -84,48 +77,58 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{product.description}</p>
         </div>
         
-        <div className="flex justify-between items-center mt-auto">
-          <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
-          <div className="flex space-x-2">
-            {onSaveForLater && (
-              <button 
-                className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 rounded-full transition-colors"
-                onClick={handleSaveForLater}
-                aria-label="Save for later"
-              >
-                <BookmarkPlus className="h-4 w-4 text-blue-500" />
-              </button>
-            )}
-            
-            {product.inventory > 0 && (
-              <button 
-                className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onAddToCart(product.id, product.price);
-                }}
-                aria-label="Add to cart"
-              >
-                <Plus className="h-4 w-4 text-primary" />
-              </button>
-            )}
-            
-            {product.inventory === 0 && (
-              <Button
-                variant="outline"
-                size="sm"
-                className={`h-7 w-7 p-0 rounded-full transition-all ${
-                  isWatched
-                    ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
-                    : 'bg-secondary/70 hover:bg-secondary'
-                }`}
-                onClick={handleNotifyMe}
-                aria-label={isWatched ? "Watching stock" : "Watch for stock updates"}
-              >
-                <Eye className="h-3.5 w-3.5" />
-              </Button>
-            )}
+        <div className="mt-auto">
+          <div className="flex justify-between items-center mb-2">
+            <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
+            <div className="flex space-x-2">
+              {onSaveForLater && (
+                <button 
+                  className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 rounded-full transition-colors"
+                  onClick={handleSaveForLater}
+                  aria-label="Save for later"
+                >
+                  <BookmarkPlus className="h-4 w-4 text-blue-500" />
+                </button>
+              )}
+              
+              {product.inventory > 0 && (
+                <button 
+                  className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onAddToCart(product.id, product.price);
+                  }}
+                  aria-label="Add to cart"
+                >
+                  <Plus className="h-4 w-4 text-primary" />
+                </button>
+              )}
+              
+              {product.inventory === 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`h-7 w-7 p-0 rounded-full transition-all ${
+                    isWatched
+                      ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
+                      : 'bg-secondary/70 hover:bg-secondary'
+                  }`}
+                  onClick={handleNotifyMe}
+                  aria-label={isWatched ? "Watching stock" : "Watch for stock updates"}
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                </Button>
+              )}
+            </div>
           </div>
+          
+          {/* Product badge now placed below the price */}
+          {badge && (
+            <div className={`${badge.bg} ${badge.color} rounded-full px-2.5 py-1 flex items-center gap-1 text-xs font-semibold w-fit`}>
+              <badge.icon className="h-3.5 w-3.5" />
+              {badge.text}
+            </div>
+          )}
         </div>
       </div>
     </div>
