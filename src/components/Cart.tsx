@@ -144,12 +144,12 @@ const Cart: React.FC<CartProps> = ({
                   value={discountCode}
                   onChange={(e) => setDiscountCode(e.target.value)}
                   placeholder="Enter discount code"
-                  className="h-10 text-sm"
+                  className="h-9 text-sm"
                 />
                 <Button 
                   onClick={handleApplyDiscount}
                   size="sm"
-                  className="h-10 whitespace-nowrap"
+                  className="whitespace-nowrap"
                   disabled={!discountCode.trim()}
                 >
                   Apply
