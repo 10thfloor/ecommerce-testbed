@@ -3,19 +3,24 @@ import React from 'react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
-import { PackageX } from 'lucide-react';
+import { PackageX, Eye, EyeOff } from 'lucide-react';
 
 interface ReadOnlyCartItemProps {
   item: CartItemType;
   inventory?: Record<number, number>;
+  onWatchItem?: (productId: number) => void;
+  watchedItems?: number[];
 }
 
 const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({ 
   item,
-  inventory = {}
+  inventory = {},
+  onWatchItem,
+  watchedItems = []
 }) => {
   const productName = useProductName(item.productId);
   const isOutOfStock = inventory[Number(item.productId)] === 0;
+  const isWatched = watchedItems.includes(Number(item.productId));
   
   return (
     <div className={`p-3 mb-2 animate-fade-in rounded-md ${
@@ -48,6 +53,24 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
           <div className="bg-secondary/30 rounded-md flex items-center h-7 px-2">
             <span className="text-xs text-muted-foreground">Qty: {item.quantity}</span>
           </div>
+
+          {isOutOfStock && onWatchItem && (
+            <button 
+              onClick={() => onWatchItem(Number(item.productId))}
+              className={`p-1 rounded-md transition-colors ${
+                isWatched 
+                  ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
+                  : 'text-primary hover:bg-primary/10'
+              }`}
+              aria-label={isWatched ? "Remove from watch list" : "Add to watch list"}
+            >
+              {isWatched ? (
+                <EyeOff className="h-3.5 w-3.5" />
+              ) : (
+                <Eye className="h-3.5 w-3.5" />
+              )}
+            </button>
+          )}
         </div>
       </div>
     </div>

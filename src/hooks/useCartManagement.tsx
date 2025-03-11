@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -429,6 +428,52 @@ export const useCartManagement = ({
     setStockWatchItems([...stockWatchItems, {...product}]);
   };
 
+  const handleWatchProductId = (productId: number) => {
+    const isAlreadyWatching = stockWatchItems.some(item => item.id === productId);
+    
+    if (isAlreadyWatching) {
+      handleRemoveFromWatch(productId);
+      return;
+    }
+    
+    const isOutOfStock = inventory[productId] === 0;
+    
+    if (!isOutOfStock) {
+      toast({
+        title: "Product In Stock",
+        description: "You can only watch out-of-stock products.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    const productName = `Product #${productId}`;
+    const newWatchItem: Product = {
+      id: productId,
+      name: productName,
+      price: 0,
+      inventory: 0,
+      description: "Out of stock product",
+      image: "/placeholder.svg"
+    };
+    
+    const cartItem = cartItems.find(item => Number(item.productId) === productId);
+    const savedItem = savedForLaterItems.find(item => Number(item.productId) === productId);
+    
+    if (cartItem) {
+      newWatchItem.price = cartItem.price;
+    } else if (savedItem) {
+      newWatchItem.price = savedItem.price;
+    }
+    
+    handleWatchItem(newWatchItem);
+    
+    toast({
+      title: "Stock Watch Added",
+      description: `You'll be notified when ${productName} is back in stock.`
+    });
+  };
+
   const handleRemoveFromWatch = (productId: number) => {
     setStockWatchItems(stockWatchItems.filter(item => item.id !== productId));
     
@@ -484,6 +529,7 @@ export const useCartManagement = ({
     handleRemoveSavedItem,
     handleEmailCurrentCart,
     handleWatchItem,
+    handleWatchProductId,
     handleRemoveFromWatch,
     simulateInventoryChange,
     undoCartLoad,

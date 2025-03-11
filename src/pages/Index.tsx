@@ -62,6 +62,7 @@ const Index = () => {
     handleRemoveSavedItem,
     handleEmailCurrentCart,
     handleWatchItem,
+    handleWatchProductId,
     handleRemoveFromWatch,
     simulateInventoryChange,
     undoCartLoad,
@@ -74,6 +75,9 @@ const Index = () => {
     initialStockWatchItems: initialStockWatchItems
   });
 
+  // Get watched product IDs
+  const watchedProductIds = stockWatchItems.map(item => item.id);
+
   return (
     <ShoppingLayout title="Shopping Cart with tRPC and NATS">
       <ShoppingGrid
@@ -82,6 +86,7 @@ const Index = () => {
         savedCarts={savedCarts}
         savedForLaterItems={savedForLaterItems}
         stockWatchItems={stockWatchItems}
+        watchedProductIds={watchedProductIds}
         inventory={inventory}
         onAddToCart={handleAddToCart}
         onSaveCart={handleSaveCart}
@@ -96,6 +101,7 @@ const Index = () => {
         onRemoveSavedItem={handleRemoveSavedItem}
         onRemoveFromWatch={handleRemoveFromWatch}
         onWatchItem={handleWatchItem}
+        onWatchProductId={handleWatchProductId}
         onUndoCart={undoCartLoad}
         hasCartHistory={hasCartHistory}
       />

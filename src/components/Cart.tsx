@@ -5,6 +5,7 @@ import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/util
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
 import { Button } from "@/components/ui/button";
+import { Product } from '@/components/ProductInventory';
 
 interface CartProps {
   items: CartItemType[];
@@ -15,6 +16,8 @@ interface CartProps {
   onEmailCart: () => void;
   onUndoCart?: () => void;
   hasHistory?: boolean;
+  onWatchItem?: (productId: number) => void;
+  watchedItems?: number[];
   inventory?: Record<number, number>;
 }
 
@@ -27,6 +30,8 @@ const Cart: React.FC<CartProps> = ({
   onEmailCart,
   onUndoCart,
   hasHistory = false,
+  onWatchItem,
+  watchedItems = [],
   inventory = {}
 }) => {
   const total = calculateTotal(items);
@@ -83,6 +88,8 @@ const Cart: React.FC<CartProps> = ({
                 onRemove={onRemoveItem}
                 onUpdateQuantity={onUpdateQuantity}
                 onSaveForLater={onSaveForLater}
+                onWatchItem={onWatchItem}
+                watchedItems={watchedItems}
                 inventory={inventory}
               />
             ))}
