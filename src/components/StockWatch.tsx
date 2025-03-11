@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Eye, EyeOff, Plus, Mail, MailOff } from 'lucide-react';
+import { Eye, EyeOff, Plus, Mail, MailX } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/components/ProductInventory';
@@ -76,7 +76,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
             </>
           ) : (
             <>
-              <MailOff className="h-4 w-4 text-muted-foreground" />
+              <MailX className="h-4 w-4 text-muted-foreground" />
               <span className="text-xs font-medium text-muted-foreground">Emails Off</span>
             </>
           )}
