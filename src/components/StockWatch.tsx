@@ -40,10 +40,10 @@ const StockWatch: React.FC<StockWatchProps> = ({
       <div className="card-glass p-4 mb-6">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center">
-            <div className="bg-primary/10 rounded-lg p-2 mr-3">
-              <Eye className="h-5 w-5 text-primary" />
+            <div className="bg-primary/10 rounded-lg p-1 mr-2">
+              <Eye className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-xl font-medium">Stock Watch</h3>
+            <h3 className="text-lg font-medium">Stock Watch</h3>
           </div>
         </div>
         <div className="text-center py-4 text-muted-foreground">
@@ -57,17 +57,17 @@ const StockWatch: React.FC<StockWatchProps> = ({
     <div className="card-glass p-4 mb-6 animate-fade-in">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="bg-primary/10 rounded-lg p-2 mr-3">
-            <Eye className="h-5 w-5 text-primary" />
+          <div className="bg-primary/10 rounded-lg p-1 mr-2">
+            <Eye className="h-4 w-4 text-primary" />
           </div>
-          <h3 className="text-xl font-medium">Stock Watch</h3>
+          <h3 className="text-lg font-medium">Stock Watch</h3>
           <span className="ml-2 text-sm text-muted-foreground">
             ({items.length} {items.length === 1 ? 'item' : 'items'})
           </span>
         </div>
 
         <div className="flex items-center gap-1">
-          <Mail className="h-4 w-4 text-primary" /> {/* Increased from h-3 w-3 to h-4 w-4 */}
+          <Mail className="h-3 w-3 text-primary" />
           <span className="text-xs font-medium mr-1">Notify</span>
           <Switch
             checked={emailNotifications}
