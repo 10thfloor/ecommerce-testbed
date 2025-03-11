@@ -1,8 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import ProductsGrid from './product/ProductsGrid';
+import ProductSearch from './product/ProductSearch';
 import { products } from './product/productData';
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
@@ -22,6 +23,22 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
 }) => {
   const { toast } = useToast();
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  // Filter products based on search query
+  const filteredProducts = useMemo(() => {
+    if (!searchQuery.trim()) return products;
+    
+    const query = searchQuery.toLowerCase();
+    return products.filter(product => 
+      product.name.toLowerCase().includes(query) || 
+      product.description.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
 
   const handleWatchItem = (product: Product) => {
     const productId = product.id;
@@ -70,13 +87,21 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      <ProductsGrid 
-        products={products}
-        watchedItems={allWatchedItems}
-        onAddToCart={onAddToCart}
-        onWatchItem={handleWatchItem}
-        onSaveForLater={handleSaveForLater}
-      />
+      <ProductSearch onSearch={handleSearch} />
+      
+      {filteredProducts.length === 0 ? (
+        <div className="text-center py-8 text-muted-foreground">
+          <p>No products found matching "{searchQuery}"</p>
+        </div>
+      ) : (
+        <ProductsGrid 
+          products={filteredProducts}
+          watchedItems={allWatchedItems}
+          onAddToCart={onAddToCart}
+          onWatchItem={handleWatchItem}
+          onSaveForLater={handleSaveForLater}
+        />
+      )}
       
       {/* Social Proof Component - will show toast notifications of recent purchases */}
       <SocialProofToast products={products} />
