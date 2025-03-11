@@ -15,6 +15,7 @@ interface ShoppingGridProps {
   savedCarts: SavedCart[];
   savedForLaterItems: CartItem[];
   stockWatchItems: Product[];
+  watchedProductIds?: number[]; // Add this new prop
   inventory?: Record<number, number>;
   onAddToCart: (productId: number, price: number) => void;
   onSaveCart: () => void;
@@ -29,6 +30,7 @@ interface ShoppingGridProps {
   onRemoveSavedItem: (id: string | number) => void;
   onRemoveFromWatch: (productId: number) => void;
   onWatchItem?: (product: Product) => void;
+  onWatchProductId?: (productId: number) => void; // Add this new prop
   onUndoCart?: () => void;
   hasCartHistory?: boolean;
 }
@@ -39,6 +41,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   savedCarts,
   savedForLaterItems,
   stockWatchItems,
+  watchedProductIds = [], // Add default value
   inventory = {},
   onAddToCart,
   onSaveCart,
@@ -53,6 +56,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onRemoveSavedItem,
   onRemoveFromWatch,
   onWatchItem,
+  onWatchProductId, // Add this new prop
   onUndoCart,
   hasCartHistory = false
 }) => {
@@ -98,6 +102,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onUndoCart={onUndoCart}
               hasHistory={hasCartHistory}
               inventory={inventory}
+              onWatchItem={onWatchProductId} // Pass the new prop
+              watchedItems={watchedProductIds} // Pass the watched items
             />
           </div>
           
@@ -116,6 +122,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onMoveToCart={onMoveToCart}
               onRemoveItem={onRemoveSavedItem}
               inventory={inventory}
+              onWatchItem={onWatchProductId} // Pass the new prop
+              watchedItems={watchedProductIds} // Pass the watched items
             />
           </div>
         </div>

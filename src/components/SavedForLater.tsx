@@ -9,13 +9,17 @@ interface SavedForLaterProps {
   onMoveToCart: (id: string | number) => void;
   onRemoveItem: (id: string | number) => void;
   inventory?: Record<number, number>;
+  onWatchItem?: (productId: number) => void;
+  watchedItems?: number[];
 }
 
 const SavedForLater: React.FC<SavedForLaterProps> = ({ 
   items, 
   onMoveToCart, 
   onRemoveItem,
-  inventory = {}
+  inventory = {},
+  onWatchItem,
+  watchedItems = []
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   
@@ -52,6 +56,8 @@ const SavedForLater: React.FC<SavedForLaterProps> = ({
               onMoveToCart={onMoveToCart}
               onRemove={onRemoveItem}
               inventory={inventory}
+              onWatchItem={onWatchItem}
+              watchedItems={watchedItems}
             />
           ))}
         </div>
