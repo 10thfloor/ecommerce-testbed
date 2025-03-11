@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Sparkles, Ban, Heart, Save, Trash } from 'lucide-react';
+import { ChevronDown, ChevronUp, Sparkles, Ban, Heart, Save, Trash, Zap } from 'lucide-react';
 import { Product } from '@/components/product/types';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,7 +101,7 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
             }}
           >
             <Heart className="h-3.5 w-3.5 text-pink-500" />
-            <span>Your Interests</span>
+            <span>About You</span>
           </Button>
           <button className="p-1 hover:bg-secondary rounded transition-colors">
             {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -189,9 +189,10 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
                   
                   <Button 
                     onClick={savePreferences}
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 bg-purple-500 hover:bg-purple-600"
+                    size="sm"
                   >
-                    <Save className="h-4 w-4" />
+                    <Zap className="h-4 w-4" />
                     Submit
                   </Button>
                 </div>
