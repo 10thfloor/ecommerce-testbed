@@ -94,7 +94,7 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
           <Button 
             variant="ghost" 
             size="sm" 
-            className="h-8 px-2 text-xs flex items-center gap-1"
+            className="h-8 px-2 text-xs flex items-center gap-1 hover:bg-purple-100 hover:text-purple-700 dark:hover:bg-purple-900/30 dark:hover:text-purple-300"
             onClick={(e) => {
               e.stopPropagation();
               setShowPreferences(!showPreferences);
