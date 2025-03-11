@@ -1,3 +1,4 @@
+
 export interface CartItem {
   id: string | number;
   productId: string | number;
@@ -51,8 +52,14 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
-export const calculateTotal = (items: CartItem[]): number => {
-  return items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+export const calculateTotal = (items: CartItem[], inventory?: Record<number, number>): number => {
+  return items.reduce((sum, item) => {
+    // Skip out of stock items if inventory is provided
+    if (inventory && inventory[Number(item.productId)] === 0) {
+      return sum;
+    }
+    return sum + (item.price * item.quantity);
+  }, 0);
 };
 
 export const getCartItemCount = (items: CartItem[]): number => {

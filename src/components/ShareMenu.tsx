@@ -9,9 +9,10 @@ interface ShareMenuProps {
   title?: string;
   date?: string;
   className?: string;
+  inventory?: Record<number, number>;
 }
 
-const ShareMenu: React.FC<ShareMenuProps> = ({ items, title = "Cart", date, className = "" }) => {
+const ShareMenu: React.FC<ShareMenuProps> = ({ items, title = "Cart", date, className = "", inventory }) => {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = React.useState(false);
   
@@ -36,12 +37,18 @@ const ShareMenu: React.FC<ShareMenuProps> = ({ items, title = "Cart", date, clas
   
   const generateShareContent = () => {
     const cartItems = items.map(item => {
+      // Skip out of stock items if inventory is provided
+      if (inventory && inventory[Number(item.productId)] === 0) {
+        return null;
+      }
       return `${item.productId} - Qty: ${item.quantity} - ${formatCurrency(item.price * item.quantity)}`;
-    }).join('\n');
+    })
+    .filter(Boolean) // Remove null entries (out of stock items)
+    .join('\n');
     
     let shareText = `${title}`;
     if (date) shareText += `\n${date}`;
-    shareText += `\n\nItems:\n${cartItems}\n\nTotal: ${formatCurrency(calculateTotal(items))}`;
+    shareText += `\n\nItems:\n${cartItems}\n\nTotal: ${formatCurrency(calculateTotal(items, inventory))}`;
     
     return shareText;
   };

@@ -172,7 +172,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
                   <div className="mt-4 flex justify-end">
                     <div className="bg-primary/5 rounded-lg p-3">
                       <span className="text-muted-foreground mr-2">Total:</span>
-                      <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items))}</span>
+                      <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items, inventory))}</span>
                     </div>
                   </div>
                 </div>

@@ -34,7 +34,7 @@ const Cart: React.FC<CartProps> = ({
   watchedItems = [],
   inventory = {}
 }) => {
-  const total = calculateTotal(items);
+  const total = calculateTotal(items, inventory);
   
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in h-full">

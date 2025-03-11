@@ -136,13 +136,20 @@ export const useCartOperations = ({
     }
     
     const cartItemsText = cartItems.map(item => {
+      // Skip out of stock items in the email
+      if (inventory[Number(item.productId)] === 0) {
+        return null;
+      }
+      
       const productName = inventory[Number(item.productId)] !== undefined ? 
         `Product #${item.productId}` : `Product #${item.productId}`;
       return `${productName} - Qty: ${item.quantity} - ${formatCurrency(item.price * item.quantity)}`;
-    }).join('%0D%0A');
+    })
+    .filter(Boolean) // Remove null entries (out of stock items)
+    .join('%0D%0A');
     
     const emailSubject = `My Shopping Cart`;
-    const emailBody = `My Current Cart Items:%0D%0A%0D%0A${cartItemsText}%0D%0A%0D%0ATotal: ${formatCurrency(calculateTotal(cartItems))}`;
+    const emailBody = `My Current Cart Items:%0D%0A%0D%0A${cartItemsText}%0D%0A%0D%0ATotal: ${formatCurrency(calculateTotal(cartItems, inventory))}`;
     
     window.location.href = `mailto:?subject=${emailSubject}&body=${emailBody}`;
     
