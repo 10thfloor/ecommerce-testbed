@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import ShoppingLayout from '@/components/ShoppingLayout';
 import ShoppingGrid from '@/components/ShoppingGrid';
-import { useCartManagement } from '@/hooks/cart/useCartManagement';
+import { useCartManagement } from '@/hooks/useCartManagement';
 import { 
   mockCartItems,
   mockSavedCarts,
