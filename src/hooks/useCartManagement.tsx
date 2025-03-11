@@ -81,6 +81,27 @@ export const useCartManagement = ({
     savedForLater.handleSaveForLater(id);
   };
 
+  // New function to handle saving products directly from inventory
+  const handleSaveProductForLater = (product: Product) => {
+    const newSavedItem: CartItem = {
+      id: Date.now() + Math.random(),
+      productId: product.id,
+      quantity: 1,
+      price: product.price
+    };
+    
+    // Check if this product is already in saved for later
+    const existingItem = savedForLater.savedForLaterItems.find(item => 
+      Number(item.productId) === product.id
+    );
+    
+    if (existingItem) {
+      return; // Item already saved
+    }
+    
+    savedForLater.setSavedForLaterItems([...savedForLater.savedForLaterItems, newSavedItem]);
+  };
+
   // Coordinate handleWatchProductId to access cart items and saved for later items for price
   const handleWatchProductId = (productId: number) => {
     const isAlreadyWatching = stockWatch.stockWatchItems.some(item => item.id === productId);
@@ -140,6 +161,7 @@ export const useCartManagement = ({
     handleRemoveFromWatch: stockWatch.handleRemoveFromWatch,
     simulateInventoryChange: inventoryManagement.simulateInventoryChange,
     undoCartLoad,
-    hasCartHistory
+    hasCartHistory,
+    handleSaveProductForLater
   };
 };

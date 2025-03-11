@@ -10,12 +10,14 @@ interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
   watchedItems?: number[];
   onWatchItem?: (product: Product) => void;
+  onSaveForLater?: (product: Product) => void;
 }
 
 const ProductInventory: React.FC<ProductInventoryProps> = ({ 
   onAddToCart, 
   watchedItems = [], 
-  onWatchItem 
+  onWatchItem,
+  onSaveForLater
 }) => {
   const { toast } = useToast();
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
@@ -44,6 +46,17 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     });
   };
 
+  const handleSaveForLater = (product: Product) => {
+    if (onSaveForLater) {
+      onSaveForLater(product);
+      
+      toast({
+        title: "Saved for Later",
+        description: `${product.name} has been added to your saved items.`,
+      });
+    }
+  };
+
   // Combine watched items from props and local state
   const allWatchedItems = [...new Set([...watchedItems, ...notifiedItems])];
 
@@ -61,6 +74,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         watchedItems={allWatchedItems}
         onAddToCart={onAddToCart}
         onWatchItem={handleWatchItem}
+        onSaveForLater={handleSaveForLater}
       />
     </div>
   );

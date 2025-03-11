@@ -8,13 +8,15 @@ interface ProductsGridProps {
   watchedItems: number[];
   onAddToCart: (productId: number, price: number) => void;
   onWatchItem?: (product: Product) => void;
+  onSaveForLater?: (product: Product) => void;
 }
 
 const ProductsGrid: React.FC<ProductsGridProps> = ({ 
   products, 
   watchedItems, 
   onAddToCart, 
-  onWatchItem 
+  onWatchItem,
+  onSaveForLater
 }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -25,6 +27,7 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({
           isWatched={watchedItems.includes(product.id)}
           onAddToCart={onAddToCart}
           onWatchItem={onWatchItem}
+          onSaveForLater={onSaveForLater}
         />
       ))}
     </div>

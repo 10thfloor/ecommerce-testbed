@@ -34,6 +34,7 @@ interface ShoppingGridProps {
   onWatchProductId?: (productId: number) => void;
   onUndoCart?: () => void;
   hasCartHistory?: boolean;
+  onSaveProductForLater?: (product: Product) => void;
 }
 
 const ShoppingGrid: React.FC<ShoppingGridProps> = ({
@@ -59,7 +60,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onWatchItem,
   onWatchProductId,
   onUndoCart,
-  hasCartHistory = false
+  hasCartHistory = false,
+  onSaveProductForLater
 }) => {
   // Extract just the IDs from stock watch items for simplified passing to ProductInventory
   const watchedItemIds = stockWatchItems.map(item => item.id);
@@ -77,6 +79,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onAddToCart={onAddToCart} 
               watchedItems={watchedItemIds}
               onWatchItem={onWatchItem}
+              onSaveForLater={onSaveProductForLater}
             />
           </div>
           

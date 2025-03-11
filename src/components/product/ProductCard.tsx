@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, Eye } from 'lucide-react';
+import { Plus, Eye, Bookmark } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '../ui/button';
 import { Product } from '@/components/product/types';
@@ -10,18 +10,27 @@ interface ProductCardProps {
   isWatched: boolean;
   onAddToCart: (productId: number, price: number) => void;
   onWatchItem?: (product: Product) => void;
+  onSaveForLater?: (product: Product) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ 
   product, 
   isWatched, 
   onAddToCart, 
-  onWatchItem 
+  onWatchItem,
+  onSaveForLater
 }) => {
   const handleNotifyMe = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onWatchItem) {
       onWatchItem(product);
+    }
+  };
+
+  const handleSaveForLater = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onSaveForLater) {
+      onSaveForLater(product);
     }
   };
 
@@ -50,34 +59,46 @@ const ProductCard: React.FC<ProductCardProps> = ({
         
         <div className="flex justify-between items-center mt-auto">
           <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
-          {product.inventory > 0 && (
-            <button 
-              className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                onAddToCart(product.id, product.price);
-              }}
-              aria-label="Add to cart"
-            >
-              <Plus className="h-4 w-4 text-primary" />
-            </button>
-          )}
-          
-          {product.inventory === 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              className={`h-7 w-7 p-0 rounded-full transition-all ${
-                isWatched
-                  ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
-                  : 'bg-secondary/70 hover:bg-secondary'
-              }`}
-              onClick={handleNotifyMe}
-              aria-label={isWatched ? "Watching stock" : "Watch for stock updates"}
-            >
-              <Eye className="h-3.5 w-3.5" />
-            </Button>
-          )}
+          <div className="flex space-x-2">
+            {onSaveForLater && (
+              <button 
+                className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 rounded-full transition-colors"
+                onClick={handleSaveForLater}
+                aria-label="Save for later"
+              >
+                <Bookmark className="h-4 w-4 text-blue-500" />
+              </button>
+            )}
+            
+            {product.inventory > 0 && (
+              <button 
+                className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddToCart(product.id, product.price);
+                }}
+                aria-label="Add to cart"
+              >
+                <Plus className="h-4 w-4 text-primary" />
+              </button>
+            )}
+            
+            {product.inventory === 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                className={`h-7 w-7 p-0 rounded-full transition-all ${
+                  isWatched
+                    ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
+                    : 'bg-secondary/70 hover:bg-secondary'
+                }`}
+                onClick={handleNotifyMe}
+                aria-label={isWatched ? "Watching stock" : "Watch for stock updates"}
+              >
+                <Eye className="h-3.5 w-3.5" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

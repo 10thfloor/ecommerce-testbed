@@ -66,7 +66,8 @@ const Index = () => {
     handleRemoveFromWatch,
     simulateInventoryChange,
     undoCartLoad,
-    hasCartHistory
+    hasCartHistory,
+    handleSaveProductForLater
   } = useCartManagement({
     initialCartItems: mockCartItems,
     initialSavedCarts: mockSavedCarts,
@@ -104,6 +105,7 @@ const Index = () => {
         onWatchProductId={handleWatchProductId}
         onUndoCart={undoCartLoad}
         hasCartHistory={hasCartHistory}
+        onSaveProductForLater={handleSaveProductForLater}
       />
     </ShoppingLayout>
   );
