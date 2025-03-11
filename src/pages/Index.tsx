@@ -8,6 +8,7 @@ import {
   mockSavedCarts,
   mockSavedForLaterItems,
 } from '@/utils/cartUtils';
+import { Product } from '@/components/product/types';
 
 // Initial product inventory
 const productInventory: Record<number, number> = {
