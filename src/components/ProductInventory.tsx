@@ -16,13 +16,24 @@ export interface Product {
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
+  watchedItems?: number[];
+  onWatchItem?: (product: Product) => void;
 }
 
-const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
+const ProductInventory: React.FC<ProductInventoryProps> = ({ 
+  onAddToCart, 
+  watchedItems = [], 
+  onWatchItem 
+}) => {
   const { toast } = useToast();
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
 
-  const handleNotifyMe = (productId: number, productName: string) => {
+  const handleNotifyMe = (product: Product, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    const productId = product.id;
+    const productName = product.name;
+    
     if (notifiedItems.includes(productId)) {
       toast({
         title: "Already Subscribed",
@@ -32,6 +43,10 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
     }
 
     setNotifiedItems([...notifiedItems, productId]);
+    
+    if (onWatchItem) {
+      onWatchItem(product);
+    }
     
     toast({
       title: "Notification Set",
@@ -158,14 +173,11 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
                     variant="outline"
                     size="icon"
                     className={`h-8 w-8 z-10 rounded-full transition-all animate-pulse-subtle ${
-                      notifiedItems.includes(product.id) 
+                      notifiedItems.includes(product.id) || watchedItems.includes(product.id)
                         ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400' 
                         : 'bg-secondary/70 hover:bg-secondary'
                     }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNotifyMe(product.id, product.name);
-                    }}
+                    onClick={(e) => handleNotifyMe(product, e)}
                     aria-label={notifiedItems.includes(product.id) ? "Notification set" : "Notify me when back in stock"}
                   >
                     <Bell className="h-4 w-4" />

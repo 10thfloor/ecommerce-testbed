@@ -7,30 +7,33 @@ import {
   formatCurrency,
   calculateTotal
 } from '@/utils/cartUtils';
+import { Product } from '@/components/ProductInventory';
 
 interface UseCartManagementProps {
   initialCartItems: CartItem[];
   initialSavedCarts: SavedCart[];
   initialSavedForLaterItems: CartItem[];
   initialInventory: Record<number, number>;
+  initialStockWatchItems?: Product[];
 }
 
 export const useCartManagement = ({
   initialCartItems,
   initialSavedCarts,
   initialSavedForLaterItems,
-  initialInventory
+  initialInventory,
+  initialStockWatchItems = []
 }: UseCartManagementProps) => {
   const { toast } = useToast();
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [savedCarts, setSavedCarts] = useState<SavedCart[]>(initialSavedCarts);
   const [savedForLaterItems, setSavedForLaterItems] = useState<CartItem[]>(initialSavedForLaterItems);
   const [inventory, setInventory] = useState<Record<number, number>>(initialInventory);
+  const [stockWatchItems, setStockWatchItems] = useState<Product[]>(initialStockWatchItems);
   const [cartHistory, setCartHistory] = useState<CartItem[][]>([]);
   const [inventoryHistory, setInventoryHistory] = useState<Record<number, number>[]>([]);
   const [lastLoadedCartId, setLastLoadedCartId] = useState<string | null>(null);
 
-  // Save the current cart to history before replacing it
   const saveToHistory = (items: CartItem[], currentInventory: Record<number, number>) => {
     if (items.length > 0) {
       setCartHistory(prev => [...prev, [...items]]);
@@ -38,7 +41,6 @@ export const useCartManagement = ({
     }
   };
 
-  // Revert to the previous cart
   const undoCartLoad = () => {
     if (cartHistory.length > 0) {
       const prevCart = cartHistory[cartHistory.length - 1];
@@ -57,11 +59,9 @@ export const useCartManagement = ({
     }
   };
 
-  // Determine if cart contents are identical
   const areCartsIdentical = (cart1: CartItem[], cart2: CartItem[]): boolean => {
     if (cart1.length !== cart2.length) return false;
     
-    // Create maps of productId -> quantity for both carts
     const getCartMap = (cart: CartItem[]) => {
       const map = new Map<number | string, number>();
       cart.forEach(item => {
@@ -73,7 +73,6 @@ export const useCartManagement = ({
     const cart1Map = getCartMap(cart1);
     const cart2Map = getCartMap(cart2);
     
-    // Check if each product has the same quantity in both carts
     if (cart1Map.size !== cart2Map.size) return false;
     
     for (const [productId, quantity] of cart1Map.entries()) {
@@ -201,7 +200,6 @@ export const useCartManagement = ({
     const cartToLoad = savedCarts.find(cart => cart.id === cartId);
     
     if (cartToLoad) {
-      // Check if we're loading the same cart with identical contents
       const isSameCart = cartId === lastLoadedCartId;
       const isIdenticalContent = areCartsIdentical(cartItems, cartToLoad.items);
       
@@ -213,7 +211,6 @@ export const useCartManagement = ({
         return;
       }
       
-      // Save current cart to history before replacing it if current cart is not empty
       if (cartItems.length > 0) {
         saveToHistory([...cartItems], {...inventory});
       }
@@ -221,12 +218,10 @@ export const useCartManagement = ({
       const tempInventory = { ...inventory };
       let insufficientInventory = false;
       
-      // Return current cart items to inventory
       cartItems.forEach(item => {
         tempInventory[Number(item.productId)] += item.quantity;
       });
       
-      // Check if all items in the saved cart are available
       cartToLoad.items.forEach(item => {
         if (tempInventory[Number(item.productId)] < item.quantity) {
           insufficientInventory = true;
@@ -367,10 +362,58 @@ export const useCartManagement = ({
     });
   };
 
+  const handleWatchItem = (product: Product) => {
+    const isAlreadyWatching = stockWatchItems.some(item => item.id === product.id);
+    
+    if (isAlreadyWatching) {
+      return;
+    }
+    
+    setStockWatchItems([...stockWatchItems, {...product}]);
+  };
+
+  const handleRemoveFromWatch = (productId: number) => {
+    setStockWatchItems(stockWatchItems.filter(item => item.id !== productId));
+    
+    toast({
+      title: "Removed from Watch List",
+      description: "You will no longer receive notifications for this item.",
+    });
+  };
+
+  const updateInventory = (newInventory: Record<number, number>) => {
+    setInventory(newInventory);
+    
+    stockWatchItems.forEach(item => {
+      if (newInventory[item.id] > 0 && item.inventory === 0) {
+        setStockWatchItems(prev => 
+          prev.map(watchItem => 
+            watchItem.id === item.id 
+              ? {...watchItem, inventory: newInventory[item.id]} 
+              : watchItem
+          )
+        );
+        
+        toast({
+          title: "Item Back in Stock!",
+          description: `${item.name} is now available to purchase.`,
+          variant: "default",
+        });
+      }
+    });
+  };
+
+  const simulateInventoryChange = (productId: number, newQuantity: number) => {
+    const updatedInventory = {...inventory};
+    updatedInventory[productId] = newQuantity;
+    updateInventory(updatedInventory);
+  };
+
   return {
     cartItems,
     savedCarts,
     savedForLaterItems,
+    stockWatchItems,
     inventory,
     handleAddToCart,
     handleUpdateQuantity,
@@ -382,6 +425,9 @@ export const useCartManagement = ({
     handleMoveToCart,
     handleRemoveSavedItem,
     handleEmailCurrentCart,
+    handleWatchItem,
+    handleRemoveFromWatch,
+    simulateInventoryChange,
     undoCartLoad,
     hasCartHistory: cartHistory.length > 0
   };

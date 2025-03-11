@@ -5,13 +5,16 @@ import Cart from '@/components/Cart';
 import SavedCarts from '@/components/SavedCarts';
 import SavedForLater from '@/components/SavedForLater';
 import ProductInventory from '@/components/ProductInventory';
+import StockWatch from '@/components/StockWatch';
 import { CartItem, SavedCart } from '@/utils/cartUtils';
+import { Product } from '@/components/ProductInventory';
 
 interface ShoppingGridProps {
   userId: string;
   cartItems: CartItem[];
   savedCarts: SavedCart[];
   savedForLaterItems: CartItem[];
+  stockWatchItems: Product[];
   inventory?: Record<number, number>;
   onAddToCart: (productId: number, price: number) => void;
   onSaveCart: () => void;
@@ -23,6 +26,7 @@ interface ShoppingGridProps {
   onDeleteCart: (cartId: string) => void;
   onMoveToCart: (id: string | number) => void;
   onRemoveSavedItem: (id: string | number) => void;
+  onRemoveFromWatch: (productId: number) => void;
   onUndoCart?: () => void;
   hasCartHistory?: boolean;
 }
@@ -32,7 +36,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   cartItems,
   savedCarts,
   savedForLaterItems,
-  inventory,
+  stockWatchItems,
+  inventory = {},
   onAddToCart,
   onSaveCart,
   onRemoveItem,
@@ -43,6 +48,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onDeleteCart,
   onMoveToCart,
   onRemoveSavedItem,
+  onRemoveFromWatch,
   onUndoCart,
   hasCartHistory = false
 }) => {
@@ -80,6 +86,17 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               hasHistory={hasCartHistory}
             />
           </div>
+          
+          {stockWatchItems.length > 0 && (
+            <div className="cart-section">
+              <StockWatch 
+                items={stockWatchItems}
+                onRemoveFromWatch={onRemoveFromWatch}
+                onAddToCart={onAddToCart}
+                inventory={inventory}
+              />
+            </div>
+          )}
           
           <div className="cart-section">
             <SavedForLater
