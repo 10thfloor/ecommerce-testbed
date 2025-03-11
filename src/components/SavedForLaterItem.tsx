@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCart, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { CartItem } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
@@ -40,7 +40,7 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
             className="btn-primary text-xs py-0.5 px-1.5 flex items-center"
             aria-label="Move to cart"
           >
-            <ShoppingCart className="h-3 w-3 mr-1" />
+            <Plus className="h-3 w-3 mr-1" />
             <span>Add</span>
           </button>
           
