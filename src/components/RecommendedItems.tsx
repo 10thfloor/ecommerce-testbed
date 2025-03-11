@@ -46,16 +46,6 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
                 We'll recommend products based on your shopping activity, 
                 including items in your cart, saved items, and watch list.
               </p>
-              <Button 
-                variant="outline" 
-                className="mt-4"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // This would typically navigate to all products or featured items
-                }}
-              >
-                Browse Popular Items
-              </Button>
             </div>
           ) : (
             // This section will be populated with recommended items in the future
