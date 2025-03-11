@@ -30,8 +30,7 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
               <span className="font-medium text-sm">{productName}</span>
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
-                  <PackageX className="h-3 w-3 mr-1" />
-                  <span className="text-xs font-medium">Out of stock</span>
+                  <PackageX className="h-3 w-3" />
                 </div>
               )}
             </div>
