@@ -80,7 +80,7 @@ const Index = () => {
   const watchedProductIds = stockWatchItems.map(item => item.id);
 
   return (
-    <ShoppingLayout title="Shopping Cart with tRPC and NATS">
+    <ShoppingLayout title="E-Commerce Testbed">
       <ShoppingGrid
         userId={userId}
         cartItems={cartItems}
