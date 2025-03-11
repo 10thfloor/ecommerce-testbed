@@ -4,6 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import ProductsGrid from './product/ProductsGrid';
 import ProductSearch from './product/ProductSearch';
+import FeaturedProductBanner from './product/FeaturedProductBanner';
 import { products } from './product/productData';
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
@@ -39,6 +40,15 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       product.description.toLowerCase().includes(query)
     );
   }, [searchQuery]);
+
+  // Choose featured products (premium items or best sellers)
+  // For this example, we'll feature the most expensive products
+  const featuredProducts = useMemo(() => {
+    return [...products]
+      .filter(product => product.inventory > 0)
+      .sort((a, b) => b.price - a.price)
+      .slice(0, 2);
+  }, []);
 
   const handleWatchItem = (product: Product) => {
     const productId = product.id;
@@ -86,6 +96,14 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         </div>
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
+      
+      {/* Only show featured products when not searching */}
+      {!searchQuery && (
+        <FeaturedProductBanner 
+          products={featuredProducts} 
+          onAddToCart={onAddToCart} 
+        />
+      )}
       
       <ProductSearch onSearch={handleSearch} />
       
