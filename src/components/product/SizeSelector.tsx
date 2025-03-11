@@ -3,6 +3,7 @@ import React from 'react';
 import { ProductSize } from './types';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
+import { useLayout } from '@/contexts/LayoutContext';
 
 interface SizeSelectorProps {
   sizes: ProductSize[];
@@ -17,6 +18,9 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
   onSelectSize,
   showInventory = false,
 }) => {
+  const { layout } = useLayout();
+  const isCompact = layout === 'compact';
+  
   return (
     <div className="flex flex-wrap gap-1.5 mb-2">
       {sizes.map((size) => {
@@ -33,7 +37,8 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
               variant={isSelected ? "default" : "outline"}
               size="xs"
               className={cn(
-                "h-7 w-7 p-0 text-xs font-medium rounded-full transition-all duration-200",
+                isCompact ? "h-6 w-6 p-0 text-[10px]" : "h-7 w-7 p-0 text-xs",
+                "font-medium rounded-full transition-all duration-200",
                 isSelected && "ring-2 ring-primary/20 transform scale-105",
                 isOutOfStock && "opacity-40 line-through",
                 isLimitedStock && !isSelected && "border-amber-500/70 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 hover:text-amber-800 dark:hover:text-amber-300",
