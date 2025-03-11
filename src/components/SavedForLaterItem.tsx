@@ -4,6 +4,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { CartItem } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
+import { Button } from './ui/button';
 
 interface SavedForLaterItemProps {
   item: CartItem;
@@ -35,14 +36,15 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
             Qty: {item.quantity}
           </span>
           
-          <button 
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 w-7 p-0 rounded-full bg-primary/10 hover:bg-primary/20"
             onClick={() => onMoveToCart(item.id)}
-            className="btn-primary text-xs py-0.5 px-1.5 flex items-center"
             aria-label="Move to cart"
           >
-            <Plus className="h-3 w-3 mr-1" />
-            <span>Add</span>
-          </button>
+            <Plus className="h-3.5 w-3.5 text-primary" />
+          </Button>
           
           <button 
             onClick={() => onRemove(item.id)}
