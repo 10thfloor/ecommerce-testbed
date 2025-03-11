@@ -61,8 +61,8 @@ const StockWatch: React.FC<StockWatchProps> = ({
             <Eye className="h-4 w-4 text-primary" />
           </div>
           <h3 className="text-lg font-medium">Stock Watch</h3>
-          <span className="ml-2 text-sm text-muted-foreground">
-            ({items.length} {items.length === 1 ? 'item' : 'items'})
+          <span className="ml-2 text-xs bg-secondary px-1.5 py-0.5 rounded-md">
+            {items.length} {items.length === 1 ? 'item' : 'items'}
           </span>
         </div>
 

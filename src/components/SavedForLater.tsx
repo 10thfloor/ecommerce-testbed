@@ -38,8 +38,8 @@ const SavedForLater: React.FC<SavedForLaterProps> = ({
             <BookmarkMinus className="h-4 w-4 text-primary" />
           </div>
           <h3 className="text-lg font-medium">Saved For Later</h3>
-          <span className="ml-2 text-sm text-muted-foreground">
-            ({items.length} {items.length === 1 ? 'item' : 'items'})
+          <span className="ml-2 text-xs bg-secondary px-1.5 py-0.5 rounded-md">
+            {items.length} {items.length === 1 ? 'item' : 'items'}
           </span>
         </div>
         <button className="p-1 hover:bg-secondary rounded transition-colors">
