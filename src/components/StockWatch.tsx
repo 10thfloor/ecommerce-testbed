@@ -67,7 +67,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
         </div>
 
         <div className="flex items-center gap-1">
-          <Mail className="h-3 w-3 text-primary" />
+          <Mail className="h-4 w-4 text-primary" /> {/* Increased from h-3 w-3 to h-4 w-4 */}
           <span className="text-xs font-medium mr-1">Notify</span>
           <Switch
             checked={emailNotifications}
