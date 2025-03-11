@@ -50,7 +50,8 @@ export const useStockWatch = ({
       price: 0,
       inventory: 0,
       description: "Out of stock product",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      sizes: []
     };
     
     setStockWatchItems([...stockWatchItems, newWatchItem]);

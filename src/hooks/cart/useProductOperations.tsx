@@ -1,4 +1,3 @@
-
 import { Product } from '@/components/product/types';
 import { CartItem } from '@/utils/cartUtils';
 import { useToast } from "@/hooks/use-toast";
@@ -22,7 +21,6 @@ export const useProductOperations = ({
 }: UseProductOperationsProps) => {
   const { toast } = useToast();
 
-  // Handle saving products directly from inventory
   const handleSaveProductForLater = (product: Product) => {
     const newSavedItem: CartItem = {
       id: Date.now() + Math.random(),
@@ -31,19 +29,17 @@ export const useProductOperations = ({
       price: product.price
     };
     
-    // Check if this product is already in saved for later
     const existingItem = savedForLaterItems.find(item => 
       Number(item.productId) === product.id
     );
     
     if (existingItem) {
-      return; // Item already saved
+      return;
     }
     
     setSavedForLaterItems([...savedForLaterItems, newSavedItem]);
   };
 
-  // Coordinate handleWatchProductId to access cart items and saved for later items for price
   const handleWatchProductId = (productId: number) => {
     const isAlreadyWatching = stockWatchItems.some(item => item.id === productId);
     
@@ -55,7 +51,7 @@ export const useProductOperations = ({
     const isOutOfStock = inventory[productId] === 0;
     
     if (!isOutOfStock) {
-      return; // The toast is already shown in the stock watch hook
+      return;
     }
     
     const productName = `Product #${productId}`;
@@ -65,7 +61,8 @@ export const useProductOperations = ({
       price: 0,
       inventory: 0,
       description: "Out of stock product",
-      image: "/placeholder.svg"
+      image: "/placeholder.svg",
+      sizes: []
     };
     
     const savedItem = savedForLaterItems.find(item => Number(item.productId) === productId);
