@@ -30,6 +30,14 @@ const initialStockWatchItems = [
     inventory: 0,
     description: "Superlight emergency rain protection for hiking",
     image: "/placeholder.svg"
+  },
+  {
+    id: 5,
+    name: "Gamma MX Softshell",
+    price: 349.99,
+    inventory: 6,
+    description: "Versatile softshell jacket for mixed mountain conditions",
+    image: "/placeholder.svg"
   }
 ];
 
