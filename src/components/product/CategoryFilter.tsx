@@ -37,7 +37,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           <Button
             variant="ghost"
             size="xs"
-            className="py-0 h-5 text-xs text-muted-foreground hover:text-foreground"
+            className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-xs transition-colors"
             onClick={onClearCategories}
           >
             Clear all
