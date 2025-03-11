@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
@@ -65,17 +64,15 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     return filtered;
   }, [searchQuery, selectedCategory]);
 
-  // Choose featured products (premium items or best sellers)
+  // Choose featured products from ALL products, not filtered ones
+  // Featured products are not affected by filters
   const featuredProducts = useMemo(() => {
-    // Filter by selected category if needed
-    let potentialFeatured = selectedCategory 
-      ? products.filter(p => p.categoryId === selectedCategory && p.inventory > 0)
-      : products.filter(p => p.inventory > 0);
+    const availableProducts = products.filter(p => p.inventory > 0);
       
-    return [...potentialFeatured]
+    return [...availableProducts]
       .sort((a, b) => b.price - a.price)
       .slice(0, 2);
-  }, [selectedCategory]);
+  }, []);
 
   const handleWatchItem = (product: Product) => {
     const productId = product.id;
@@ -124,14 +121,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      {/* Category filters */}
-      <CategoryFilter
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        productCountByCategory={productCountByCategory}
-      />
-      
-      {/* Featured products */}
+      {/* Featured products - not affected by filters */}
       {featuredProducts.length > 0 && (
         <FeaturedProductBanner 
           products={featuredProducts} 
@@ -139,7 +129,15 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         />
       )}
       
+      {/* Search placed above filters */}
       <ProductSearch onSearch={handleSearch} />
+      
+      {/* Category filters moved below search */}
+      <CategoryFilter
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+        productCountByCategory={productCountByCategory}
+      />
       
       {filteredProducts.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
