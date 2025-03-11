@@ -131,52 +131,65 @@ export const useSavedCarts = ({
     
     if (cartToAddFrom) {
       const tempInventory = { ...inventory };
-      let insufficientInventory = false;
+      let addedItemsCount = 0;
+      let skippedItemsCount = 0;
       
-      cartToAddFrom.items.forEach(itemToAdd => {
-        const existingItemIndex = cartItems.findIndex(item => item.productId === itemToAdd.productId);
-        const existingQuantity = existingItemIndex !== -1 ? cartItems[existingItemIndex].quantity : 0;
-        const totalNeeded = existingQuantity + itemToAdd.quantity;
-        
-        if (tempInventory[Number(itemToAdd.productId)] < itemToAdd.quantity) {
-          insufficientInventory = true;
-        }
-      });
-      
-      if (insufficientInventory) {
-        toast({
-          title: "Insufficient Inventory",
-          description: "Some items cannot be added due to insufficient inventory.",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      const updatedInventory = { ...inventory };
+      // Create a new cart with the existing items
       const updatedCartItems = [...cartItems];
+      const updatedInventory = { ...inventory };
       
+      // Check each item in the saved cart
       cartToAddFrom.items.forEach(itemToAdd => {
-        const existingItemIndex = updatedCartItems.findIndex(item => item.productId === itemToAdd.productId);
-        
-        if (existingItemIndex !== -1) {
-          updatedCartItems[existingItemIndex].quantity += itemToAdd.quantity;
+        // Check if there's enough inventory for this item
+        if (tempInventory[Number(itemToAdd.productId)] >= itemToAdd.quantity) {
+          // There's enough inventory, so add/update the item
+          const existingItemIndex = updatedCartItems.findIndex(
+            item => item.productId === itemToAdd.productId
+          );
+          
+          if (existingItemIndex !== -1) {
+            // Update existing item quantity
+            updatedCartItems[existingItemIndex].quantity += itemToAdd.quantity;
+          } else {
+            // Add as new item
+            updatedCartItems.push({
+              ...itemToAdd,
+              id: Date.now() + Math.random()
+            });
+          }
+          
+          // Update inventory
+          updatedInventory[Number(itemToAdd.productId)] -= itemToAdd.quantity;
+          tempInventory[Number(itemToAdd.productId)] -= itemToAdd.quantity;
+          addedItemsCount++;
         } else {
-          updatedCartItems.push({
-            ...itemToAdd,
-            id: Date.now() + Math.random()
-          });
+          // Not enough inventory for this item
+          skippedItemsCount++;
         }
-        
-        updatedInventory[Number(itemToAdd.productId)] -= itemToAdd.quantity;
       });
       
+      // Update the cart and inventory
       setCartItems(updatedCartItems);
       setInventory(updatedInventory);
       
-      toast({
-        title: "Items Added",
-        description: `Items from "${getCartMnemonic(cartId)}" have been added to your cart.`,
-      });
+      // Show appropriate toast message
+      if (addedItemsCount > 0 && skippedItemsCount > 0) {
+        toast({
+          title: "Items Partially Added",
+          description: `Added ${addedItemsCount} available items from "${getCartMnemonic(cartId)}". ${skippedItemsCount} out-of-stock items were skipped.`,
+        });
+      } else if (addedItemsCount > 0) {
+        toast({
+          title: "Items Added",
+          description: `Items from "${getCartMnemonic(cartId)}" have been added to your cart.`,
+        });
+      } else {
+        toast({
+          title: "No Items Added",
+          description: "None of the items in this saved cart are currently in stock.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
