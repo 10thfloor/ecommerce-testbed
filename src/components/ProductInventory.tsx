@@ -97,7 +97,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       price: 349.99,
       description: "Versatile softshell jacket for mixed weather conditions",
       image: "/placeholder.svg",
-      inventory: 6
+      inventory: 2
     },
     {
       id: 6,
