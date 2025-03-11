@@ -20,14 +20,16 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
 }) => {
   const productName = useProductName(item.productId);
   const isOutOfStock = inventory[Number(item.productId)] === 0;
-  const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
+  const lowStock = inventory[Number(item.productId)] === 1;
   const isWatched = watchedItems.includes(Number(item.productId));
   
   return (
     <div className={`p-3 mb-2 animate-fade-in rounded-md ${
       isOutOfStock 
         ? 'bg-amber-500/10 border border-amber-500/30' 
-        : 'card-glass'
+        : lowStock 
+          ? 'bg-amber-500/5 border border-amber-500/20'
+          : 'card-glass'
     }`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
@@ -46,7 +48,7 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
               )}
               {lowStock && !isOutOfStock && (
                 <span className="ml-2 text-amber-600 dark:text-amber-400 text-xs font-medium">
-                  Only {inventory[Number(item.productId)]} left
+                  Only 1 left
                 </span>
               )}
             </div>

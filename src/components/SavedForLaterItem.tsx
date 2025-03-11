@@ -25,23 +25,36 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
 }) => {
   const productName = useProductName(item.productId);
   const isOutOfStock = inventory[Number(item.productId)] === 0;
+  const lowStock = inventory[Number(item.productId)] === 1;
   const isWatched = watchedItems.includes(Number(item.productId));
   
   return (
     <div className={`p-2.5 mb-2 animate-fade-in rounded-md ${
       isOutOfStock 
         ? 'bg-amber-500/10 border border-amber-500/30' 
-        : 'card-glass'
+        : lowStock 
+          ? 'bg-amber-500/5 border border-amber-500/20'
+          : 'card-glass'
     }`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex flex-col">
             <div className="flex items-center">
               <span className="font-medium text-sm">{productName}</span>
+              {item.size && (
+                <span className="ml-1.5 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                  {item.size}
+                </span>
+              )}
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
                   <PackageX className="h-3 w-3" />
                 </div>
+              )}
+              {lowStock && !isOutOfStock && (
+                <span className="ml-2 text-amber-600 dark:text-amber-400 text-xs font-medium">
+                  Only 1 left
+                </span>
               )}
             </div>
             <span className="text-xs text-muted-foreground">
@@ -56,12 +69,12 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className={`h-7 w-7 p-0 rounded-full ${isOutOfStock ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary/10 hover:bg-primary/20'}`}
+            className={`h-7 w-7 p-0 rounded-full ${isOutOfStock ? 'bg-muted text-muted-foreground cursor-not-allowed' : lowStock ? 'border-amber-500/70 bg-amber-500/10 text-amber-700 hover:bg-amber-500/20' : 'bg-primary/10 hover:bg-primary/20'}`}
             onClick={() => !isOutOfStock && onMoveToCart(item.id)}
             aria-label="Move to cart"
             disabled={isOutOfStock}
           >
-            <Plus className={`h-3.5 w-3.5 ${isOutOfStock ? 'text-muted-foreground' : 'text-primary'}`} />
+            <Plus className={`h-3.5 w-3.5 ${isOutOfStock ? 'text-muted-foreground' : lowStock ? 'text-amber-700' : 'text-primary'}`} />
           </Button>
           
           {isOutOfStock && onWatchItem && (
