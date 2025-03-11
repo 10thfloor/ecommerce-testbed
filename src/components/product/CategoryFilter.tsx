@@ -29,7 +29,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
           size="xs"
           className={`rounded-full whitespace-nowrap transition-all duration-200 ${
             selectedCategory === null 
-              ? "bg-amber-500/5 border-amber-500/20 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10" 
+              ? "bg-blue-500/5 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10" 
               : "hover:bg-secondary/80"
           }`}
           onClick={() => onSelectCategory(null)}
@@ -39,7 +39,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
             variant="secondary" 
             className={`ml-1 text-[10px] px-1.5 ${
               selectedCategory === null
-                ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
+                ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
                 : "bg-secondary"
             }`}
           >
@@ -62,7 +62,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
               size="xs"
               className={`rounded-full whitespace-nowrap transition-all duration-200 ${
                 isSelected
-                  ? "bg-amber-500/5 border-amber-500/20 text-amber-700 dark:text-amber-400 hover:bg-amber-500/10"
+                  ? "bg-blue-500/5 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10"
                   : "hover:bg-secondary/80"
               }`}
               onClick={() => onSelectCategory(category.id)}
@@ -73,7 +73,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 variant="secondary"
                 className={`ml-1 text-[10px] px-1.5 ${
                   isSelected
-                    ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
+                    ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
                     : "bg-secondary"
                 }`}
               >
