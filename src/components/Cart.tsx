@@ -56,13 +56,13 @@ const Cart: React.FC<CartProps> = ({
           />
           <Button 
             onClick={onSaveCart}
-            className="btn-primary flex items-center space-x-1 hover-scale"
+            className="hover-scale flex items-center gap-1"
             disabled={items.length === 0}
             variant="default"
             size="sm"
           >
             <SaveAll className="h-4 w-4" />
-            <span>Save Cart</span>
+            <span>Save</span>
           </Button>
         </div>
       </div>

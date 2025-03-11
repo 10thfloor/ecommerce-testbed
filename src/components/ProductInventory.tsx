@@ -171,8 +171,8 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
                 {product.inventory === 0 && (
                   <Button
                     variant="outline"
-                    size="icon"
-                    className={`h-8 w-8 z-10 rounded-full transition-all animate-pulse-subtle ${
+                    size="sm"
+                    className={`h-7 w-7 p-0 rounded-full transition-all animate-pulse-subtle ${
                       notifiedItems.includes(product.id) || watchedItems.includes(product.id)
                         ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400' 
                         : 'bg-secondary/70 hover:bg-secondary'
@@ -180,7 +180,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
                     onClick={(e) => handleNotifyMe(product, e)}
                     aria-label={notifiedItems.includes(product.id) ? "Notification set" : "Notify me when back in stock"}
                   >
-                    <Bell className="h-4 w-4" />
+                    <Bell className="h-3.5 w-3.5" />
                   </Button>
                 )}
               </div>

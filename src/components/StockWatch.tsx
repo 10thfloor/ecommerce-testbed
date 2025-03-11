@@ -78,22 +78,22 @@ const StockWatch: React.FC<StockWatchProps> = ({
               <div className="flex items-center space-x-2">
                 {isInStock && (
                   <Button
-                    size="icon"
+                    size="sm"
                     variant="outline"
-                    className="h-8 w-8 bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
+                    className="h-7 w-7 p-0 bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
                     onClick={() => onAddToCart(product.id, product.price)}
                   >
-                    <Plus className="h-4 w-4 text-green-600 dark:text-green-400" />
+                    <Plus className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
                   </Button>
                 )}
                 
                 <Button
-                  size="icon"
+                  size="sm"
                   variant="outline" 
-                  className="h-8 w-8"
+                  className="h-7 w-7 p-0"
                   onClick={() => onRemoveFromWatch(product.id)}
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
