@@ -95,9 +95,6 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
       {isExpanded && (
         <div className="mt-4 space-y-6">
           {savedCarts.map((cart) => {
-            const outOfStockCount = countOutOfStockItems(cart);
-            const hasOutOfStock = outOfStockCount > 0;
-            
             return (
               <div 
                 key={cart.id} 
@@ -121,13 +118,6 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    {hasOutOfStock && (
-                      <div className="text-xs font-medium bg-amber-100 text-amber-700 rounded-full px-2 py-1 flex items-center">
-                        <AlertCircle className="h-3 w-3 mr-1" />
-                        {outOfStockCount} unavailable
-                      </div>
-                    )}
-                    
                     <ShareMenu 
                       items={cart.items} 
                       title={`${getCartMnemonic(cart.id)} Cart`}
