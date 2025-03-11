@@ -44,6 +44,9 @@ const Cart: React.FC<CartProps> = ({
             <ShoppingCart className="h-4 w-4 text-primary" />
           </div>
           <h3 className="text-lg font-medium">Your Cart</h3>
+          <span className="ml-2 text-sm text-muted-foreground">
+            ({items.length} {items.length === 1 ? 'item' : 'items'})
+          </span>
           
           {hasHistory && onUndoCart && (
             <button 

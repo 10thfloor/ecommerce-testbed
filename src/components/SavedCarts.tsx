@@ -86,6 +86,9 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
             <ShoppingBag className="h-5 w-5 text-primary" />
           </div>
           <h3 className="text-xl font-medium">Saved Carts</h3>
+          <span className="ml-2 text-sm text-muted-foreground">
+            ({savedCarts.length} {savedCarts.length === 1 ? 'cart' : 'carts'})
+          </span>
         </div>
         <button className="p-1.5 hover:bg-secondary/70 rounded-full transition-colors">
           {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -113,6 +116,9 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
                       
                       <div className="flex items-center text-xs text-muted-foreground">
                         <span className="mr-2">{cart.date}</span>
+                        <span className="text-xs bg-secondary px-1.5 py-0.5 rounded-md">
+                          {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? 'item' : 'items'}
+                        </span>
                       </div>
                     </div>
                   </div>
