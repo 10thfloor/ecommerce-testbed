@@ -31,6 +31,7 @@ const initialStockWatchItems: Product[] = [
     inventory: 0,
     description: "Superlight emergency rain protection for hiking",
     image: "/placeholder.svg",
+    categoryId: 1, // Jackets category
     sizes: [
       { name: 'SM', inventory: 0 },
       { name: 'MD', inventory: 0 },
@@ -45,6 +46,7 @@ const initialStockWatchItems: Product[] = [
     inventory: 2,
     description: "Versatile softshell jacket for mixed mountain conditions",
     image: "/placeholder.svg",
+    categoryId: 1, // Jackets category
     sizes: [
       { name: 'SM', inventory: 0 },
       { name: 'MD', inventory: 1 },

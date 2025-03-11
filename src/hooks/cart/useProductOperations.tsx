@@ -82,7 +82,8 @@ export const useProductOperations = ({
         { name: 'MD', inventory: 0 },
         { name: 'LG', inventory: 0 },
         { name: 'XL', inventory: 0 }
-      ]
+      ],
+      categoryId: 4 // Default to Accessories category
     };
     
     const savedItem = savedForLaterItems.find(item => Number(item.productId) === productId);

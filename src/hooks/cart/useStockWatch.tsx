@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Product } from '@/components/product/types';
@@ -51,7 +52,8 @@ export const useStockWatch = ({
       inventory: 0,
       description: "Out of stock product",
       image: "/placeholder.svg",
-      sizes: []
+      sizes: [],
+      categoryId: 4 // Default to Accessories category
     };
     
     setStockWatchItems([...stockWatchItems, newWatchItem]);
