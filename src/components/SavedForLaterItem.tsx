@@ -45,15 +45,13 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
               )}
             </div>
             <span className="text-xs text-muted-foreground">
-              {formatCurrency(item.price)} × {item.quantity}
+              {formatCurrency(item.price)}
             </span>
           </div>
         </div>
         
         <div className="flex items-center space-x-2">
-          <span className="text-xs text-muted-foreground bg-secondary py-0.5 px-1.5 rounded-md">
-            Qty: {item.quantity}
-          </span>
+          {/* Removed quantity indicator since all saved items have quantity 1 */}
           
           <Button
             variant="outline"

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { 
   CartItem,
@@ -77,12 +76,8 @@ export const useCartManagement = ({
 
   // Override handleSaveForLater to coordinate between cart operations and saved for later
   const handleSaveForLater = (id: string | number) => {
-    // Use the cart operations version to get the item and remove from cart
-    const itemToSave = cartOperations.handleSaveForLater(id);
-    if (itemToSave) {
-      // Add to saved for later items
-      savedForLater.setSavedForLaterItems([...savedForLater.savedForLaterItems, itemToSave]);
-    }
+    // We'll use savedForLater's implementation directly now as it handles removing from cart
+    savedForLater.handleSaveForLater(id);
   };
 
   // Coordinate handleWatchProductId to access cart items and saved for later items for price
