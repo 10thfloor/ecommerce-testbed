@@ -17,21 +17,21 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
   productCountByCategory
 }) => {
   return (
-    <div className="mb-6 bg-secondary/20 rounded-lg p-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Filter className="h-4 w-4 text-primary" />
-        <h3 className="text-sm font-medium">Filter by Category</h3>
+    <div className="mb-4 bg-secondary/10 rounded-lg p-3">
+      <div className="flex items-center gap-2 mb-2">
+        <Filter className="h-3.5 w-3.5 text-primary" />
+        <h3 className="text-xs font-medium text-muted-foreground">Categories</h3>
       </div>
       
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-nowrap overflow-x-auto gap-1.5 pb-1">
         <Button
           variant={selectedCategory === null ? "default" : "outline"}
-          size="sm"
-          className="rounded-full h-9"
+          size="xs"
+          className="rounded-full whitespace-nowrap"
           onClick={() => onSelectCategory(null)}
         >
-          All Products
-          <Badge variant="secondary" className="ml-2 bg-primary/20 text-primary-foreground">
+          All
+          <Badge variant="secondary" className="ml-1 bg-primary/10 text-primary-foreground text-[10px] px-1.5">
             {Object.values(productCountByCategory).reduce((a, b) => a + b, 0)}
           </Badge>
         </Button>
@@ -47,19 +47,19 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
             <Button
               key={category.id}
               variant={selectedCategory === category.id ? "default" : "outline"}
-              size="sm"
-              className={`rounded-full h-9 transition-all duration-200 ${
+              size="xs"
+              className={`rounded-full whitespace-nowrap transition-all duration-200 ${
                 selectedCategory === category.id 
                   ? "shadow-sm" 
                   : "hover:border-primary/40"
               }`}
               onClick={() => onSelectCategory(category.id)}
             >
-              <Icon className="h-3.5 w-3.5 mr-1.5" />
+              <Icon className="h-3 w-3 mr-1" />
               {category.name}
               <Badge 
                 variant={selectedCategory === category.id ? "secondary" : "outline"} 
-                className={`ml-2 ${
+                className={`ml-1 text-[10px] px-1.5 ${
                   selectedCategory === category.id 
                     ? "bg-background/20 text-primary-foreground" 
                     : "bg-background/50"
