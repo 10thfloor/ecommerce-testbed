@@ -101,7 +101,7 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
             return (
               <div 
                 key={cart.id} 
-                className={`bg-secondary/30 rounded-lg p-4 transition-all ${hasOutOfStock ? 'border-l-4 border-amber-500' : ''}`}
+                className="bg-secondary/30 rounded-lg p-4 transition-all"
               >
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center space-x-4">
@@ -121,10 +121,6 @@ const SavedCarts: React.FC<SavedCartsProps> = ({
                   </div>
                   
                   <div className="flex items-center space-x-2">
-                    <div className="text-xs font-medium bg-primary/10 text-primary rounded-full px-2 py-1">
-                      {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? 'item' : 'items'}
-                    </div>
-                    
                     {hasOutOfStock && (
                       <div className="text-xs font-medium bg-amber-100 text-amber-700 rounded-full px-2 py-1 flex items-center">
                         <AlertCircle className="h-3 w-3 mr-1" />

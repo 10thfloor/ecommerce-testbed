@@ -18,7 +18,7 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
   const isOutOfStock = inventory[Number(item.productId)] === 0;
   
   return (
-    <div className={`card-glass p-3 mb-2 animate-fade-in ${isOutOfStock ? 'bg-destructive/10' : ''}`}>
+    <div className={`card-glass p-3 mb-2 animate-fade-in ${isOutOfStock ? 'border-l-4 border-amber-500' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex flex-col">
