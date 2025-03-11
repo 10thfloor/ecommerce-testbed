@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Sparkles, Ban, User, Save } from 'lucide-react';
+import { ChevronDown, ChevronUp, Sparkles, Ban, Heart, Save, Trash } from 'lucide-react';
 import { Product } from '@/components/product/types';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,6 +54,22 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
     setShowPreferences(false);
   };
 
+  const clearPreferences = () => {
+    setPreferences({
+      interests: '',
+      activities: '',
+      favoriteColors: '',
+      priceRange: ''
+    });
+    
+    localStorage.removeItem('userPreferences');
+    
+    toast({
+      title: "Preferences Cleared",
+      description: "Your preferences have been reset.",
+    });
+  };
+
   // Load preferences from localStorage on initial render
   React.useEffect(() => {
     const savedPreferences = localStorage.getItem('userPreferences');
@@ -84,8 +100,8 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
               setShowPreferences(!showPreferences);
             }}
           >
-            <User className="h-3.5 w-3.5" />
-            <span>Your Preferences</span>
+            <Heart className="h-3.5 w-3.5 text-pink-500" />
+            <span>Your Interests</span>
           </Button>
           <button className="p-1 hover:bg-secondary rounded transition-colors">
             {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
@@ -97,9 +113,10 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
         <div className="mt-6">
           {showPreferences ? (
             <div className="bg-card p-4 rounded-lg border border-border animate-fade-in">
-              <h4 className="text-base font-medium mb-3">Tell us a bit about yourself</h4>
+              <h4 className="text-base font-medium mb-3">Tell us what you like</h4>
               <p className="text-sm text-muted-foreground mb-4">
-                This information helps us recommend products you might like.
+                Let us know your preferences so we can suggest products you'll love.
+                You can update these anytime.
               </p>
               
               <div className="space-y-3">
@@ -155,13 +172,27 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
                   />
                 </div>
                 
-                <div className="pt-2 flex justify-end">
+                <p className="text-xs text-muted-foreground mt-2 italic">
+                  You can come back and update your preferences anytime.
+                </p>
+                
+                <div className="pt-2 flex justify-between">
+                  <Button 
+                    variant="outline"
+                    onClick={clearPreferences}
+                    className="flex items-center gap-1"
+                    size="sm"
+                  >
+                    <Trash className="h-4 w-4" />
+                    Clear All
+                  </Button>
+                  
                   <Button 
                     onClick={savePreferences}
                     className="flex items-center gap-1"
                   >
                     <Save className="h-4 w-4" />
-                    Save Preferences
+                    Submit
                   </Button>
                 </div>
               </div>
