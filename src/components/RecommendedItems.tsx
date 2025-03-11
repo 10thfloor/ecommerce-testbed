@@ -189,7 +189,7 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
                   
                   <Button 
                     onClick={savePreferences}
-                    className="flex items-center gap-1 bg-purple-500 hover:bg-purple-600"
+                    className="flex items-center gap-1 bg-purple-700 hover:bg-purple-800"
                     size="sm"
                   >
                     <Zap className="h-4 w-4" />
