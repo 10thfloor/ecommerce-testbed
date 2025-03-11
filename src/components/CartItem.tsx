@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Minus, Plus, Trash2, BookmarkPlus } from 'lucide-react';
+import { Minus, Plus, Trash2, BookmarkPlus, AlertTriangle } from 'lucide-react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
@@ -10,17 +10,22 @@ interface CartItemProps {
   onRemove: (id: string | number) => void;
   onUpdateQuantity: (id: string | number, quantity: number) => void;
   onSaveForLater?: (id: string | number) => void;
+  inventory?: Record<number, number>;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ 
   item, 
   onRemove, 
   onUpdateQuantity,
-  onSaveForLater 
+  onSaveForLater,
+  inventory = {}
 }) => {
   const productName = useProductName(item.productId);
+  const isOutOfStock = inventory[Number(item.productId)] === 0;
+  const lowStock = inventory[Number(item.productId)] > 0 && inventory[Number(item.productId)] < 3;
   
   const handleIncrement = () => {
+    if (isOutOfStock || inventory[Number(item.productId)] <= item.quantity) return;
     onUpdateQuantity(item.id, item.quantity + 1);
   };
 
@@ -31,11 +36,24 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   return (
-    <div className="card-glass p-3 mb-2 animate-fade-in">
+    <div className={`card-glass p-3 mb-2 animate-fade-in ${isOutOfStock ? 'bg-destructive/10' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex flex-col">
-            <span className="font-medium text-sm">{productName}</span>
+            <div className="flex items-center">
+              <span className="font-medium text-sm">{productName}</span>
+              {isOutOfStock && (
+                <div className="ml-2 flex items-center text-destructive">
+                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  <span className="text-xs font-medium">Out of stock</span>
+                </div>
+              )}
+              {lowStock && !isOutOfStock && (
+                <span className="ml-2 text-amber-500 text-xs font-medium">
+                  Only {inventory[Number(item.productId)]} left
+                </span>
+              )}
+            </div>
             <span className="text-xs text-muted-foreground">
               {formatCurrency(item.price)} × {item.quantity}
             </span>
@@ -47,21 +65,23 @@ const CartItem: React.FC<CartItemProps> = ({
             {formatCurrency(item.price * item.quantity)}
           </div>
           
-          <div className="bg-secondary rounded-md flex items-center h-7">
+          <div className={`bg-secondary rounded-md flex items-center h-7 ${isOutOfStock ? 'opacity-50' : ''}`}>
             <button 
               onClick={handleDecrement}
               className="p-1 hover:bg-muted rounded-l-md transition-colors"
               aria-label="Decrease quantity"
+              disabled={isOutOfStock}
             >
               <Minus className="h-3 w-3" />
             </button>
             <span className="px-2 font-medium text-xs">{item.quantity}</span>
             <button 
               onClick={handleIncrement}
-              className="p-1 hover:bg-muted rounded-r-md transition-colors"
+              className={`p-1 ${!isOutOfStock && item.quantity < inventory[Number(item.productId)] ? 'hover:bg-muted' : ''} rounded-r-md transition-colors`}
               aria-label="Increase quantity"
+              disabled={isOutOfStock || item.quantity >= inventory[Number(item.productId)]}
             >
-              <Plus className="h-3 w-3" />
+              <Plus className={`h-3 w-3 ${item.quantity >= inventory[Number(item.productId)] ? 'text-muted-foreground' : ''}`} />
             </button>
           </div>
           

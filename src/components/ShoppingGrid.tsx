@@ -81,6 +81,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onLoadCart={onLoadCart}
               onDeleteCart={onDeleteCart}
               onAddCartItems={onAddCartItems}
+              inventory={inventory}
             />
           </div>
         </div>
@@ -96,6 +97,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onEmailCart={onEmailCart}
               onUndoCart={onUndoCart}
               hasHistory={hasCartHistory}
+              inventory={inventory}
             />
           </div>
           
@@ -113,6 +115,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               items={savedForLaterItems}
               onMoveToCart={onMoveToCart}
               onRemoveItem={onRemoveSavedItem}
+              inventory={inventory}
             />
           </div>
         </div>

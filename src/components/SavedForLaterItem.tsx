@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, AlertTriangle } from 'lucide-react';
 import { CartItem } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
@@ -10,21 +10,32 @@ interface SavedForLaterItemProps {
   item: CartItem;
   onMoveToCart: (id: string | number) => void;
   onRemove: (id: string | number) => void;
+  inventory?: Record<number, number>;
 }
 
 const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({ 
   item, 
   onMoveToCart, 
-  onRemove 
+  onRemove,
+  inventory = {}
 }) => {
   const productName = useProductName(item.productId);
+  const isOutOfStock = inventory[Number(item.productId)] === 0;
   
   return (
-    <div className="card-glass p-2.5 mb-2 animate-fade-in">
+    <div className={`card-glass p-2.5 mb-2 animate-fade-in ${isOutOfStock ? 'bg-destructive/10' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex flex-col">
-            <span className="font-medium text-sm">{productName}</span>
+            <div className="flex items-center">
+              <span className="font-medium text-sm">{productName}</span>
+              {isOutOfStock && (
+                <div className="ml-2 flex items-center text-destructive">
+                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  <span className="text-xs font-medium">Out of stock</span>
+                </div>
+              )}
+            </div>
             <span className="text-xs text-muted-foreground">
               {formatCurrency(item.price)} × {item.quantity}
             </span>
@@ -39,11 +50,12 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
           <Button
             variant="outline"
             size="sm"
-            className="h-7 w-7 p-0 rounded-full bg-primary/10 hover:bg-primary/20"
-            onClick={() => onMoveToCart(item.id)}
+            className={`h-7 w-7 p-0 rounded-full ${isOutOfStock ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary/10 hover:bg-primary/20'}`}
+            onClick={() => !isOutOfStock && onMoveToCart(item.id)}
             aria-label="Move to cart"
+            disabled={isOutOfStock}
           >
-            <Plus className="h-3.5 w-3.5 text-primary" />
+            <Plus className={`h-3.5 w-3.5 ${isOutOfStock ? 'text-muted-foreground' : 'text-primary'}`} />
           </Button>
           
           <button 

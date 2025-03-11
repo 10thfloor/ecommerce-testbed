@@ -15,6 +15,7 @@ interface CartProps {
   onEmailCart: () => void;
   onUndoCart?: () => void;
   hasHistory?: boolean;
+  inventory?: Record<number, number>;
 }
 
 const Cart: React.FC<CartProps> = ({ 
@@ -25,7 +26,8 @@ const Cart: React.FC<CartProps> = ({
   onSaveForLater,
   onEmailCart,
   onUndoCart,
-  hasHistory = false
+  hasHistory = false,
+  inventory = {}
 }) => {
   const total = calculateTotal(items);
   
@@ -81,6 +83,7 @@ const Cart: React.FC<CartProps> = ({
                 onRemove={onRemoveItem}
                 onUpdateQuantity={onUpdateQuantity}
                 onSaveForLater={onSaveForLater}
+                inventory={inventory}
               />
             ))}
           </div>
