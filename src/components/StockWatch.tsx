@@ -1,9 +1,10 @@
 
-import React from 'react';
-import { Eye, EyeOff, Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { Eye, EyeOff, Plus, Mail, MailOff } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
 import { Product } from '@/components/ProductInventory';
+import { useToast } from "@/hooks/use-toast";
 
 interface StockWatchProps {
   items: Product[];
@@ -18,14 +19,31 @@ const StockWatch: React.FC<StockWatchProps> = ({
   onAddToCart,
   inventory
 }) => {
+  const { toast } = useToast();
+  const [emailNotifications, setEmailNotifications] = useState(false);
+
+  const toggleEmailNotifications = () => {
+    const newState = !emailNotifications;
+    setEmailNotifications(newState);
+    
+    toast({
+      title: newState ? "Email Notifications On" : "Email Notifications Off",
+      description: newState 
+        ? "You'll receive emails when watched items are back in stock." 
+        : "You won't receive emails for stock updates.",
+    });
+  };
+
   if (items.length === 0) {
     return (
       <div className="card-glass p-4 mb-6">
-        <div className="mb-4 flex items-center">
-          <div className="bg-primary/10 rounded-lg p-2 mr-3">
-            <Eye className="h-5 w-5 text-primary" />
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="bg-primary/10 rounded-lg p-2 mr-3">
+              <Eye className="h-5 w-5 text-primary" />
+            </div>
+            <h3 className="text-xl font-medium">Stock Watch</h3>
           </div>
-          <h3 className="text-xl font-medium">Stock Watch</h3>
         </div>
         <div className="text-center py-4 text-muted-foreground">
           You're not watching any items.
@@ -36,11 +54,33 @@ const StockWatch: React.FC<StockWatchProps> = ({
 
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in">
-      <div className="mb-4 flex items-center">
-        <div className="bg-primary/10 rounded-lg p-2 mr-3">
-          <Eye className="h-5 w-5 text-primary" />
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <div className="bg-primary/10 rounded-lg p-2 mr-3">
+            <Eye className="h-5 w-5 text-primary" />
+          </div>
+          <h3 className="text-xl font-medium">Stock Watch</h3>
         </div>
-        <h3 className="text-xl font-medium">Stock Watch</h3>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 px-2 flex items-center gap-1"
+          onClick={toggleEmailNotifications}
+          aria-label={emailNotifications ? "Turn off email notifications" : "Turn on email notifications"}
+        >
+          {emailNotifications ? (
+            <>
+              <Mail className="h-4 w-4 text-blue-400" />
+              <span className="text-xs font-medium text-blue-400">Emails On</span>
+            </>
+          ) : (
+            <>
+              <MailOff className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">Emails Off</span>
+            </>
+          )}
+        </Button>
       </div>
 
       <div className="space-y-2">
