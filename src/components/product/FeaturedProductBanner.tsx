@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ArrowRight, Star } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
 import { Product } from './types';
@@ -54,10 +54,11 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
               <div className="mt-auto">
                 <Button 
                   onClick={() => onAddToCart(product.id, product.price)}
-                  className="w-full group"
+                  variant="outline"
+                  className="w-full group hover:bg-primary/10 border-primary/20"
                 >
-                  Add to Cart
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <ShoppingCart className="h-4 w-4 mr-2 group-hover:text-primary" />
+                  <span className="group-hover:text-primary">Add to Cart</span>
                 </Button>
               </div>
             </div>
