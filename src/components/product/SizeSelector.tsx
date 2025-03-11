@@ -22,7 +22,6 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
       {sizes.map((size) => {
         const isSelected = selectedSize === size.name;
         const isOutOfStock = size.inventory === 0;
-        const isLowStock = size.inventory <= 3 && size.inventory > 0;
         
         return (
           <div key={size.name} className="relative">
@@ -40,12 +39,6 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
             >
               {size.name}
             </Button>
-            
-            {showInventory && isLowStock && (
-              <span className="absolute -top-2 -right-2 px-1 py-0.5 bg-amber-500/20 text-amber-700 dark:text-amber-400 text-[0.6rem] rounded-full">
-                {size.inventory}
-              </span>
-            )}
           </div>
         );
       })}
