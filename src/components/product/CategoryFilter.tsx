@@ -49,7 +49,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
         <Button
           variant={!hasFilters ? "outline" : "ghost"}
           size="xs"
-          className={`rounded-full whitespace-nowrap transition-all duration-200 ${
+          className={`rounded-full whitespace-nowrap h-7 transition-all duration-200 ${
             !hasFilters 
               ? "bg-blue-500/5 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10" 
               : "hover:bg-secondary/80"
@@ -82,7 +82,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({
               key={category.id}
               variant={isSelected ? "outline" : "ghost"}
               size="xs"
-              className={`rounded-full whitespace-nowrap transition-all duration-200 ${
+              className={`rounded-full whitespace-nowrap h-7 transition-all duration-200 ${
                 isSelected
                   ? "bg-blue-500/5 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10"
                   : "hover:bg-secondary/80"
