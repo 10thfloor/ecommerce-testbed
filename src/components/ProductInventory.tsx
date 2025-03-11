@@ -25,7 +25,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const { toast } = useToast();
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -42,11 +42,25 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }, {} as Record<number, number>);
   }, []);
 
+  const toggleCategory = (categoryId: number) => {
+    setSelectedCategories(prev => {
+      if (prev.includes(categoryId)) {
+        return prev.filter(id => id !== categoryId);
+      } else {
+        return [...prev, categoryId];
+      }
+    });
+  };
+
+  const clearCategories = () => {
+    setSelectedCategories([]);
+  };
+
   const filteredProducts = useMemo(() => {
     let filtered = products;
     
-    if (selectedCategory !== null) {
-      filtered = filtered.filter(product => product.categoryId === selectedCategory);
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product => selectedCategories.includes(product.categoryId));
     }
     
     if (searchQuery.trim()) {
@@ -58,7 +72,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }
     
     return filtered;
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategories]);
 
   const featuredProducts = useMemo(() => {
     const availableProducts = products.filter(p => p.inventory > 0);
@@ -127,14 +141,15 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <ProductSearch onSearch={handleSearch} />
         
         <CategoryFilter
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
+          selectedCategories={selectedCategories}
+          onSelectCategory={toggleCategory}
+          onClearCategories={clearCategories}
           productCountByCategory={productCountByCategory}
         />
         
         {filteredProducts.length === 0 ? (
           <div className="bg-secondary/20 text-center py-8 rounded-lg text-muted-foreground mt-4">
-            <p>No products found {searchQuery ? `matching "${searchQuery}"` : "in this category"}</p>
+            <p>No products found {searchQuery ? `matching "${searchQuery}"` : "in selected categories"}</p>
           </div>
         ) : (
           <div className="mt-4">
