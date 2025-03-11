@@ -22,6 +22,7 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
       {sizes.map((size) => {
         const isSelected = selectedSize === size.name;
         const isOutOfStock = size.inventory === 0;
+        const isLimitedStock = size.inventory > 0 && size.inventory <= 3;
         
         return (
           <div key={size.name} className="relative">
@@ -34,7 +35,8 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
                 "h-7 w-7 p-0 text-xs font-medium rounded-full transition-all duration-200",
                 isSelected && "ring-2 ring-primary/20 transform scale-105",
                 isOutOfStock && "opacity-40 line-through",
-                !isSelected && !isOutOfStock && "hover:bg-primary/10 hover:text-primary"
+                isLimitedStock && !isSelected && "border-amber-500/70 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 hover:text-amber-800 dark:hover:text-amber-300",
+                !isSelected && !isOutOfStock && !isLimitedStock && "hover:bg-primary/10 hover:text-primary"
               )}
             >
               {size.name}
