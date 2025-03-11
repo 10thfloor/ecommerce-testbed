@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ShoppingCart, SaveAll } from 'lucide-react';
+import { ShoppingCart, SaveAll, History } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
@@ -12,6 +12,8 @@ interface CartProps {
   onUpdateQuantity: (id: string | number, quantity: number) => void;
   onSaveForLater: (id: string | number) => void;
   onEmailCart: () => void;
+  onUndoCart?: () => void;
+  hasHistory?: boolean;
 }
 
 const Cart: React.FC<CartProps> = ({ 
@@ -20,7 +22,9 @@ const Cart: React.FC<CartProps> = ({
   onRemoveItem, 
   onUpdateQuantity,
   onSaveForLater,
-  onEmailCart
+  onEmailCart,
+  onUndoCart,
+  hasHistory = false
 }) => {
   const total = calculateTotal(items);
   
@@ -32,6 +36,17 @@ const Cart: React.FC<CartProps> = ({
             <ShoppingCart className="h-4 w-4 text-primary" />
           </div>
           <h3 className="text-lg font-medium">Your Cart</h3>
+          
+          {hasHistory && onUndoCart && (
+            <button 
+              onClick={onUndoCart}
+              className="ml-3 flex items-center space-x-1 text-xs text-primary hover:text-primary/80 transition-colors bg-primary/10 hover:bg-primary/20 px-2 py-1 rounded-md"
+              aria-label="Undo last cart change"
+            >
+              <History className="h-3 w-3 mr-1" />
+              <span>Undo</span>
+            </button>
+          )}
         </div>
         <div className="flex space-x-2">
           <ShareMenu 

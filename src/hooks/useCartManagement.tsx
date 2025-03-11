@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -28,12 +27,13 @@ export const useCartManagement = ({
   const [savedForLaterItems, setSavedForLaterItems] = useState<CartItem[]>(initialSavedForLaterItems);
   const [inventory, setInventory] = useState<Record<number, number>>(initialInventory);
   const [cartHistory, setCartHistory] = useState<CartItem[][]>([]);
-  const [showUndoToast, setShowUndoToast] = useState(false);
+  const [inventoryHistory, setInventoryHistory] = useState<Record<number, number>[]>([]);
 
   // Save the current cart to history before replacing it
-  const saveToHistory = (items: CartItem[]) => {
+  const saveToHistory = (items: CartItem[], currentInventory: Record<number, number>) => {
     if (items.length > 0) {
       setCartHistory(prev => [...prev, [...items]]);
+      setInventoryHistory(prev => [...prev, {...currentInventory}]);
     }
   };
 
@@ -41,24 +41,13 @@ export const useCartManagement = ({
   const undoCartLoad = () => {
     if (cartHistory.length > 0) {
       const prevCart = cartHistory[cartHistory.length - 1];
+      const prevInventory = inventoryHistory[inventoryHistory.length - 1];
       
-      // Adjust inventory
-      const tempInventory = { ...inventory };
-      
-      // Return current cart items to inventory
-      cartItems.forEach(item => {
-        tempInventory[Number(item.productId)] += item.quantity;
-      });
-      
-      // Remove previous cart items from inventory
-      prevCart.forEach(item => {
-        tempInventory[Number(item.productId)] -= item.quantity;
-      });
-      
-      setInventory(tempInventory);
       setCartItems(prevCart);
+      setInventory(prevInventory);
+      
       setCartHistory(prev => prev.slice(0, -1));
-      setShowUndoToast(false);
+      setInventoryHistory(prev => prev.slice(0, -1));
       
       toast({
         title: "Cart Restored",
@@ -185,11 +174,14 @@ export const useCartManagement = ({
     const cartToLoad = savedCarts.find(cart => cart.id === cartId);
     
     if (cartToLoad) {
+      // Confirm before loading cart if current cart is not empty
+      if (cartItems.length > 0) {
+        // Save current cart to history before replacing it
+        saveToHistory([...cartItems], {...inventory});
+      }
+      
       const tempInventory = { ...inventory };
       let insufficientInventory = false;
-      
-      // Save current cart to history before replacing it
-      saveToHistory([...cartItems]);
       
       // Return current cart items to inventory
       cartItems.forEach(item => {
@@ -229,8 +221,6 @@ export const useCartManagement = ({
           </button>
         ) : undefined
       });
-      
-      setShowUndoToast(true);
     }
   };
 
@@ -354,6 +344,6 @@ export const useCartManagement = ({
     handleRemoveSavedItem,
     handleEmailCurrentCart,
     undoCartLoad,
-    cartHistory
+    hasCartHistory: cartHistory.length > 0
   };
 };

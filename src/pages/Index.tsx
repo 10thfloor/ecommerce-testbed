@@ -38,6 +38,8 @@ const Index = () => {
     handleMoveToCart,
     handleRemoveSavedItem,
     handleEmailCurrentCart,
+    undoCartLoad,
+    hasCartHistory
   } = useCartManagement({
     initialCartItems: mockCartItems,
     initialSavedCarts: mockSavedCarts,
@@ -62,6 +64,8 @@ const Index = () => {
         onDeleteCart={handleDeleteCart}
         onMoveToCart={handleMoveToCart}
         onRemoveSavedItem={handleRemoveSavedItem}
+        onUndoCart={undoCartLoad}
+        hasCartHistory={hasCartHistory}
       />
     </ShoppingLayout>
   );
