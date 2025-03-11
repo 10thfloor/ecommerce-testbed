@@ -36,14 +36,18 @@ const CartItem: React.FC<CartItemProps> = ({
   };
 
   return (
-    <div className={`card-glass p-3 mb-2 animate-fade-in ${isOutOfStock ? 'bg-destructive/10' : ''}`}>
+    <div className={`p-3 mb-2 animate-fade-in rounded-md ${
+      isOutOfStock 
+        ? 'bg-amber-500/10 border border-amber-500/30' 
+        : 'card-glass'
+    }`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <div className="flex flex-col">
             <div className="flex items-center">
               <span className="font-medium text-sm">{productName}</span>
               {isOutOfStock && (
-                <div className="ml-2 flex items-center text-destructive">
+                <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
                   <AlertTriangle className="h-3 w-3 mr-1" />
                   <span className="text-xs font-medium">Out of stock</span>
                 </div>
