@@ -3,7 +3,7 @@ import React from 'react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
-import { AlertTriangle } from 'lucide-react';
+import { PackageX } from 'lucide-react';
 
 interface ReadOnlyCartItemProps {
   item: CartItemType;
@@ -30,7 +30,7 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
               <span className="font-medium text-sm">{productName}</span>
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
-                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  <PackageX className="h-3 w-3 mr-1" />
                   <span className="text-xs font-medium">Out of stock</span>
                 </div>
               )}

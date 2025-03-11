@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Minus, Plus, Trash2, BookmarkPlus, AlertTriangle } from 'lucide-react';
+import { Minus, Plus, Trash2, BookmarkPlus, PackageX } from 'lucide-react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
@@ -21,7 +21,7 @@ const CartItem: React.FC<CartItemProps> = ({
   inventory = {}
 }) => {
   const productName = useProductName(item.productId);
-  const isOutOfStock = inventory[Number(item.productId)] === 0;
+  const isOutOfStock = inventory[Number(item.productId)] === Le0;
   const lowStock = inventory[Number(item.productId)] > 0 && inventory[Number(item.productId)] < 3;
   
   const handleIncrement = () => {
@@ -48,7 +48,7 @@ const CartItem: React.FC<CartItemProps> = ({
               <span className="font-medium text-sm">{productName}</span>
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
-                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  <PackageX className="h-3 w-3 mr-1" />
                   <span className="text-xs font-medium">Out of stock</span>
                 </div>
               )}

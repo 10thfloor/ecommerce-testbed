@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Plus, Trash2, AlertTriangle } from 'lucide-react';
+import { Plus, Trash2, PackageX } from 'lucide-react';
 import { CartItem } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
@@ -35,7 +35,7 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
               <span className="font-medium text-sm">{productName}</span>
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
-                  <AlertTriangle className="h-3 w-3 mr-1" />
+                  <PackageX className="h-3 w-3 mr-1" />
                   <span className="text-xs font-medium">Out of stock</span>
                 </div>
               )}
