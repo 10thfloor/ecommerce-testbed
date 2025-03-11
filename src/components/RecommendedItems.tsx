@@ -24,8 +24,8 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <div className="flex items-center">
-          <div className="bg-amber-500/20 rounded-lg p-1 mr-2">
-            <Sparkles className="h-4 w-4 text-amber-500" />
+          <div className="bg-purple-500/20 rounded-lg p-1 mr-2 animate-pulse-subtle">
+            <Sparkles className="h-4 w-4 text-purple-500" />
           </div>
           <h3 className="text-lg font-medium">Recommended For You</h3>
         </div>
