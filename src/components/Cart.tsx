@@ -4,6 +4,7 @@ import { ShoppingCart, SaveAll, History } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
+import { Button } from "@/components/ui/button";
 
 interface CartProps {
   items: CartItemType[];
@@ -53,14 +54,16 @@ const Cart: React.FC<CartProps> = ({
             items={items} 
             title="My Shopping Cart" 
           />
-          <button 
+          <Button 
             onClick={onSaveCart}
             className="btn-primary flex items-center space-x-1 hover-scale"
             disabled={items.length === 0}
+            variant="default"
+            size="sm"
           >
-            <SaveAll className="h-4 w-4 mr-1" />
+            <SaveAll className="h-4 w-4" />
             <span>Save Cart</span>
-          </button>
+          </Button>
         </div>
       </div>
       

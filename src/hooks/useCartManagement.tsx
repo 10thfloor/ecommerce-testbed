@@ -28,6 +28,7 @@ export const useCartManagement = ({
   const [inventory, setInventory] = useState<Record<number, number>>(initialInventory);
   const [cartHistory, setCartHistory] = useState<CartItem[][]>([]);
   const [inventoryHistory, setInventoryHistory] = useState<Record<number, number>[]>([]);
+  const [lastLoadedCartId, setLastLoadedCartId] = useState<string | null>(null);
 
   // Save the current cart to history before replacing it
   const saveToHistory = (items: CartItem[], currentInventory: Record<number, number>) => {
@@ -54,6 +55,32 @@ export const useCartManagement = ({
         description: "Your previous cart has been restored.",
       });
     }
+  };
+
+  // Determine if cart contents are identical
+  const areCartsIdentical = (cart1: CartItem[], cart2: CartItem[]): boolean => {
+    if (cart1.length !== cart2.length) return false;
+    
+    // Create maps of productId -> quantity for both carts
+    const getCartMap = (cart: CartItem[]) => {
+      const map = new Map<number | string, number>();
+      cart.forEach(item => {
+        map.set(item.productId, (map.get(item.productId) || 0) + item.quantity);
+      });
+      return map;
+    };
+    
+    const cart1Map = getCartMap(cart1);
+    const cart2Map = getCartMap(cart2);
+    
+    // Check if each product has the same quantity in both carts
+    if (cart1Map.size !== cart2Map.size) return false;
+    
+    for (const [productId, quantity] of cart1Map.entries()) {
+      if (cart2Map.get(productId) !== quantity) return false;
+    }
+    
+    return true;
   };
 
   const handleAddToCart = (productId: number, price: number) => {
@@ -174,9 +201,20 @@ export const useCartManagement = ({
     const cartToLoad = savedCarts.find(cart => cart.id === cartId);
     
     if (cartToLoad) {
-      // Confirm before loading cart if current cart is not empty
+      // Check if we're loading the same cart with identical contents
+      const isSameCart = cartId === lastLoadedCartId;
+      const isIdenticalContent = areCartsIdentical(cartItems, cartToLoad.items);
+      
+      if (isSameCart && isIdenticalContent) {
+        toast({
+          title: "Cart Already Loaded",
+          description: "This cart is already loaded and has not changed.",
+        });
+        return;
+      }
+      
+      // Save current cart to history before replacing it if current cart is not empty
       if (cartItems.length > 0) {
-        // Save current cart to history before replacing it
         saveToHistory([...cartItems], {...inventory});
       }
       
@@ -208,6 +246,7 @@ export const useCartManagement = ({
       
       setCartItems([...cartToLoad.items]);
       setInventory(tempInventory);
+      setLastLoadedCartId(cartId);
       
       toast({
         title: "Cart Loaded",
