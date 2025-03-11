@@ -63,6 +63,11 @@ const CartItem: React.FC<CartItemProps> = ({
                 "font-medium", 
                 layout === 'compact' ? "text-xs sm:text-sm" : "text-sm"
               )}>{productName}</span>
+              {item.size && (
+                <span className="ml-1.5 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                  {item.size}
+                </span>
+              )}
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
                   <PackageX className="h-3 w-3" />

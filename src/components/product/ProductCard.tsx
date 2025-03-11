@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Plus, Eye, BookmarkPlus, Star, Award, Flame, Gem, Zap } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
@@ -9,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 interface ProductCardProps {
   product: Product;
   isWatched: boolean;
-  onAddToCart: (productId: number, price: number) => void;
+  onAddToCart: (productId: number, price: number, size?: string) => void;
   onWatchItem?: (product: Product) => void;
   onSaveForLater?: (product: Product) => void;
 }
@@ -50,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       });
       return;
     }
-    onAddToCart(product.id, product.price);
+    onAddToCart(product.id, product.price, selectedSize);
   };
 
   const handleSizeSelect = (size: ProductSize['name']) => {

@@ -1,3 +1,4 @@
+
 import { Product } from '@/components/product/types';
 import { CartItem } from '@/utils/cartUtils';
 import { useToast } from "@/hooks/use-toast";
@@ -22,15 +23,29 @@ export const useProductOperations = ({
   const { toast } = useToast();
 
   const handleSaveProductForLater = (product: Product) => {
+    // Default to first available size or first size if none available
+    const availableSize = product.sizes.find(size => size.inventory > 0)?.name || 
+                         (product.sizes.length > 0 ? product.sizes[0].name : undefined);
+    
+    if (!availableSize) {
+      toast({
+        title: "No Size Available",
+        description: "This product doesn't have any sizes defined",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const newSavedItem: CartItem = {
       id: Date.now() + Math.random(),
       productId: product.id,
       quantity: 1,
-      price: product.price
+      price: product.price,
+      size: availableSize
     };
     
     const existingItem = savedForLaterItems.find(item => 
-      Number(item.productId) === product.id
+      Number(item.productId) === product.id && item.size === availableSize
     );
     
     if (existingItem) {
@@ -62,7 +77,12 @@ export const useProductOperations = ({
       inventory: 0,
       description: "Out of stock product",
       image: "/placeholder.svg",
-      sizes: []
+      sizes: [
+        { name: 'SM', inventory: 0 },
+        { name: 'MD', inventory: 0 },
+        { name: 'LG', inventory: 0 },
+        { name: 'XL', inventory: 0 }
+      ]
     };
     
     const savedItem = savedForLaterItems.find(item => Number(item.productId) === productId);

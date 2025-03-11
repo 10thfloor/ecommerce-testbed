@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -23,7 +22,7 @@ export const useCartOperations = ({
   const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [inventory, setInventory] = useState<Record<number, number>>(initialInventory);
 
-  const handleAddToCart = (productId: number, price: number) => {
+  const handleAddToCart = (productId: number, price: number, size?: string) => {
     if (inventory[productId] <= 0) {
       toast({
         title: "Out of Stock",
@@ -33,7 +32,18 @@ export const useCartOperations = ({
       return;
     }
 
-    const existingItemIndex = cartItems.findIndex(item => item.productId === productId);
+    if (!size) {
+      toast({
+        title: "Size Required",
+        description: "Please select a size before adding to cart.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const existingItemIndex = cartItems.findIndex(
+      item => item.productId === productId && item.size === size
+    );
     
     if (existingItemIndex !== -1) {
       if (cartItems[existingItemIndex].quantity < inventory[productId]) {
@@ -57,7 +67,8 @@ export const useCartOperations = ({
         id: Date.now(),
         productId,
         quantity: 1,
-        price
+        price,
+        size
       };
       setCartItems([...cartItems, newItem]);
       
@@ -68,7 +79,7 @@ export const useCartOperations = ({
     
     toast({
       title: "Item Added",
-      description: `Added product #${productId} to your cart.`,
+      description: `Added ${size} size of product #${productId} to your cart.`,
     });
   };
 
