@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { ShoppingCart, SaveAll, History, Percent, Check } from 'lucide-react';
+import { ShoppingCart, SaveAll, History, Tag, Check } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
@@ -119,8 +120,8 @@ const Cart: React.FC<CartProps> = ({
             ))}
           </div>
           
-          <div className="mt-4 border-t border-gray-200 dark:border-gray-800 pt-3">
-            <div className="flex justify-between items-center mb-2">
+          <div className="mt-6 border-t border-gray-200 dark:border-gray-800 pt-4">
+            <div className="flex justify-between items-center mb-3">
               <span className="text-sm text-muted-foreground">Subtotal:</span>
               <span className="font-medium">{formatCurrency(total)}</span>
             </div>
@@ -129,26 +130,26 @@ const Cart: React.FC<CartProps> = ({
             {!showDiscountInput && !appliedDiscount && (
               <button
                 onClick={() => setShowDiscountInput(true)}
-                className="text-xs text-primary hover:text-primary/80 flex items-center mt-1 mb-2"
+                className="flex items-center gap-2 py-2 px-3 w-full text-sm text-primary hover:text-primary/80 bg-primary/5 hover:bg-primary/10 rounded-md transition-colors my-3"
               >
-                <Percent className="h-3 w-3 mr-1" />
+                <Tag className="h-4 w-4" />
                 <span>Have a discount code?</span>
               </button>
             )}
             
             {/* Discount input */}
             {showDiscountInput && !appliedDiscount && (
-              <div className="flex items-center gap-2 mt-2 mb-3 animate-in slide-in-from-left duration-300">
+              <div className="flex items-center gap-2 my-4">
                 <Input
                   value={discountCode}
                   onChange={(e) => setDiscountCode(e.target.value)}
                   placeholder="Enter discount code"
-                  className="h-8 text-sm"
+                  className="h-10 text-sm"
                 />
                 <Button 
                   onClick={handleApplyDiscount}
                   size="sm"
-                  className="h-8"
+                  className="h-10 whitespace-nowrap"
                   disabled={!discountCode.trim()}
                 >
                   Apply
@@ -158,23 +159,23 @@ const Cart: React.FC<CartProps> = ({
             
             {/* Applied discount */}
             {appliedDiscount && (
-              <div className="flex justify-between items-center mb-2 text-green-600 dark:text-green-400 animate-in slide-in-from-left duration-300">
-                <div className="flex items-center text-xs">
-                  <Check className="h-3 w-3 mr-1" />
+              <div className="flex justify-between items-center mb-3 mt-2 py-2 px-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/30 rounded-md">
+                <div className="flex items-center text-sm text-green-600 dark:text-green-400">
+                  <Check className="h-4 w-4 mr-2" />
                   <span className="font-medium">Code applied: {appliedDiscount}</span>
                   <button 
                     onClick={handleRemoveDiscount}
-                    className="ml-2 text-xs text-muted-foreground hover:text-muted-foreground/80"
+                    className="ml-3 text-xs text-muted-foreground hover:text-foreground underline"
                   >
                     Remove
                   </button>
                 </div>
-                <span className="font-medium text-sm">-{formatCurrency(discountAmount)}</span>
+                <span className="font-medium">-{formatCurrency(discountAmount)}</span>
               </div>
             )}
             
             {/* Final total */}
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex justify-between items-center mt-4 pt-2 border-t border-gray-200 dark:border-gray-800">
               <span className="font-medium">Total:</span>
               <div className={`bg-primary/5 rounded-lg p-2 font-bold text-lg ${
                 appliedDiscount ? 'text-green-600 dark:text-green-400' : ''
