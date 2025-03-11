@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { SavedCart } from '@/utils/cartUtils';
 import { getCartItemCount, formatCurrency, calculateTotal } from '@/utils/cartUtils';
-import { ChevronDown, ChevronUp, ShoppingBag } from 'lucide-react';
+import { ChevronDown, ChevronUp, ShoppingBag, Trash2 } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import { useToast } from "@/hooks/use-toast";
 import ShareMenu from './ShareMenu';
@@ -129,9 +129,10 @@ const SavedCarts: React.FC<SavedCartsProps> = ({ savedCarts, onLoadCart, onDelet
                       e.stopPropagation();
                       onDeleteCart(cart.id);
                     }}
-                    className="py-1.5 px-3 bg-destructive/10 hover:bg-destructive/20 text-destructive font-medium rounded-md text-sm transition-colors"
+                    className="p-1.5 bg-destructive/10 hover:bg-destructive/20 text-destructive rounded-full transition-colors"
+                    aria-label="Delete cart"
                   >
-                    Delete
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               </div>
