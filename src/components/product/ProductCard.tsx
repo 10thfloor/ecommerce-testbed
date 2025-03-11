@@ -17,11 +17,11 @@ interface ProductCardProps {
 const getProductBadge = (productId: number) => {
   // Use product ID to deterministically assign a badge type
   const badges = [
-    { icon: Star, text: "Top Rated", color: "text-white/80", bg: "bg-primary/20" },
-    { icon: Award, text: "Best Seller", color: "text-white/80", bg: "bg-primary/20" },
-    { icon: Flame, text: "Hot Item", color: "text-white/80", bg: "bg-primary/20" },
-    { icon: Gem, text: "Premium", color: "text-white/80", bg: "bg-primary/20" },
-    { icon: Zap, text: "Flash Deal", color: "text-white/80", bg: "bg-primary/20" },
+    { icon: Star, text: "Top Rated", color: "text-yellow-500", bg: "bg-yellow-100 dark:bg-yellow-900/30" },
+    { icon: Award, text: "Best Seller", color: "text-blue-500", bg: "bg-blue-100 dark:bg-blue-900/30" },
+    { icon: Flame, text: "Hot Item", color: "text-orange-500", bg: "bg-orange-100 dark:bg-orange-900/30" },
+    { icon: Gem, text: "Premium", color: "text-purple-500", bg: "bg-purple-100 dark:bg-purple-900/30" },
+    { icon: Zap, text: "Flash Deal", color: "text-green-500", bg: "bg-green-100 dark:bg-green-900/30" },
   ];
   
   // Use product ID to consistently select the same badge for a product
@@ -57,20 +57,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div 
       key={product.id}
-      className={`${product.inventory > 0 ? 'bg-card/70 hover:bg-card' : 'bg-amber-500/5 border border-amber-500/20'} 
-        rounded-sm p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''} relative`}
+      className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-amber-500/10 border border-amber-500/30'} 
+        rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''} relative`}
       onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
     >
       <div className="flex flex-col h-full">
         <div className="mb-2">
-          <h4 className="font-light text-base mb-1 tracking-wide uppercase">{product.name}</h4>
+          <h4 className="font-medium text-base mb-1">{product.name}</h4>
           {(product.inventory <= 3 && product.inventory > 0) && (
-            <div className="text-xs font-medium rounded-sm px-2 py-0.5 inline-block mb-2 bg-amber-500/10 text-amber-400">
+            <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 bg-amber-500/20 text-amber-700 dark:text-amber-400">
               Only {product.inventory} left
             </div>
           )}
           {product.inventory === 0 && (
-            <div className="text-xs font-medium rounded-sm px-2 py-0.5 inline-block mb-2 bg-amber-500/10 text-amber-400">
+            <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 bg-amber-500/20 text-amber-700 dark:text-amber-400">
               Out of stock
             </div>
           )}
@@ -79,21 +79,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
         
         <div className="mt-auto">
           <div className="flex justify-between items-center mb-2">
-            <span className="font-light text-sm">{formatCurrency(product.price)}</span>
+            <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
             <div className="flex space-x-2">
               {onSaveForLater && (
                 <button 
-                  className="p-1.5 bg-secondary/80 hover:bg-secondary rounded-sm transition-colors"
+                  className="p-1.5 bg-blue-500/10 hover:bg-blue-500/20 rounded-full transition-colors"
                   onClick={handleSaveForLater}
                   aria-label="Save for later"
                 >
-                  <BookmarkPlus className="h-4 w-4 text-secondary-foreground/70" />
+                  <BookmarkPlus className="h-4 w-4 text-blue-500" />
                 </button>
               )}
               
               {product.inventory > 0 && (
                 <button 
-                  className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-sm transition-colors"
+                  className="p-1.5 bg-primary/10 hover:bg-primary/20 rounded-full transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     onAddToCart(product.id, product.price);
@@ -108,9 +108,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <Button
                   variant="outline"
                   size="sm"
-                  className={`h-7 w-7 p-0 rounded-sm transition-all ${
+                  className={`h-7 w-7 p-0 rounded-full transition-all ${
                     isWatched
-                      ? 'bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 animate-pulse-subtle' 
+                      ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
                       : 'bg-secondary/70 hover:bg-secondary'
                   }`}
                   onClick={handleNotifyMe}
@@ -124,7 +124,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Product badge now placed below the price */}
           {badge && (
-            <div className={`${badge.bg} ${badge.color} rounded-sm px-2.5 py-1 flex items-center gap-1 text-xs font-light w-fit uppercase tracking-wide`}>
+            <div className={`${badge.bg} ${badge.color} rounded-full px-2.5 py-1 flex items-center gap-1 text-xs font-semibold w-fit`}>
               <badge.icon className="h-3.5 w-3.5" />
               {badge.text}
             </div>
