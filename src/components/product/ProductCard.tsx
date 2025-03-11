@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { Product, ProductSize } from '@/components/product/types';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
+import { categories } from './categoryData';
 
 interface ProductCardProps {
   product: Product;
@@ -76,6 +77,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const showBadge = [1, 3, 7].includes(product.id);
   const badge = showBadge ? getProductBadge(product.id) : null;
 
+  // Get category name
+  const category = categories.find(c => c.id === product.categoryId);
+  
   // Calculate if any size has inventory
   const hasSizeInStock = product.sizes.some(size => size.inventory > 0);
 
@@ -95,6 +99,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
     >
       <div className="flex flex-col h-full">
         <div className="mb-2">
+          {/* Category badge */}
+          {category && (
+            <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-1.5 bg-secondary/70 text-foreground/70">
+              {category.name}
+            </div>
+          )}
+          
           <h4 className="font-medium text-base mb-1">{product.name}</h4>
           <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{product.description}</p>
           

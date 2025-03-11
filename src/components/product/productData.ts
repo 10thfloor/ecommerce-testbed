@@ -9,6 +9,7 @@ export const products: Product[] = [
     description: "Premium waterproof hardshell for extreme alpine conditions",
     image: "/placeholder.svg",
     inventory: 5,
+    categoryId: 1, // Jackets
     sizes: [
       { name: 'SM', inventory: 2 },
       { name: 'MD', inventory: 0 },
@@ -23,6 +24,7 @@ export const products: Product[] = [
     description: "All-round mountaineering pants with GORE-TEX protection",
     image: "/placeholder.svg",
     inventory: 8,
+    categoryId: 2, // Pants
     sizes: [
       { name: 'SM', inventory: 3 },
       { name: 'MD', inventory: 2 },
@@ -37,6 +39,7 @@ export const products: Product[] = [
     description: "Lightweight insulated mid-layer with exceptional breathability",
     image: "/placeholder.svg",
     inventory: 12,
+    categoryId: 3, // Layers
     sizes: [
       { name: 'SM', inventory: 3 },
       { name: 'MD', inventory: 4 },
@@ -51,6 +54,7 @@ export const products: Product[] = [
     description: "Ultralight 850 fill-power down vest for alpine climbing",
     image: "/placeholder.svg",
     inventory: 3,
+    categoryId: 3, // Layers
     sizes: [
       { name: 'SM', inventory: 0 },
       { name: 'MD', inventory: 1 },
@@ -65,6 +69,7 @@ export const products: Product[] = [
     description: "Versatile softshell jacket for mixed weather conditions",
     image: "/placeholder.svg",
     inventory: 8,
+    categoryId: 1, // Jackets
     sizes: [
       { name: 'SM', inventory: 2 },
       { name: 'MD', inventory: 2 },
@@ -79,6 +84,7 @@ export const products: Product[] = [
     description: "Superlight emergency rain protection for hiking",
     image: "/placeholder.svg",
     inventory: 0,
+    categoryId: 1, // Jackets
     sizes: [
       { name: 'SM', inventory: 0 },
       { name: 'MD', inventory: 0 },
@@ -93,6 +99,7 @@ export const products: Product[] = [
     description: "Classic fleece with a clean aesthetic for everyday wear",
     image: "/placeholder.svg",
     inventory: 15,
+    categoryId: 3, // Layers
     sizes: [
       { name: 'SM', inventory: 4 },
       { name: 'MD', inventory: 4 },
@@ -107,6 +114,7 @@ export const products: Product[] = [
     description: "Advanced breathable insulation for cold, active pursuits",
     image: "/placeholder.svg",
     inventory: 4,
+    categoryId: 3, // Layers
     sizes: [
       { name: 'SM', inventory: 1 },
       { name: 'MD', inventory: 1 },
@@ -115,3 +123,13 @@ export const products: Product[] = [
     ]
   }
 ];
+
+// Helper function to get products by category
+export const getProductsByCategory = (categoryId: number): Product[] => {
+  return products.filter(product => product.categoryId === categoryId);
+};
+
+// Get unique category IDs from products
+export const getUniqueCategories = (): number[] => {
+  return [...new Set(products.map(product => product.categoryId))];
+};

@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import ProductsGrid from './product/ProductsGrid';
 import ProductSearch from './product/ProductSearch';
 import FeaturedProductBanner from './product/FeaturedProductBanner';
+import CategoryFilter from './product/CategoryFilter';
 import { products } from './product/productData';
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
@@ -25,30 +26,56 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const { toast } = useToast();
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
-  // Filter products based on search query
+  // Calculate product count by category
+  const productCountByCategory = useMemo(() => {
+    return products.reduce((acc, product) => {
+      const { categoryId } = product;
+      if (!acc[categoryId]) {
+        acc[categoryId] = 0;
+      }
+      acc[categoryId]++;
+      return acc;
+    }, {} as Record<number, number>);
+  }, []);
+
+  // Filter products based on search query and selected category
   const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) return products;
+    let filtered = products;
     
-    const query = searchQuery.toLowerCase();
-    return products.filter(product => 
-      product.name.toLowerCase().includes(query) || 
-      product.description.toLowerCase().includes(query)
-    );
-  }, [searchQuery]);
+    // Filter by category if selected
+    if (selectedCategory !== null) {
+      filtered = filtered.filter(product => product.categoryId === selectedCategory);
+    }
+    
+    // Then filter by search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(product => 
+        product.name.toLowerCase().includes(query) || 
+        product.description.toLowerCase().includes(query)
+      );
+    }
+    
+    return filtered;
+  }, [searchQuery, selectedCategory]);
 
   // Choose featured products (premium items or best sellers)
-  // For this example, we'll feature the most expensive products
   const featuredProducts = useMemo(() => {
-    return [...products]
-      .filter(product => product.inventory > 0)
+    // Filter by selected category if needed
+    let potentialFeatured = selectedCategory 
+      ? products.filter(p => p.categoryId === selectedCategory && p.inventory > 0)
+      : products.filter(p => p.inventory > 0);
+      
+    return [...potentialFeatured]
       .sort((a, b) => b.price - a.price)
       .slice(0, 2);
-  }, []);
+  }, [selectedCategory]);
 
   const handleWatchItem = (product: Product) => {
     const productId = product.id;
@@ -97,17 +124,26 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      {/* Always show featured products regardless of search status */}
-      <FeaturedProductBanner 
-        products={featuredProducts} 
-        onAddToCart={onAddToCart} 
+      {/* Category filters */}
+      <CategoryFilter
+        selectedCategory={selectedCategory}
+        onSelectCategory={setSelectedCategory}
+        productCountByCategory={productCountByCategory}
       />
+      
+      {/* Featured products */}
+      {featuredProducts.length > 0 && (
+        <FeaturedProductBanner 
+          products={featuredProducts} 
+          onAddToCart={onAddToCart} 
+        />
+      )}
       
       <ProductSearch onSearch={handleSearch} />
       
       {filteredProducts.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
-          <p>No products found matching "{searchQuery}"</p>
+          <p>No products found {searchQuery ? `matching "${searchQuery}"` : "in this category"}</p>
         </div>
       ) : (
         <ProductsGrid 
@@ -119,7 +155,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         />
       )}
       
-      {/* Social Proof Component - will show toast notifications of recent purchases */}
+      {/* Social Proof Component */}
       <SocialProofToast products={products} />
     </div>
   );
