@@ -1,10 +1,11 @@
-import React from 'react';
-import { ShoppingCart, SaveAll, History } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShoppingCart, SaveAll, History, Percent, Check } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
 import { Button } from "@/components/ui/button";
 import { Product } from '@/components/product/types';
+import { Input } from '@/components/ui/input';
 
 interface CartProps {
   items: CartItemType[];
@@ -34,6 +35,27 @@ const Cart: React.FC<CartProps> = ({
   inventory = {}
 }) => {
   const total = calculateTotal(items, inventory);
+  const [showDiscountInput, setShowDiscountInput] = useState(false);
+  const [discountCode, setDiscountCode] = useState('');
+  const [appliedDiscount, setAppliedDiscount] = useState<string | null>(null);
+  
+  const handleApplyDiscount = () => {
+    if (discountCode.trim() === '') return;
+    
+    // In a real app, this would validate the code with an API
+    // For demo purposes, we'll just apply it immediately
+    setAppliedDiscount(discountCode);
+    setDiscountCode('');
+    // Keep discount input open to show the applied code
+  };
+  
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null);
+  };
+  
+  // Calculate a mock 10% discount if code is applied
+  const discountAmount = appliedDiscount ? total * 0.1 : 0;
+  const finalTotal = total - discountAmount;
   
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in h-full">
@@ -97,10 +119,68 @@ const Cart: React.FC<CartProps> = ({
             ))}
           </div>
           
-          <div className="mt-4 flex justify-end">
-            <div className="bg-primary/5 rounded-lg p-3">
-              <span className="text-muted-foreground mr-2">Total:</span>
-              <span className="font-bold text-lg">{formatCurrency(total)}</span>
+          <div className="mt-4 border-t border-gray-200 dark:border-gray-800 pt-3">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-muted-foreground">Subtotal:</span>
+              <span className="font-medium">{formatCurrency(total)}</span>
+            </div>
+            
+            {/* Discount section */}
+            {!showDiscountInput && !appliedDiscount && (
+              <button
+                onClick={() => setShowDiscountInput(true)}
+                className="text-xs text-primary hover:text-primary/80 flex items-center mt-1 mb-2"
+              >
+                <Percent className="h-3 w-3 mr-1" />
+                <span>Have a discount code?</span>
+              </button>
+            )}
+            
+            {/* Discount input */}
+            {showDiscountInput && !appliedDiscount && (
+              <div className="flex items-center gap-2 mt-2 mb-3 animate-in slide-in-from-left duration-300">
+                <Input
+                  value={discountCode}
+                  onChange={(e) => setDiscountCode(e.target.value)}
+                  placeholder="Enter discount code"
+                  className="h-8 text-sm"
+                />
+                <Button 
+                  onClick={handleApplyDiscount}
+                  size="sm"
+                  className="h-8"
+                  disabled={!discountCode.trim()}
+                >
+                  Apply
+                </Button>
+              </div>
+            )}
+            
+            {/* Applied discount */}
+            {appliedDiscount && (
+              <div className="flex justify-between items-center mb-2 text-green-600 dark:text-green-400 animate-in slide-in-from-left duration-300">
+                <div className="flex items-center text-xs">
+                  <Check className="h-3 w-3 mr-1" />
+                  <span className="font-medium">Code applied: {appliedDiscount}</span>
+                  <button 
+                    onClick={handleRemoveDiscount}
+                    className="ml-2 text-xs text-muted-foreground hover:text-muted-foreground/80"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <span className="font-medium text-sm">-{formatCurrency(discountAmount)}</span>
+              </div>
+            )}
+            
+            {/* Final total */}
+            <div className="flex justify-between items-center mt-2">
+              <span className="font-medium">Total:</span>
+              <div className={`bg-primary/5 rounded-lg p-2 font-bold text-lg ${
+                appliedDiscount ? 'text-green-600 dark:text-green-400' : ''
+              }`}>
+                {formatCurrency(finalTotal)}
+              </div>
             </div>
           </div>
         </>
