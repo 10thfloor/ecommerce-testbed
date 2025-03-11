@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -6,7 +7,8 @@ import {
   generateCartId,
   formatCurrency,
   calculateTotal,
-  mergeCartItems
+  mergeCartItems,
+  getCartMnemonic
 } from '@/utils/cartUtils';
 import { Product } from '@/components/ProductInventory';
 
