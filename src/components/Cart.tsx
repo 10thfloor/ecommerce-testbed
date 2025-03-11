@@ -42,6 +42,10 @@ const Cart: React.FC<CartProps> = ({
   const [appliedDiscount, setAppliedDiscount] = useState<string | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number>(30 * 60); // 30 minutes in seconds
   
+  const availableItems = items.filter(item => 
+    inventory[Number(item.productId)] > 0
+  );
+  
   useEffect(() => {
     if (items.length === 0) {
       setTimeRemaining(30 * 60); // Reset to 30 minutes
@@ -79,18 +83,22 @@ const Cart: React.FC<CartProps> = ({
   };
   
   const handleCheckout = () => {
-    if (items.length === 0) {
+    if (availableItems.length === 0) {
       toast({
-        title: "Empty Cart",
-        description: "Please add items to your cart before checkout.",
+        title: "No Available Items",
+        description: "Your cart only contains out-of-stock items. Please add available items before checkout.",
         variant: "destructive",
       });
       return;
     }
     
+    const availableTotal = calculateTotal(availableItems);
+    const availableDiscountAmount = appliedDiscount ? availableTotal * 0.1 : 0;
+    const availableFinalTotal = availableTotal - availableDiscountAmount;
+    
     toast({
       title: "Checkout Initiated",
-      description: `Processing ${items.length} ${items.length === 1 ? 'item' : 'items'} for ${formatCurrency(finalTotal)}`,
+      description: `Processing ${availableItems.length} ${availableItems.length === 1 ? 'item' : 'items'} for ${formatCurrency(availableFinalTotal)}`,
     });
   };
   
@@ -219,14 +227,22 @@ const Cart: React.FC<CartProps> = ({
               </div>
             </div>
             
+            {items.length > 0 && availableItems.length < items.length && (
+              <div className="mt-3 text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded-md border border-amber-100 dark:border-amber-800/30">
+                <p>
+                  {items.length - availableItems.length} {items.length - availableItems.length === 1 ? 'item' : 'items'} in your cart {items.length - availableItems.length === 1 ? 'is' : 'are'} out of stock and will not be included in checkout.
+                </p>
+              </div>
+            )}
+            
             <Button 
               onClick={handleCheckout}
               className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
               size="lg"
-              disabled={items.length === 0}
+              disabled={availableItems.length === 0}
             >
               <CreditCard className="h-5 w-5" />
-              <span className="font-medium">Checkout</span>
+              <span className="font-medium">Checkout{availableItems.length < items.length ? ` (${availableItems.length} items)` : ''}</span>
             </Button>
             
             <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
