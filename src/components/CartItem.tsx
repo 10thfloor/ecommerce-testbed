@@ -4,6 +4,8 @@ import { Minus, Plus, Trash2, BookmarkPlus, PackageX, Eye, EyeOff } from 'lucide
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
+import { useLayout } from '@/contexts/LayoutContext';
+import { cn } from '@/lib/utils';
 
 interface CartItemProps {
   item: CartItemType;
@@ -28,6 +30,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const isOutOfStock = inventory[Number(item.productId)] === 0;
   const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
+  const { layout } = useLayout();
   
   const handleIncrement = () => {
     if (isOutOfStock || inventory[Number(item.productId)] <= item.quantity) return;
@@ -46,11 +49,20 @@ const CartItem: React.FC<CartItemProps> = ({
         ? 'bg-amber-500/10 border border-amber-500/30' 
         : 'card-glass'
     }`}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
+      <div className={cn(
+        "flex items-center", 
+        layout === 'compact' ? "flex-col sm:flex-row" : "justify-between"
+      )}>
+        <div className={cn(
+          "flex items-center", 
+          layout === 'compact' ? "w-full justify-between mb-3 sm:mb-0 sm:justify-start" : ""
+        )}>
           <div className="flex flex-col">
             <div className="flex items-center">
-              <span className="font-medium text-sm">{productName}</span>
+              <span className={cn(
+                "font-medium", 
+                layout === 'compact' ? "text-xs sm:text-sm" : "text-sm"
+              )}>{productName}</span>
               {isOutOfStock && (
                 <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
                   <PackageX className="h-3 w-3" />
@@ -66,12 +78,23 @@ const CartItem: React.FC<CartItemProps> = ({
               {formatCurrency(item.price)} × {item.quantity}
             </span>
           </div>
+          
+          {layout === 'compact' && (
+            <div className="font-medium text-sm ml-auto">
+              {formatCurrency(item.price * item.quantity)}
+            </div>
+          )}
         </div>
         
-        <div className="flex items-center space-x-2">
-          <div className="font-medium text-sm">
-            {formatCurrency(item.price * item.quantity)}
-          </div>
+        <div className={cn(
+          "flex items-center", 
+          layout === 'compact' ? "w-full justify-between sm:justify-end sm:space-x-2" : "space-x-2"
+        )}>
+          {layout !== 'compact' && (
+            <div className="font-medium text-sm">
+              {formatCurrency(item.price * item.quantity)}
+            </div>
+          )}
           
           <div className={`bg-secondary rounded-md flex items-center h-7 ${isOutOfStock ? 'opacity-50' : ''}`}>
             <button 
@@ -93,7 +116,10 @@ const CartItem: React.FC<CartItemProps> = ({
             </button>
           </div>
           
-          <div className="flex items-center space-x-1">
+          <div className={cn(
+            "flex items-center", 
+            layout === 'compact' ? "space-x-1" : "space-x-1"
+          )}>
             {isOutOfStock && onWatchItem && (
               <button 
                 onClick={() => onWatchItem(Number(item.productId))}
@@ -105,9 +131,9 @@ const CartItem: React.FC<CartItemProps> = ({
                 aria-label={isWatched ? "Remove from watch list" : "Add to watch list"}
               >
                 {isWatched ? (
-                  <EyeOff className="h-3.5 w-3.5" />
+                  <EyeOff className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
                 ) : (
-                  <Eye className="h-3.5 w-3.5" />
+                  <Eye className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
                 )}
               </button>
             )}
@@ -118,7 +144,7 @@ const CartItem: React.FC<CartItemProps> = ({
                 className="p-1 text-primary hover:bg-primary/10 rounded-md transition-colors"
                 aria-label="Save for later"
               >
-                <BookmarkPlus className="h-3.5 w-3.5" />
+                <BookmarkPlus className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
               </button>
             )}
             
@@ -127,7 +153,7 @@ const CartItem: React.FC<CartItemProps> = ({
               className="p-1 text-destructive hover:bg-destructive/10 rounded-md transition-colors"
               aria-label="Remove item"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <Trash2 className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
             </button>
           </div>
         </div>

@@ -132,4 +132,10 @@
   .cart-section {
     @apply animate-fade-in;
   }
+  
+  /* Extra small button size for compact layouts */
+  .btn-xs {
+    @apply px-2 py-0.5 text-xs;
+  }
 }
+

@@ -6,6 +6,8 @@ import { useToast } from "@/hooks/use-toast";
 import CartHeader from './cart/CartHeader';
 import CartSummary from './cart/CartSummary';
 import CartReservationTimer from './cart/CartReservationTimer';
+import { useLayout } from '@/contexts/LayoutContext';
+import { cn } from '@/lib/utils';
 
 interface CartProps {
   items: CartItemType[];
@@ -38,6 +40,7 @@ const Cart: React.FC<CartProps> = ({
   const total = calculateTotal(items, inventory);
   const [appliedDiscount, setAppliedDiscount] = useState<string | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number>(30 * 60); // 30 minutes in seconds
+  const { layout } = useLayout();
   
   const availableItems = items.filter(item => 
     inventory[Number(item.productId)] > 0
@@ -103,7 +106,10 @@ const Cart: React.FC<CartProps> = ({
   const finalTotal = total - discountAmount;
   
   return (
-    <div className="card-glass p-4 mb-6 animate-fade-in h-full">
+    <div className={cn(
+      "card-glass p-4 mb-6 animate-fade-in h-full",
+      layout === 'compact' ? "p-3" : "p-4"
+    )}>
       <CartHeader 
         itemCount={items.length}
         onSaveCart={onSaveCart}
@@ -119,7 +125,10 @@ const Cart: React.FC<CartProps> = ({
         </div>
       ) : (
         <>
-          <div className="space-y-2">
+          <div className={cn(
+            "space-y-2",
+            layout === 'compact' ? "space-y-1" : "space-y-2"
+          )}>
             {items.map((item) => (
               <CartItem 
                 key={item.id}

@@ -73,7 +73,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   const getGridClasses = () => {
     switch (layout) {
       case 'compact':
-        return "grid-cols-1 md:grid-cols-3";
+        return "grid-cols-1 md:grid-cols-2";
       case 'wide':
         return "grid-cols-1 md:grid-cols-1";
       case 'default':
@@ -86,7 +86,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   const getLeftColumnClasses = () => {
     switch (layout) {
       case 'compact':
-        return "md:col-span-2";
+        return "md:col-span-1";
       case 'wide':
         return "md:col-span-1";
       case 'default':
