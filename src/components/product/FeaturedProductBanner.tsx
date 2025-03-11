@@ -68,11 +68,14 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
                 <h4 className="font-medium text-base">{product.name}</h4>
                 <p className="text-muted-foreground text-sm line-clamp-2 mb-3">{product.description}</p>
                 
-                <SizeSelector
-                  sizes={product.sizes}
-                  selectedSize={selectedSizes[product.id]}
-                  onSelectSize={(size) => handleSizeSelect(product.id, size)}
-                />
+                <div className="mb-2">
+                  <div className="text-xs font-medium text-muted-foreground mb-1">Select Size:</div>
+                  <SizeSelector
+                    sizes={product.sizes}
+                    selectedSize={selectedSizes[product.id]}
+                    onSelectSize={(size) => handleSizeSelect(product.id, size)}
+                  />
+                </div>
                 
                 <div className="mb-3 flex items-center mt-2">
                   <span className="font-bold mr-3">{formatCurrency(product.price)}</span>

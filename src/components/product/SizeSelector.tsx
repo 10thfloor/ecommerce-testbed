@@ -16,23 +16,29 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
   onSelectSize,
 }) => {
   return (
-    <div className="flex flex-wrap gap-1 mb-2">
-      {sizes.map((size) => (
-        <Button
-          key={size.name}
-          onClick={() => onSelectSize(size.name)}
-          disabled={size.inventory === 0}
-          variant="outline"
-          size="xs"
-          className={cn(
-            "h-6 w-6 p-0 text-xs font-medium",
-            selectedSize === size.name && "bg-primary text-primary-foreground hover:bg-primary/90",
-            size.inventory === 0 && "opacity-50 cursor-not-allowed"
-          )}
-        >
-          {size.name}
-        </Button>
-      ))}
+    <div className="flex flex-wrap gap-1.5 mb-2">
+      {sizes.map((size) => {
+        const isSelected = selectedSize === size.name;
+        const isOutOfStock = size.inventory === 0;
+        
+        return (
+          <Button
+            key={size.name}
+            onClick={() => onSelectSize(size.name)}
+            disabled={isOutOfStock}
+            variant={isSelected ? "default" : "outline"}
+            size="xs"
+            className={cn(
+              "h-7 w-7 p-0 text-xs font-medium rounded-full transition-all duration-200",
+              isSelected && "ring-2 ring-primary/20 transform scale-105",
+              isOutOfStock && "opacity-40 line-through",
+              !isSelected && !isOutOfStock && "hover:bg-primary/10 hover:text-primary"
+            )}
+          >
+            {size.name}
+          </Button>
+        );
+      })}
     </div>
   );
 };
