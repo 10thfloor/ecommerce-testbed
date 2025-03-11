@@ -43,6 +43,13 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Badge border colors */
+    --yellow-500: #eab308;
+    --blue-500: #3b82f6;
+    --orange-500: #f97316;
+    --purple-500: #a855f7;
+    --green-500: #22c55e;
   }
 
   .dark {
@@ -136,5 +143,19 @@
   /* Extra small button size for compact layouts */
   .btn-xs {
     @apply px-2 py-0.5 text-xs;
+  }
+
+  /* Border-only pulse animation */
+  .product-card-pulse {
+    animation: border-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes border-pulse {
+    0%, 100% {
+      border-opacity: 1;
+    }
+    50% {
+      border-opacity: 0.4;
+    }
   }
 }

@@ -80,13 +80,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const hasSizeInStock = product.sizes.some(size => size.inventory > 0);
 
   // Determine if we should add the pulsing border
-  const pulsingBorderClass = badge ? `border-2 ${badge.borderColor} animate-pulse-subtle` : '';
+  // Using CSS variables to animate only the border opacity
+  const borderClass = badge ? `border-2 ${badge.borderColor}` : '';
+  const animationClass = badge ? 'product-card-pulse' : '';
 
   return (
     <div 
       key={product.id}
       className={`${hasSizeInStock ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-amber-500/10 border border-amber-500/30'} 
-        rounded-lg p-4 transition-all relative ${pulsingBorderClass}`}
+        rounded-lg p-4 transition-all relative ${borderClass} ${animationClass}`}
+      style={badge ? {
+        '--pulse-color': `var(--${badge.borderColor.replace('border-', '')})`,
+      } as React.CSSProperties : undefined}
     >
       <div className="flex flex-col h-full">
         <div className="mb-2">
@@ -169,4 +174,3 @@ const ProductCard: React.FC<ProductCardProps> = ({
 };
 
 export default ProductCard;
-
