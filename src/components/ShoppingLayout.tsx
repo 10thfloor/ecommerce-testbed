@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import LayoutSwitcher from './LayoutSwitcher';
+import ThemeToggle from './ThemeToggle';
 
 interface ShoppingLayoutProps {
   title: string;
@@ -25,7 +26,10 @@ const ShoppingLayout: React.FC<ShoppingLayoutProps> = ({ title, children }) => {
             <div className="h-0.5 w-16 bg-primary rounded animate-pulse-subtle opacity-70"></div>
           </div>
           
-          <LayoutSwitcher />
+          <div className="flex items-center space-x-2">
+            <ThemeToggle />
+            <LayoutSwitcher />
+          </div>
         </header>
         
         {children}
