@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShoppingCart, Plus, AlertCircle, Bell } from 'lucide-react';
+import { ShoppingCart, Plus, Bell } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useToast } from "@/hooks/use-toast";
 import { Button } from './ui/button';
@@ -115,7 +115,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((product) => (
           <div 
             key={product.id}
@@ -152,20 +152,22 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onAddToCart }) => {
                     <Plus className="h-4 w-4 text-primary" />
                   </button>
                 ) : (
-                  <div className="flex space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className={`text-xs ${notifiedItems.includes(product.id) ? 'bg-primary/10' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleNotifyMe(product.id, product.name);
-                      }}
-                    >
-                      <Bell className="h-3 w-3 mr-1" />
-                      {notifiedItems.includes(product.id) ? 'Notified' : 'Notify Me'}
-                    </Button>
-                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={`text-xs px-3 py-1 h-8 transition-all ${
+                      notifiedItems.includes(product.id) 
+                        ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400' 
+                        : 'bg-secondary/50 hover:bg-secondary/70'
+                    }`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNotifyMe(product.id, product.name);
+                    }}
+                  >
+                    <Bell className="h-3 w-3 mr-1.5" />
+                    {notifiedItems.includes(product.id) ? 'Notified' : 'Notify Me'}
+                  </Button>
                 )}
               </div>
             </div>
