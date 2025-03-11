@@ -71,7 +71,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
       >
         <CreditCard className="h-5 w-5" />
         <span className="font-medium">
-          Checkout{availableItems > 0 ? ` (${availableItems} ${availableItems === 1 ? 'unit' : 'units'})` : ''}
+          Checkout{availableItems > 0 ? ` (${availableItems} ${availableItems === 1 ? 'product' : 'products'})` : ''}
         </span>
       </Button>
     </div>
