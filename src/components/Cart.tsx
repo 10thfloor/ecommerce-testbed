@@ -211,15 +211,16 @@ const Cart: React.FC<CartProps> = ({
               </div>
             </div>
             
-            {/* Reservation countdown timer */}
+            {/* Reservation countdown timer - now with purple colors */}
             <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
-              <div className="flex items-center text-sm text-amber-600 dark:text-amber-400">
+              <div className="flex items-center text-sm text-purple-600 dark:text-purple-400">
                 <Clock className="h-4 w-4 mr-2" />
                 <span>Items reserved for:</span>
               </div>
               <div className={`font-mono font-medium rounded-md px-3 py-1 ${
-                timeRemaining < 300 ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400' : 
-                'bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400'
+                timeRemaining < 300 
+                  ? 'bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/30' 
+                  : 'bg-purple-50 dark:bg-purple-900/10 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-800/20'
               }`}>
                 {formatTimeRemaining(timeRemaining)}
               </div>
