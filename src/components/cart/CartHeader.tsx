@@ -71,7 +71,7 @@ const CartHeader: React.FC<CartHeaderProps> = ({
           size={isCompact ? "xs" : "sm"}
         >
           <SaveAll className={cn(isCompact ? "h-3.5 w-3.5" : "h-4 w-4")} />
-          <span className={cn(isCompact ? "text-xs" : "")}>Save</span>
+          <span className={isCompact ? "text-xs" : ""}>Save</span>
         </Button>
       </div>
     </div>

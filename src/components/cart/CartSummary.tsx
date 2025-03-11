@@ -88,7 +88,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
           "w-full mt-4 bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2",
           isCompact ? "text-sm py-1 h-auto" : ""
         )}
-        size={isCompact ? "sm" : "lg"}
+        size={isCompact ? "xs" : "lg"}
         disabled={availableItems === 0}
       >
         <CreditCard className={cn("h-5 w-5", isCompact ? "h-4 w-4" : "")} />
