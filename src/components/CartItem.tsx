@@ -57,7 +57,7 @@ const CartItem: React.FC<CartItemProps> = ({
                 </div>
               )}
               {lowStock && !isOutOfStock && (
-                <span className="ml-2 text-amber-500 text-xs font-medium">
+                <span className="ml-2 text-amber-600 dark:text-amber-400 text-xs font-medium">
                   Only {inventory[Number(item.productId)]} left
                 </span>
               )}

@@ -84,7 +84,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
               className={`relative flex justify-between items-center p-3 rounded-md ${
                 isInStock 
                   ? 'bg-green-500/10 border border-green-500/30' 
-                  : 'bg-secondary/30'
+                  : 'bg-amber-500/10 border border-amber-500/30'
               }`}
             >
               <div className="flex-1">

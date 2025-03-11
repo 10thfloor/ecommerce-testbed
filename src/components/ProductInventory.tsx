@@ -138,20 +138,21 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         {products.map((product) => (
           <div 
             key={product.id}
-            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-secondary/10'} 
+            className={`${product.inventory > 0 ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-amber-500/10 border border-amber-500/30'} 
               rounded-lg p-4 transition-all ${product.inventory > 0 ? 'hover-scale cursor-pointer' : ''} relative`}
             onClick={() => product.inventory > 0 && onAddToCart(product.id, product.price)}
           >
             <div className="flex flex-col h-full">
               <div className="mb-2">
                 <h4 className="font-medium text-base mb-1">{product.name}</h4>
-                {(product.inventory <= 3) && (
-                  <div className={`text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 ${
-                    product.inventory === 0 ? 'bg-destructive/20 text-destructive' :
-                    'bg-amber-500/20 text-amber-700 dark:text-amber-400'
-                  }`}>
-                    {product.inventory === 0 ? 'Out of stock' : 
-                     `Only ${product.inventory} left`}
+                {(product.inventory <= 3 && product.inventory > 0) && (
+                  <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 bg-amber-500/20 text-amber-700 dark:text-amber-400">
+                    Only {product.inventory} left
+                  </div>
+                )}
+                {product.inventory === 0 && (
+                  <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 bg-amber-500/20 text-amber-700 dark:text-amber-400">
+                    Out of stock
                   </div>
                 )}
                 <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{product.description}</p>
