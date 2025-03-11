@@ -1,12 +1,12 @@
-
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, SaveAll, History, Tag, Check, Clock } from 'lucide-react';
+import { ShoppingCart, SaveAll, History, Tag, Check, Clock, CreditCard } from 'lucide-react';
 import { CartItem as CartItemType, formatCurrency, calculateTotal } from '@/utils/cartUtils';
 import CartItem from './CartItem';
 import ShareMenu from './ShareMenu';
 import { Button } from "@/components/ui/button";
 import { Product } from '@/components/product/types';
 import { Input } from '@/components/ui/input';
+import { useToast } from "@/hooks/use-toast";
 
 interface CartProps {
   items: CartItemType[];
@@ -35,6 +35,7 @@ const Cart: React.FC<CartProps> = ({
   watchedItems = [],
   inventory = {}
 }) => {
+  const { toast } = useToast();
   const total = calculateTotal(items, inventory);
   const [showDiscountInput, setShowDiscountInput] = useState(false);
   const [discountCode, setDiscountCode] = useState('');
@@ -42,7 +43,6 @@ const Cart: React.FC<CartProps> = ({
   const [timeRemaining, setTimeRemaining] = useState<number>(30 * 60); // 30 minutes in seconds
   
   useEffect(() => {
-    // Only start the countdown if there are items in the cart
     if (items.length === 0) {
       setTimeRemaining(30 * 60); // Reset to 30 minutes
       return;
@@ -70,18 +70,30 @@ const Cart: React.FC<CartProps> = ({
   const handleApplyDiscount = () => {
     if (discountCode.trim() === '') return;
     
-    // In a real app, this would validate the code with an API
-    // For demo purposes, we'll just apply it immediately
     setAppliedDiscount(discountCode);
     setDiscountCode('');
-    // Keep discount input open to show the applied code
   };
   
   const handleRemoveDiscount = () => {
     setAppliedDiscount(null);
   };
   
-  // Calculate a mock 10% discount if code is applied
+  const handleCheckout = () => {
+    if (items.length === 0) {
+      toast({
+        title: "Empty Cart",
+        description: "Please add items to your cart before checkout.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    toast({
+      title: "Checkout Initiated",
+      description: `Processing ${items.length} ${items.length === 1 ? 'item' : 'items'} for ${formatCurrency(finalTotal)}`,
+    });
+  };
+  
   const discountAmount = appliedDiscount ? total * 0.1 : 0;
   const finalTotal = total - discountAmount;
   
@@ -153,7 +165,6 @@ const Cart: React.FC<CartProps> = ({
               <span className="font-medium">{formatCurrency(total)}</span>
             </div>
             
-            {/* Discount section */}
             {!showDiscountInput && !appliedDiscount && (
               <button
                 onClick={() => setShowDiscountInput(true)}
@@ -164,7 +175,6 @@ const Cart: React.FC<CartProps> = ({
               </button>
             )}
             
-            {/* Discount input */}
             {showDiscountInput && !appliedDiscount && (
               <div className="flex items-center gap-2 my-4">
                 <Input
@@ -184,7 +194,6 @@ const Cart: React.FC<CartProps> = ({
               </div>
             )}
             
-            {/* Applied discount */}
             {appliedDiscount && (
               <div className="flex justify-between items-center mb-3 mt-2 py-2 px-3 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800/30 rounded-md">
                 <div className="flex items-center text-sm text-green-600 dark:text-green-400">
@@ -201,7 +210,6 @@ const Cart: React.FC<CartProps> = ({
               </div>
             )}
             
-            {/* Final total */}
             <div className="flex justify-between items-center mt-4 pt-2 border-t border-gray-200 dark:border-gray-800">
               <span className="font-medium">Total:</span>
               <div className={`bg-primary/5 rounded-lg p-2 font-bold text-lg ${
@@ -211,7 +219,16 @@ const Cart: React.FC<CartProps> = ({
               </div>
             </div>
             
-            {/* Reservation countdown timer - now with purple colors */}
+            <Button 
+              onClick={handleCheckout}
+              className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2"
+              size="lg"
+              disabled={items.length === 0}
+            >
+              <CreditCard className="h-5 w-5" />
+              <span className="font-medium">Checkout</span>
+            </Button>
+            
             <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
               <div className="flex items-center text-sm text-purple-600 dark:text-purple-400">
                 <Clock className="h-4 w-4 mr-2" />
