@@ -7,7 +7,8 @@ import SavedForLater from '@/components/SavedForLater';
 import ProductInventory from '@/components/ProductInventory';
 import StockWatch from '@/components/StockWatch';
 import RecommendedItems from '@/components/RecommendedItems';
-import { CartItem, SavedCart } from '@/utils/cartUtils';
+import OrderHistory from '@/components/OrderHistory';
+import { CartItem, SavedCart, Order } from '@/utils/cartUtils';
 import { Product } from '@/components/product/types';
 import { useLayout } from '@/contexts/LayoutContext';
 import { cn } from '@/lib/utils';
@@ -20,6 +21,7 @@ interface ShoppingGridProps {
   stockWatchItems: Product[];
   watchedProductIds?: number[]; 
   inventory?: Record<number, number>;
+  orders?: Order[];
   onAddToCart: (productId: number, price: number) => void;
   onSaveCart: () => void;
   onRemoveItem: (id: string | number) => void;
@@ -37,6 +39,7 @@ interface ShoppingGridProps {
   onUndoCart?: () => void;
   hasCartHistory?: boolean;
   onSaveProductForLater?: (product: Product) => void;
+  onCheckout?: (items: CartItem[], total: number) => void;
 }
 
 const ShoppingGrid: React.FC<ShoppingGridProps> = ({
@@ -47,6 +50,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   stockWatchItems,
   watchedProductIds = [],
   inventory = {},
+  orders = [],
   onAddToCart,
   onSaveCart,
   onRemoveItem,
@@ -63,7 +67,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onWatchProductId,
   onUndoCart,
   hasCartHistory = false,
-  onSaveProductForLater
+  onSaveProductForLater,
+  onCheckout
 }) => {
   // Extract just the IDs from stock watch items for simplified passing to ProductInventory
   const watchedItemIds = stockWatchItems.map(item => item.id);
@@ -123,6 +128,13 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onSaveForLater={onSaveProductForLater}
             />
           </div>
+          
+          <div className="cart-section">
+            <OrderHistory 
+              orders={orders}
+              inventory={inventory}
+            />
+          </div>
         </div>
         
         <div className={cn("space-y-4", getRightColumnClasses())}>
@@ -139,6 +151,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               inventory={inventory}
               onWatchItem={onWatchProductId}
               watchedItems={watchedProductIds}
+              onCheckout={onCheckout}
             />
           </div>
           

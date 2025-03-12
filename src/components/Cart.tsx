@@ -21,6 +21,7 @@ interface CartProps {
   onWatchItem?: (productId: number) => void;
   watchedItems?: number[];
   inventory?: Record<number, number>;
+  onCheckout?: (items: CartItemType[], total: number) => void;
 }
 
 const Cart: React.FC<CartProps> = ({ 
@@ -34,7 +35,8 @@ const Cart: React.FC<CartProps> = ({
   hasHistory = false,
   onWatchItem,
   watchedItems = [],
-  inventory = {}
+  inventory = {},
+  onCheckout
 }) => {
   const { toast } = useToast();
   const total = calculateTotal(items, inventory);
@@ -96,9 +98,16 @@ const Cart: React.FC<CartProps> = ({
     const availableDiscountAmount = appliedDiscount ? availableTotal * 0.1 : 0;
     const availableFinalTotal = availableTotal - availableDiscountAmount;
     
+    // Create deep copies of the items to prevent reference issues
+    const orderItems = JSON.parse(JSON.stringify(availableItems));
+    
+    if (onCheckout) {
+      onCheckout(orderItems, availableFinalTotal);
+    }
+    
     toast({
-      title: "Checkout Initiated",
-      description: `Processing ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'} for ${formatCurrency(availableFinalTotal)}`,
+      title: "Order Completed",
+      description: `Processed ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'} for ${formatCurrency(availableFinalTotal)}`,
     });
   };
   

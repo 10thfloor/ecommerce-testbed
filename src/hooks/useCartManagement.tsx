@@ -13,6 +13,7 @@ import { useCartHistory } from './cart/useCartHistory';
 import { useInventoryManagement } from './cart/useInventoryManagement';
 import { useProductOperations } from './cart/useProductOperations';
 import { useCartSynchronization } from './cart/useCartSynchronization';
+import { useOrderHistory } from './cart/useOrderHistory';
 
 interface UseCartManagementProps {
   initialCartItems: CartItem[];
@@ -50,6 +51,16 @@ export const useCartManagement = ({
     initialCartItems,
     initialInventory,
     saveToHistory
+  });
+
+  // Clear cart function for order completion
+  const clearCart = () => {
+    cartOperations.setCartItems([]);
+  };
+
+  // Use order history hook
+  const orderHistory = useOrderHistory({
+    clearCart
   });
 
   // Use cart synchronization hook
@@ -102,12 +113,18 @@ export const useCartManagement = ({
     savedForLater.handleSaveForLater(id);
   };
 
+  // Handle checkout
+  const handleCheckout = (items: CartItem[], total: number) => {
+    orderHistory.addOrder(items, total);
+  };
+
   return {
     cartItems: cartOperations.cartItems,
     savedCarts: savedCarts.savedCarts,
     savedForLaterItems: savedForLater.savedForLaterItems,
     stockWatchItems: stockWatch.stockWatchItems,
     inventory: inventoryManagement.inventory,
+    orders: orderHistory.orders,
     handleAddToCart: cartOperations.handleAddToCart,
     handleUpdateQuantity: cartOperations.handleUpdateQuantity,
     handleRemoveItem: cartOperations.handleRemoveItem,
@@ -125,6 +142,7 @@ export const useCartManagement = ({
     simulateInventoryChange: inventoryManagement.simulateInventoryChange,
     undoCartLoad,
     hasCartHistory,
-    handleSaveProductForLater: productOps.handleSaveProductForLater
+    handleSaveProductForLater: productOps.handleSaveProductForLater,
+    handleCheckout
   };
 };

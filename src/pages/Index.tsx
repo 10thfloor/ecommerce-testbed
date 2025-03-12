@@ -65,6 +65,7 @@ const Index = () => {
     savedForLaterItems,
     stockWatchItems,
     inventory,
+    orders,
     handleAddToCart,
     handleUpdateQuantity,
     handleRemoveItem,
@@ -82,7 +83,8 @@ const Index = () => {
     simulateInventoryChange,
     undoCartLoad,
     hasCartHistory,
-    handleSaveProductForLater
+    handleSaveProductForLater,
+    handleCheckout
   } = useCartManagement({
     initialCartItems: mockCartItems,
     initialSavedCarts: mockSavedCarts,
@@ -104,6 +106,7 @@ const Index = () => {
         stockWatchItems={stockWatchItems}
         watchedProductIds={watchedProductIds}
         inventory={inventory}
+        orders={orders}
         onAddToCart={handleAddToCart}
         onSaveCart={handleSaveCart}
         onRemoveItem={handleRemoveItem}
@@ -121,6 +124,7 @@ const Index = () => {
         onUndoCart={undoCartLoad}
         hasCartHistory={hasCartHistory}
         onSaveProductForLater={handleSaveProductForLater}
+        onCheckout={handleCheckout}
       />
     </ShoppingLayout>
   );

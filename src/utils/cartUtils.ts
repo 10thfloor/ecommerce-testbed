@@ -12,6 +12,13 @@ export interface SavedCart {
   items: CartItem[];
 }
 
+export interface Order {
+  id: string;
+  date: string;
+  items: CartItem[];
+  total: number;
+}
+
 // Mock data for the shopping cart
 export const mockCartItems: CartItem[] = [
   { id: 1, productId: 1, quantity: 1, price: 799.99, size: 'MD' },
@@ -132,3 +139,5 @@ export const mergeCartItems = (currentItems: CartItem[], savedItems: CartItem[])
   
   return mergedItems;
 };
+
+//
