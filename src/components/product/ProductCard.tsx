@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, Eye, BookmarkPlus, Star, Award, Flame, Gem, Zap } from 'lucide-react';
+import { Plus, Eye, BookmarkPlus, Star, Award, Flame, Gem, Zap, Diamond } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '../ui/button';
 import { Product, ProductSize } from '@/components/product/types';
@@ -109,8 +109,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Limited Edition Badge */}
           {product.isLimitedEdition && (
-            <Badge className="mb-1.5 ml-1 bg-purple-500 hover:bg-purple-600">
-              <Gem className="h-3 w-3 mr-1" />
+            <Badge className="mb-1.5 ml-1 bg-purple-500/70 hover:bg-purple-500/80 font-normal">
+              <Diamond className="h-3 w-3 mr-1" />
               Limited Edition
             </Badge>
           )}

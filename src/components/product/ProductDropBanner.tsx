@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Product, ProductSize } from './types';
-import { Gem, ShoppingCart, Clock } from 'lucide-react';
+import { Diamond, ShoppingCart, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/utils/cartUtils';
@@ -73,7 +73,7 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center">
             <div className="bg-purple-500/30 rounded-full p-1.5 mr-2">
-              <Gem className="h-4 w-4 text-purple-500" />
+              <Diamond className="h-4 w-4 text-purple-500" />
             </div>
             <h3 className="font-bold text-purple-800 dark:text-purple-300">
               {collectionName} Drop
@@ -95,7 +95,10 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
               className="bg-background/50 backdrop-blur-sm rounded-lg p-3 border border-purple-500/20 hover:border-purple-500/50 transition-all"
             >
               <div className="flex flex-col h-full">
-                <Badge className="self-start mb-2 bg-purple-500 hover:bg-purple-600">Limited Edition</Badge>
+                <Badge className="self-start mb-2 bg-purple-500/70 hover:bg-purple-500/80 font-normal">
+                  <Diamond className="h-3 w-3 mr-1" />
+                  Limited Edition
+                </Badge>
                 
                 <h4 className="font-medium text-sm mb-1">{product.name}</h4>
                 <p className="text-muted-foreground text-xs line-clamp-2 mb-2">{product.description}</p>
