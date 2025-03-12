@@ -1,17 +1,13 @@
 
 import React, { useState, useMemo } from 'react';
-import { ShoppingCart, Gem, Filter } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import ProductsGrid from './product/ProductsGrid';
-import ProductSearch from './product/ProductSearch';
-import FeaturedProductBanner from './product/FeaturedProductBanner';
-import CategoryFilter from './product/CategoryFilter';
 import { products, getLimitedEditionProducts } from './product/productData';
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
-import ProductDropBanner from './product/ProductDropBanner';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
+import ProductInventoryHeader from './product/ProductInventoryHeader';
+import ProductPromotions from './product/ProductPromotions';
+import ProductFilterSection from './product/ProductFilterSection';
+import ProductResultSection from './product/ProductResultSection';
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
@@ -141,79 +137,34 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
 
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in h-full">
-      <div className="mb-6 flex items-center">
-        <div className="bg-primary/10 rounded-lg p-2 mr-3">
-          <ShoppingCart className="h-5 w-5 text-primary" />
-        </div>
-        <h3 className="text-xl font-medium">Product Inventory</h3>
-      </div>
+      <ProductInventoryHeader />
       
-      {/* Limited edition products banner */}
-      {limitedEditionProducts.length > 0 && (
-        <div className="mb-6">
-          <ProductDropBanner 
-            products={limitedEditionProducts} 
-            onAddToCart={onAddToCart} 
-          />
-        </div>
-      )}
+      <ProductPromotions 
+        limitedEditionProducts={limitedEditionProducts}
+        featuredProducts={featuredProducts}
+        onAddToCart={onAddToCart}
+      />
       
-      {/* Featured products banner (non-limited edition) */}
-      {featuredProducts.length > 0 && (
-        <div className="mb-6">
-          <FeaturedProductBanner 
-            products={featuredProducts} 
-            onAddToCart={onAddToCart} 
-          />
-        </div>
-      )}
+      <ProductFilterSection 
+        searchQuery={searchQuery}
+        onSearch={handleSearch}
+        showLimitedEditionOnly={showLimitedEditionOnly}
+        setShowLimitedEditionOnly={setShowLimitedEditionOnly}
+        limitedEditionCount={limitedEditionCount}
+        selectedCategories={selectedCategories}
+        onSelectCategory={toggleCategory}
+        onClearCategories={clearCategories}
+        productCountByCategory={productCountByCategory}
+      />
       
-      <div className="space-y-4">
-        <ProductSearch onSearch={handleSearch} />
-        
-        {/* Limited Edition Filter Toggle */}
-        <div className="flex items-center justify-between bg-purple-500/10 rounded-lg p-3 text-sm mb-4">
-          <div className="flex items-center gap-2">
-            <Gem className="h-4 w-4 text-purple-500" />
-            <span className="font-medium text-purple-700 dark:text-purple-300">
-              Limited Edition Items
-            </span>
-            {limitedEditionCount > 0 && (
-              <Badge variant="outline" className="bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-500/30">
-                {limitedEditionCount}
-              </Badge>
-            )}
-          </div>
-          <Switch
-            checked={showLimitedEditionOnly}
-            onCheckedChange={setShowLimitedEditionOnly}
-            className="data-[state=checked]:bg-purple-500"
-          />
-        </div>
-        
-        <CategoryFilter
-          selectedCategories={selectedCategories}
-          onSelectCategory={toggleCategory}
-          onClearCategories={clearCategories}
-          productCountByCategory={productCountByCategory}
-        />
-        
-        {filteredProducts.length === 0 ? (
-          <div className="bg-secondary/20 text-center py-8 rounded-lg text-muted-foreground mt-4">
-            <p>No products found {searchQuery ? `matching "${searchQuery}"` : "in selected categories"}</p>
-          </div>
-        ) : (
-          <div className="mt-4">
-            <ProductsGrid 
-              products={filteredProducts}
-              watchedItems={allWatchedItems}
-              onAddToCart={onAddToCart}
-              onWatchItem={handleWatchItem}
-              onSaveForLater={handleSaveForLater}
-            />
-          </div>
-        )}
-      </div>
+      <ProductResultSection 
+        filteredProducts={filteredProducts}
+        searchQuery={searchQuery}
+        watchedItems={allWatchedItems}
+        onAddToCart={onAddToCart}
+        onWatchItem={handleWatchItem}
+        onSaveForLater={handleSaveForLater}
+      />
       
       <SocialProofToast products={products} />
     </div>
