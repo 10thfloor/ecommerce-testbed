@@ -39,7 +39,7 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
               variant={isSelected ? "default" : "outline"}
               size="xs"
               className={cn(
-                isCompact ? "h-6 w-6 p-0 text-[10px]" : "h-7 w-7 p-0 text-xs",
+                isCompact ? "h-5 w-5 p-0 text-[10px]" : "h-7 w-7 p-0 text-xs",
                 "font-medium rounded-full transition-all duration-200",
                 isSelected && "ring-2 ring-primary/20 transform scale-105",
                 isOutOfStock && "opacity-40 line-through",

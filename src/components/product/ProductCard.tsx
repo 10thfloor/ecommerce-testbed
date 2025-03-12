@@ -92,7 +92,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <div 
       key={product.id}
       className={`${hasSizeInStock ? 'bg-secondary/30 hover:bg-secondary/50' : 'bg-amber-500/10 border border-amber-500/30'} 
-        rounded-lg p-4 transition-all relative ${borderClass} ${animationClass}`}
+        rounded-lg p-4 transition-all relative ${borderClass} ${animationClass} ${product.isLimitedEdition ? 'border-purple-500/50 bg-purple-500/5' : ''}`}
       style={badge ? {
         '--pulse-color': `var(--${badge.borderColor.replace('border-', '')})`,
       } as React.CSSProperties : undefined}
@@ -106,6 +106,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           )}
           
+          {/* Limited Edition Badge */}
+          {product.isLimitedEdition && (
+            <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-1.5 ml-1 bg-purple-500/20 text-purple-600 dark:text-purple-300">
+              <Gem className="h-3 w-3 inline-block mr-1" />
+              Limited Edition
+            </div>
+          )}
+          
           <h4 className="font-medium text-base mb-1">{product.name}</h4>
           <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{product.description}</p>
           
@@ -114,6 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             selectedSize={selectedSize}
             onSelectSize={handleSizeSelect}
             showInventory={true}
+            isLimitedEdition={product.isLimitedEdition}
           />
           
           {!hasSizeInStock && (

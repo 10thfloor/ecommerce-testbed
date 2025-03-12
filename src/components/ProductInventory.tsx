@@ -1,13 +1,17 @@
+
 import React, { useState, useMemo } from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Gem, Filter } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import ProductsGrid from './product/ProductsGrid';
 import ProductSearch from './product/ProductSearch';
 import FeaturedProductBanner from './product/FeaturedProductBanner';
 import CategoryFilter from './product/CategoryFilter';
-import { products } from './product/productData';
+import { products, getLimitedEditionProducts } from './product/productData';
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
+import ProductDropBanner from './product/ProductDropBanner';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
@@ -26,6 +30,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+  const [showLimitedEditionOnly, setShowLimitedEditionOnly] = useState(false);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -59,10 +64,17 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const filteredProducts = useMemo(() => {
     let filtered = products;
     
+    // Filter by limited edition if the toggle is on
+    if (showLimitedEditionOnly) {
+      filtered = filtered.filter(product => product.isLimitedEdition);
+    }
+    
+    // Apply category filters
     if (selectedCategories.length > 0) {
       filtered = filtered.filter(product => selectedCategories.includes(product.categoryId));
     }
     
+    // Apply search query filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(product => 
@@ -72,10 +84,16 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }
     
     return filtered;
-  }, [searchQuery, selectedCategories]);
+  }, [searchQuery, selectedCategories, showLimitedEditionOnly]);
+
+  // Get limited edition products for the Product Drop banner
+  const limitedEditionProducts = useMemo(() => {
+    return getLimitedEditionProducts();
+  }, []);
 
   const featuredProducts = useMemo(() => {
-    const availableProducts = products.filter(p => p.inventory > 0);
+    // For featured products, exclude limited editions since they have their own section
+    const availableProducts = products.filter(p => p.inventory > 0 && !p.isLimitedEdition);
       
     return [...availableProducts]
       .sort((a, b) => b.price - a.price)
@@ -119,6 +137,8 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
 
   const allWatchedItems = [...new Set([...watchedItems, ...notifiedItems])];
 
+  const limitedEditionCount = limitedEditionProducts.length;
+
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in h-full">
       <div className="mb-6 flex items-center">
@@ -128,6 +148,17 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         <h3 className="text-xl font-medium">Product Inventory</h3>
       </div>
       
+      {/* Limited edition products banner */}
+      {limitedEditionProducts.length > 0 && (
+        <div className="mb-6">
+          <ProductDropBanner 
+            products={limitedEditionProducts} 
+            onAddToCart={onAddToCart} 
+          />
+        </div>
+      )}
+      
+      {/* Featured products banner (non-limited edition) */}
       {featuredProducts.length > 0 && (
         <div className="mb-6">
           <FeaturedProductBanner 
@@ -139,6 +170,26 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       
       <div className="space-y-4">
         <ProductSearch onSearch={handleSearch} />
+        
+        {/* Limited Edition Filter Toggle */}
+        <div className="flex items-center justify-between bg-purple-500/10 rounded-lg p-3 text-sm mb-4">
+          <div className="flex items-center gap-2">
+            <Gem className="h-4 w-4 text-purple-500" />
+            <span className="font-medium text-purple-700 dark:text-purple-300">
+              Limited Edition Items
+            </span>
+            {limitedEditionCount > 0 && (
+              <Badge variant="outline" className="bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-500/30">
+                {limitedEditionCount}
+              </Badge>
+            )}
+          </div>
+          <Switch
+            checked={showLimitedEditionOnly}
+            onCheckedChange={setShowLimitedEditionOnly}
+            className="data-[state=checked]:bg-purple-500"
+          />
+        </div>
         
         <CategoryFilter
           selectedCategories={selectedCategories}

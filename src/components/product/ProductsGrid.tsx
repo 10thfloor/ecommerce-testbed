@@ -6,7 +6,7 @@ import { Product } from './types';
 interface ProductsGridProps {
   products: Product[];
   watchedItems: number[];
-  onAddToCart: (productId: number, price: number) => void;
+  onAddToCart: (productId: number, price: number, size?: string) => void;
   onWatchItem?: (product: Product) => void;
   onSaveForLater?: (product: Product) => void;
 }

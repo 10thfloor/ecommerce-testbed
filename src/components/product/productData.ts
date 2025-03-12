@@ -120,7 +120,43 @@ export const products: Product[] = [
       { name: 'MD', inventory: 1 },
       { name: 'LG', inventory: 1 },
       { name: 'XL', inventory: 1 }
-    ]
+    ],
+    isLimitedEdition: true,
+    collectionId: 1 // BEAMS Collection
+  },
+  {
+    id: 9,
+    name: "BEAMS Arctic Parka",
+    price: 899.99,
+    description: "Limited edition collaboration with BEAMS featuring exclusive styling",
+    image: "/placeholder.svg",
+    inventory: 3,
+    categoryId: 1, // Jackets
+    sizes: [
+      { name: 'SM', inventory: 1 },
+      { name: 'MD', inventory: 1 },
+      { name: 'LG', inventory: 1 },
+      { name: 'XL', inventory: 0 }
+    ],
+    isLimitedEdition: true,
+    collectionId: 1 // BEAMS Collection
+  },
+  {
+    id: 10,
+    name: "BEAMS Mountain Hat",
+    price: 149.99,
+    description: "Exclusive BEAMS collaboration headwear with unique pattern",
+    image: "/placeholder.svg",
+    inventory: 5,
+    categoryId: 4, // Accessories
+    sizes: [
+      { name: 'SM', inventory: 2 },
+      { name: 'MD', inventory: 2 },
+      { name: 'LG', inventory: 1 },
+      { name: 'XL', inventory: 0 }
+    ],
+    isLimitedEdition: true,
+    collectionId: 1 // BEAMS Collection
   }
 ];
 
@@ -132,4 +168,14 @@ export const getProductsByCategory = (categoryId: number): Product[] => {
 // Get unique category IDs from products
 export const getUniqueCategories = (): number[] => {
   return [...new Set(products.map(product => product.categoryId))];
+};
+
+// Get limited edition products
+export const getLimitedEditionProducts = (): Product[] => {
+  return products.filter(product => product.isLimitedEdition);
+};
+
+// Get products by collection
+export const getProductsByCollection = (collectionId: number): Product[] => {
+  return products.filter(product => product.collectionId === collectionId);
 };
