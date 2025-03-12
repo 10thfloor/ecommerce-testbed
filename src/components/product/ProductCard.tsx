@@ -7,6 +7,7 @@ import { Product, ProductSize } from '@/components/product/types';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
 import { categories } from './categoryData';
+import { Badge } from '../ui/badge';
 
 interface ProductCardProps {
   product: Product;
@@ -108,10 +109,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Limited Edition Badge */}
           {product.isLimitedEdition && (
-            <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-1.5 ml-1 bg-purple-500/20 text-purple-600 dark:text-purple-300">
-              <Gem className="h-3 w-3 inline-block mr-1" />
+            <Badge className="mb-1.5 ml-1 bg-purple-500 hover:bg-purple-600">
+              <Gem className="h-3 w-3 mr-1" />
               Limited Edition
-            </div>
+            </Badge>
           )}
           
           <h4 className="font-medium text-base mb-1">{product.name}</h4>
