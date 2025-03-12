@@ -77,6 +77,15 @@ export const generateCartId = (): string => {
   return Math.random().toString(16).slice(2, 18);
 };
 
+export const generateOrderId = (): string => {
+  return Math.random().toString(16).slice(2, 18);
+};
+
+export const formatCurrentDate = (): string => {
+  const date = new Date();
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+};
+
 // List of adjectives and nouns for mnemonic cart names
 const adjectives = [
   "Happy", "Bright", "Swift", "Clever", "Gentle", "Bold", "Calm", "Brave", 
@@ -139,5 +148,3 @@ export const mergeCartItems = (currentItems: CartItem[], savedItems: CartItem[])
   
   return mergedItems;
 };
-
-//
