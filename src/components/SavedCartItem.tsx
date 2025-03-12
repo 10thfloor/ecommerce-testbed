@@ -61,7 +61,7 @@ const SavedCartItem: React.FC<SavedCartItemProps> = ({
           </div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1.5">
           <ShareMenu 
             items={cart.items} 
             title={`${getCartMnemonic(cart.id)} Cart`}
@@ -73,32 +73,32 @@ const SavedCartItem: React.FC<SavedCartItemProps> = ({
             <Button 
               onClick={handleAddItemsClick}
               variant="secondary"
-              size="icon"
-              className="text-blue-500 hover:text-blue-600 hover:bg-blue-100/50 dark:hover:bg-blue-900/20"
+              size="xs"
+              className="text-blue-500 hover:text-blue-600 hover:bg-blue-100/50 dark:hover:bg-blue-900/20 h-7 w-7"
               title="Add items to current cart"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-3.5 w-3.5" />
             </Button>
           )}
           
           <Button 
             onClick={handleLoadCartClick}
             variant="secondary"
-            size="icon"
-            className="text-primary hover:text-primary/80 hover:bg-primary/10"
+            size="xs"
+            className="text-primary hover:text-primary/80 hover:bg-primary/10 h-7 w-7"
             title="Use this cart"
           >
-            <ShoppingCart className="h-4 w-4" />
+            <ShoppingCart className="h-3.5 w-3.5" />
           </Button>
           
           <Button 
             onClick={handleDeleteClick}
             variant="secondary"
-            size="icon"
-            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+            size="xs"
+            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10 h-7 w-7"
             title="Delete cart"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
