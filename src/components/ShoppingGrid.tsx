@@ -128,13 +128,6 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onSaveForLater={onSaveProductForLater}
             />
           </div>
-          
-          <div className="cart-section">
-            <OrderHistory 
-              orders={orders}
-              inventory={inventory}
-            />
-          </div>
         </div>
         
         <div className={cn("space-y-4", getRightColumnClasses())}>
@@ -152,6 +145,13 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onWatchItem={onWatchProductId}
               watchedItems={watchedProductIds}
               onCheckout={onCheckout}
+            />
+          </div>
+          
+          <div className="cart-section">
+            <OrderHistory 
+              orders={orders}
+              inventory={inventory}
             />
           </div>
           
