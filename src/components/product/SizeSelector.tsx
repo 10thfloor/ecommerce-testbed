@@ -10,6 +10,7 @@ interface SizeSelectorProps {
   selectedSize?: ProductSize['name'];
   onSelectSize: (size: ProductSize['name']) => void;
   showInventory?: boolean;
+  isLimitedEdition?: boolean;
 }
 
 const SizeSelector: React.FC<SizeSelectorProps> = ({
@@ -17,6 +18,7 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
   selectedSize,
   onSelectSize,
   showInventory = false,
+  isLimitedEdition = false,
 }) => {
   const { layout } = useLayout();
   const isCompact = layout === 'compact';
@@ -41,12 +43,20 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
                 "font-medium rounded-full transition-all duration-200",
                 isSelected && "ring-2 ring-primary/20 transform scale-105",
                 isOutOfStock && "opacity-40 line-through",
+                isLimitedEdition && !isOutOfStock && "border-purple-500/70 ring-purple-500/30",
                 isLimitedStock && !isSelected && "border-amber-500/70 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/20 hover:text-amber-800 dark:hover:text-amber-300",
                 !isSelected && !isOutOfStock && !isLimitedStock && "hover:bg-primary/10 hover:text-primary"
               )}
             >
               {size.name}
             </Button>
+            
+            {isLimitedEdition && !isOutOfStock && size.inventory <= 3 && (
+              <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-purple-500"></span>
+              </span>
+            )}
           </div>
         );
       })}
