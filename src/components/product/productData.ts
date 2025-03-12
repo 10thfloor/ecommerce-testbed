@@ -109,7 +109,7 @@ export const products: Product[] = [
   },
   {
     id: 8,
-    name: "Proton AR Insulated",
+    name: "BEAMS Alpine Insulated Jacket",
     price: 399.99,
     description: "Advanced breathable insulation for cold, active pursuits",
     image: "/placeholder.svg",

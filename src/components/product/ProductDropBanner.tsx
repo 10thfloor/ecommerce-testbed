@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Product, ProductSize } from './types';
 import { Diamond, ShoppingCart, Clock } from 'lucide-react';
@@ -17,15 +16,15 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
   const { toast } = useToast();
   const [selectedSizes, setSelectedSizes] = useState<Record<number, ProductSize['name'] | undefined>>({});
   
-  // Only get products that are part of a limited edition collection
-  const limitedEditionProducts = products.filter(p => p.isLimitedEdition);
+  // Only get products that are part of the BEAMS collection (collectionId: 1)
+  const beamsCollectionProducts = products.filter(p => p.collectionId === 1);
   
-  if (limitedEditionProducts.length === 0) {
+  if (beamsCollectionProducts.length === 0) {
     return null;
   }
   
-  // Get collection name from the first product (assuming they're all in the same collection)
-  const collectionName = "BEAMS Collection"; // Hardcoded for now
+  // Get collection name from the first product
+  const collectionName = "BEAMS Collection";
   
   const handleSizeSelect = (productId: number, size: ProductSize['name']) => {
     setSelectedSizes(prev => ({
@@ -89,7 +88,7 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {limitedEditionProducts.map(product => (
+          {beamsCollectionProducts.map(product => (
             <div 
               key={product.id}
               className="bg-background/50 backdrop-blur-sm rounded-lg p-3 border border-purple-500/20 hover:border-purple-500/50 transition-all"
