@@ -2,9 +2,10 @@
 import React from 'react';
 import { SavedCart } from '@/utils/cartUtils';
 import { getCartItemCount, formatCurrency, calculateTotal, getCartMnemonic } from '@/utils/cartUtils';
-import { ShoppingBag, Trash2, Plus } from 'lucide-react';
+import { ShoppingBag, Trash2, Plus, ShoppingCart } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import ShareMenu from './ShareMenu';
+import { Button } from "@/components/ui/button";
 
 interface SavedCartItemProps {
   cart: SavedCart;
@@ -69,29 +70,36 @@ const SavedCartItem: React.FC<SavedCartItemProps> = ({
           />
           
           {onAddCartItems && (
-            <button 
+            <Button 
               onClick={handleAddItemsClick}
-              className="py-1.5 px-3 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium rounded-md text-sm transition-colors flex items-center"
+              variant="secondary"
+              size="icon"
+              className="text-blue-500 hover:text-blue-600 hover:bg-blue-100/50 dark:hover:bg-blue-900/20"
+              title="Add items to current cart"
             >
-              <Plus className="h-3.5 w-3.5 mr-1" />
-              Add Items
-            </button>
+              <Plus className="h-4 w-4" />
+            </Button>
           )}
           
-          <button 
+          <Button 
             onClick={handleLoadCartClick}
-            className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-sm transition-colors"
+            variant="secondary"
+            size="icon"
+            className="text-primary hover:text-primary/80 hover:bg-primary/10"
+            title="Use this cart"
           >
-            Use Cart
-          </button>
+            <ShoppingCart className="h-4 w-4" />
+          </Button>
           
-          <button 
+          <Button 
             onClick={handleDeleteClick}
-            className="p-1.5 bg-destructive/10 hover:bg-destructive/20 text-destructive rounded-full transition-colors"
-            aria-label="Delete cart"
+            variant="secondary"
+            size="icon"
+            className="text-destructive hover:text-destructive/80 hover:bg-destructive/10"
+            title="Delete cart"
           >
             <Trash2 className="h-4 w-4" />
-          </button>
+          </Button>
         </div>
       </div>
       
