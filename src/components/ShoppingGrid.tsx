@@ -149,13 +149,6 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
           </div>
           
           <div className="cart-section">
-            <OrderHistory 
-              orders={orders}
-              inventory={inventory}
-            />
-          </div>
-          
-          <div className="cart-section">
             <RecommendedItems 
               onAddToCart={onAddToCart}
               inventory={inventory}
@@ -179,6 +172,13 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               inventory={inventory}
               onWatchItem={onWatchProductId}
               watchedItems={watchedProductIds}
+            />
+          </div>
+          
+          <div className="cart-section">
+            <OrderHistory 
+              orders={orders}
+              inventory={inventory}
             />
           </div>
           
