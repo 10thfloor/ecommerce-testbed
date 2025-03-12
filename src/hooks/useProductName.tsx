@@ -9,7 +9,9 @@ const productNameMap: Record<number, string> = {
   5: "Gamma MX Softshell",
   6: "Zeta SL Rain Jacket",
   7: "Covert Fleece",
-  8: "BEAMS Alpine Insulated Jacket"
+  8: "BEAMS Alpine Insulated Jacket",
+  9: "BEAMS Arctic Parka",
+  10: "BEAMS Mountain Hat"
 };
 
 export function useProductName(productId: string | number): string {
