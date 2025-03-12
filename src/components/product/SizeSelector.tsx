@@ -50,13 +50,6 @@ const SizeSelector: React.FC<SizeSelectorProps> = ({
             >
               {size.name}
             </Button>
-            
-            {isLimitedEdition && !isOutOfStock && size.inventory <= 3 && (
-              <span className="absolute -top-1.5 -right-1.5 flex h-3.5 w-3.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-purple-500"></span>
-              </span>
-            )}
           </div>
         );
       })}
