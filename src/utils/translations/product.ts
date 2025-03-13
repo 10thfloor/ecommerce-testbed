@@ -1,3 +1,4 @@
+
 import { Language } from '@/contexts/LanguageContext';
 
 interface TranslationObject {

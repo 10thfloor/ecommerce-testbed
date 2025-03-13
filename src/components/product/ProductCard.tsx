@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Plus, Eye, BookmarkPlus, Star, Award, Flame, Gem, Zap, Diamond } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
@@ -44,7 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [selectedSize, setSelectedSize] = useState<ProductSize['name'] | undefined>();
   const { toast } = useToast();
-  const { currency, language } = useTranslation();
+  const { currency, language, t } = useTranslation();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -117,7 +116,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {product.isLimitedEdition && (
             <Badge className="mb-1.5 ml-1 bg-purple-500/70 hover:bg-purple-500/80 font-normal">
               <Diamond className="h-3 w-3 mr-1" />
-              Limited Edition
+              {t('product.limitedEdition')}
             </Badge>
           )}
           
@@ -134,7 +133,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           
           {!hasSizeInStock && (
             <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-2 bg-amber-500/20 text-amber-700 dark:text-amber-400">
-              Out of stock
+              {t('product.outOfStock')}
             </div>
           )}
         </div>

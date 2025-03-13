@@ -32,7 +32,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
   const { layout } = useLayout();
-  const { currency } = useTranslation();
+  const { currency, t } = useTranslation();
   
   const handleIncrement = () => {
     if (isOutOfStock || inventory[Number(item.productId)] <= item.quantity) return;
@@ -84,7 +84,7 @@ const CartItem: React.FC<CartItemProps> = ({
               </span>
               {lowStock && !isOutOfStock && (
                 <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                  Only {inventory[Number(item.productId)]} left
+                  {t('product.only')} {inventory[Number(item.productId)]} {t('product.left')}
                 </span>
               )}
             </div>
