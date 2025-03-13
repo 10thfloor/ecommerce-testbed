@@ -79,7 +79,7 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
               <Diamond className="h-4 w-4 text-purple-500" />
             </div>
             <h3 className="font-bold text-purple-800 dark:text-purple-300">
-              {collectionName} {t('product.drop')}
+              {collectionName} Drop
             </h3>
           </div>
           
