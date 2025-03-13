@@ -8,6 +8,7 @@ import { formatCurrency } from '@/utils/cartUtils';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from '@/hooks/useTranslation';
+import { getLocalizedDescription } from '@/utils/productUtils';
 
 interface ProductDropBannerProps {
   products: Product[];
@@ -16,7 +17,7 @@ interface ProductDropBannerProps {
 
 const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddToCart }) => {
   const { toast } = useToast();
-  const { currency } = useTranslation();
+  const { currency, language, t } = useTranslation();
   const [selectedSizes, setSelectedSizes] = useState<Record<number, ProductSize['name'] | undefined>>({});
   
   // Only get products that are part of the BEAMS collection (collectionId: 1)
@@ -41,8 +42,8 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
     
     if (!selectedSize) {
       toast({
-        title: "Select a Size",
-        description: "Please select a size before adding to cart",
+        title: t('product.selectSize'),
+        description: t('product.selectSizeDescription'),
         variant: "destructive",
       });
       return;
@@ -51,8 +52,8 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
     onAddToCart(productId, price, selectedSize);
     
     toast({
-      title: "Limited Edition Added",
-      description: `You've added a limited edition item to your cart!`,
+      title: t('product.limitedEditionAdded'),
+      description: t('product.limitedEditionAddedDescription'),
     });
   };
   
@@ -78,14 +79,14 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
               <Diamond className="h-4 w-4 text-purple-500" />
             </div>
             <h3 className="font-bold text-purple-800 dark:text-purple-300">
-              {collectionName} Drop
+              {collectionName} {t('product.drop')}
             </h3>
           </div>
           
           <div className="flex items-center space-x-2">
             <Clock className="h-3.5 w-3.5 text-purple-600 dark:text-purple-300" />
             <span className="text-xs font-medium text-purple-700 dark:text-purple-300">
-              Ends {formatFutureDate(7)}
+              {t('product.ends')} {formatFutureDate(7)}
             </span>
           </div>
         </div>
@@ -99,11 +100,13 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
               <div className="flex flex-col h-full">
                 <Badge className="self-start mb-2 bg-purple-500/70 hover:bg-purple-500/80 font-normal">
                   <Diamond className="h-3 w-3 mr-1" />
-                  Limited Edition
+                  {t('product.limitedEdition')}
                 </Badge>
                 
                 <h4 className="font-medium text-sm mb-1">{product.name}</h4>
-                <p className="text-muted-foreground text-xs line-clamp-2 mb-2">{product.description}</p>
+                <p className="text-muted-foreground text-xs line-clamp-2 mb-2">
+                  {getLocalizedDescription(product.description, language)}
+                </p>
                 
                 <div className="mb-2">
                   <SizeSelector
@@ -125,7 +128,7 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
                     disabled={!selectedSizes[product.id]}
                   >
                     <ShoppingCart className="h-3.5 w-3.5 mr-1" />
-                    Add
+                    {t('product.add')}
                   </Button>
                 </div>
               </div>

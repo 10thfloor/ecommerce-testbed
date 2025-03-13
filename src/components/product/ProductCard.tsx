@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { categories } from './categoryData';
 import { Badge } from '../ui/badge';
 import { useTranslation } from '@/hooks/useTranslation';
+import { getLocalizedDescription } from '@/utils/productUtils';
 
 interface ProductCardProps {
   product: Product;
@@ -43,7 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [selectedSize, setSelectedSize] = useState<ProductSize['name'] | undefined>();
   const { toast } = useToast();
-  const { currency } = useTranslation();
+  const { currency, language } = useTranslation();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -86,6 +87,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Calculate if any size has inventory
   const hasSizeInStock = product.sizes.some(size => size.inventory > 0);
 
+  // Get localized description
+  const localizedDescription = getLocalizedDescription(product.description, language);
+
   // Determine if we should add the pulsing border
   // Using CSS variables to animate only the border opacity
   const borderClass = badge ? `border-2 ${badge.borderColor}` : '';
@@ -118,7 +122,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
           
           <h4 className="font-medium text-base mb-1">{product.name}</h4>
-          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{product.description}</p>
+          <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{localizedDescription}</p>
           
           <SizeSelector
             sizes={product.sizes}

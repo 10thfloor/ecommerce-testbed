@@ -200,6 +200,11 @@ export const translations: Translations = {
     fr: 'Ajouter au panier',
     ja: 'カートに追加'
   },
+  'product.add': {
+    en: 'Add',
+    fr: 'Ajouter',
+    ja: '追加'
+  },
   'product.saveForLater': {
     en: 'Save for later',
     fr: 'Enregistrer pour plus tard',
@@ -209,6 +214,86 @@ export const translations: Translations = {
     en: 'Watch item',
     fr: 'Surveiller l\'article',
     ja: '商品を監視'
+  },
+  'product.selectSize': {
+    en: 'Select Size',
+    fr: 'Sélectionner la taille',
+    ja: 'サイズを選択'
+  },
+  'product.selectSizeDescription': {
+    en: 'Please select a size before adding to cart',
+    fr: 'Veuillez sélectionner une taille avant d\'ajouter au panier',
+    ja: 'カートに追加する前にサイズを選択してください'
+  },
+  'product.selectSizeFirst': {
+    en: 'Select Size First',
+    fr: 'Sélectionnez d\'abord la taille',
+    ja: '最初にサイズを選択'
+  },
+  'product.limitedEdition': {
+    en: 'Limited Edition',
+    fr: 'Édition Limitée',
+    ja: '限定版'
+  },
+  'product.limitedEditionAdded': {
+    en: 'Limited Edition Added',
+    fr: 'Édition Limitée Ajoutée',
+    ja: '限定版が追加されました'
+  },
+  'product.limitedEditionAddedDescription': {
+    en: 'You\'ve added a limited edition item to your cart!',
+    fr: 'Vous avez ajouté un article en édition limitée à votre panier!',
+    ja: '限定版アイテムがカートに追加されました！'
+  },
+  'product.featuredProducts': {
+    en: 'Featured Products',
+    fr: 'Produits en vedette',
+    ja: '注目商品'
+  },
+  'product.drop': {
+    en: 'Drop',
+    fr: 'Collection',
+    ja: 'ドロップ'
+  },
+  'product.ends': {
+    en: 'Ends',
+    fr: 'Se termine le',
+    ja: '終了'
+  },
+  'product.is': {
+    en: 'is',
+    fr: 'est',
+    ja: 'は'
+  },
+  'product.are': {
+    en: 'are',
+    fr: 'sont',
+    ja: 'は'
+  },
+  'cart.item': {
+    en: 'item',
+    fr: 'article',
+    ja: '商品'
+  },
+  'cart.items': {
+    en: 'items',
+    fr: 'articles',
+    ja: '商品'
+  },
+  'cart.out_of_stock': {
+    en: 'out of stock',
+    fr: 'en rupture de stock',
+    ja: '在庫切れです'
+  },
+  'cart.is': {
+    en: 'is',
+    fr: 'est',
+    ja: 'は'
+  },
+  'cart.are': {
+    en: 'are',
+    fr: 'sont',
+    ja: 'は'
   }
 };
 

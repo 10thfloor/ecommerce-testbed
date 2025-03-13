@@ -7,6 +7,7 @@ import { Product, ProductSize } from './types';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
 import { useTranslation } from '@/hooks/useTranslation';
+import { getLocalizedDescription } from '@/utils/productUtils';
 
 interface FeaturedProductBannerProps {
   products: Product[];
@@ -24,7 +25,7 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
   
   const [selectedSizes, setSelectedSizes] = useState<Record<number, ProductSize['name'] | undefined>>({});
   const { toast } = useToast();
-  const { currency } = useTranslation();
+  const { currency, language, t } = useTranslation();
   
   if (featuredProducts.length === 0) return null;
 
@@ -40,8 +41,8 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
     
     if (!selectedSize) {
       toast({
-        title: "Select a Size",
-        description: "Please select a size before adding to cart",
+        title: t('product.selectSize'),
+        description: t('product.selectSizeDescription'),
         variant: "destructive",
       });
       return;
@@ -56,7 +57,7 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
         <div className="bg-yellow-500/20 rounded-full p-1.5 mr-2">
           <Star className="h-4 w-4 text-yellow-500" />
         </div>
-        <h3 className="font-medium text-sm text-foreground/90">Featured Products</h3>
+        <h3 className="font-medium text-sm text-foreground/90">{t('product.featuredProducts')}</h3>
       </div>
       
       <div className={`grid ${featuredProducts.length > 1 ? 'md:grid-cols-2' : 'grid-cols-1'} gap-4`}>
@@ -68,10 +69,12 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
             <div className="flex flex-col h-full">
               <div className="mb-2">
                 <h4 className="font-medium text-base">{product.name}</h4>
-                <p className="text-muted-foreground text-sm line-clamp-2 mb-3">{product.description}</p>
+                <p className="text-muted-foreground text-sm line-clamp-2 mb-3">
+                  {getLocalizedDescription(product.description, language)}
+                </p>
                 
                 <div className="mb-2">
-                  <div className="text-xs font-medium text-muted-foreground mb-1">Select Size:</div>
+                  <div className="text-xs font-medium text-muted-foreground mb-1">{t('product.selectSize')}:</div>
                   <SizeSelector
                     sizes={product.sizes}
                     selectedSize={selectedSizes[product.id]}
@@ -94,7 +97,7 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
                 >
                   <ShoppingCart className="h-4 w-4 mr-2 group-hover:text-primary" />
                   <span className="group-hover:text-primary">
-                    {selectedSizes[product.id] ? 'Add to Cart' : 'Select Size First'}
+                    {selectedSizes[product.id] ? t('product.addToCart') : t('product.selectSizeFirst')}
                   </span>
                 </Button>
               </div>

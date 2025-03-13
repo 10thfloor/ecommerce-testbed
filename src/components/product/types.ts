@@ -4,11 +4,17 @@ export interface ProductSize {
   inventory: number;
 }
 
+export interface ProductDescription {
+  en: string;
+  fr: string;
+  ja: string;
+}
+
 export interface Product {
   id: number;
   name: string;
   price: number;
-  description: string;
+  description: string | ProductDescription;
   image: string;
   inventory: number;
   sizes: ProductSize[];
