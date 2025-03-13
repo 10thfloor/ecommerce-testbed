@@ -1,12 +1,14 @@
 
 import React from 'react';
-import { Minus, Plus, Trash2, BookmarkPlus, PackageX, Eye, EyeOff } from 'lucide-react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
 import { useLayout } from '@/contexts/LayoutContext';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
+import CartItemDetails from './cart/CartItemDetails';
+import QuantityControls from './cart/QuantityControls';
+import CartItemActions from './cart/CartItemActions';
 
 interface CartItemProps {
   item: CartItemType;
@@ -32,7 +34,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
   const { layout } = useLayout();
-  const { currency, t } = useTranslation();
+  const { currency } = useTranslation();
   
   const handleIncrement = () => {
     if (isOutOfStock || inventory[Number(item.productId)] <= item.quantity) return;
@@ -61,34 +63,16 @@ const CartItem: React.FC<CartItemProps> = ({
           "flex items-center", 
           layout === 'compact' ? "w-full justify-between mb-3 sm:mb-0 sm:justify-start" : ""
         )}>
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <span className={cn(
-                "font-medium", 
-                layout === 'compact' ? "text-xs sm:text-sm" : "text-sm"
-              )}>{productName}</span>
-              {item.size && (
-                <span className="ml-1.5 text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
-                  {item.size}
-                </span>
-              )}
-              {isOutOfStock && (
-                <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
-                  <PackageX className="h-3 w-3" />
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xs text-muted-foreground">
-                {formatCurrency(item.price, currency)} × {item.quantity}
-              </span>
-              {lowStock && !isOutOfStock && (
-                <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                  {t('product.only')} {inventory[Number(item.productId)]} {t('product.left')}
-                </span>
-              )}
-            </div>
-          </div>
+          <CartItemDetails 
+            productName={productName}
+            price={item.price}
+            quantity={item.quantity}
+            size={item.size}
+            isOutOfStock={isOutOfStock}
+            lowStock={lowStock}
+            inventory={inventory[Number(item.productId)]}
+            formatCurrency={formatCurrency}
+          />
           
           {layout === 'compact' && (
             <div className="font-medium text-sm ml-auto">
@@ -107,66 +91,21 @@ const CartItem: React.FC<CartItemProps> = ({
             </div>
           )}
           
-          <div className={`bg-secondary rounded-md flex items-center h-7 ${isOutOfStock ? 'opacity-50' : ''}`}>
-            <button 
-              onClick={handleDecrement}
-              className="p-1 hover:bg-muted rounded-l-md transition-colors"
-              aria-label="Decrease quantity"
-              disabled={isOutOfStock}
-            >
-              <Minus className="h-3 w-3" />
-            </button>
-            <span className="px-2 font-medium text-xs">{item.quantity}</span>
-            <button 
-              onClick={handleIncrement}
-              className={`p-1 ${!isOutOfStock && item.quantity < inventory[Number(item.productId)] ? 'hover:bg-muted' : ''} rounded-r-md transition-colors`}
-              aria-label="Increase quantity"
-              disabled={isOutOfStock || item.quantity >= inventory[Number(item.productId)]}
-            >
-              <Plus className={`h-3 w-3 ${item.quantity >= inventory[Number(item.productId)] ? 'text-muted-foreground' : ''}`} />
-            </button>
-          </div>
+          <QuantityControls 
+            quantity={item.quantity}
+            onDecrement={handleDecrement}
+            onIncrement={handleIncrement}
+            isOutOfStock={isOutOfStock}
+            maxQuantity={inventory[Number(item.productId)]}
+          />
           
-          <div className={cn(
-            "flex items-center", 
-            layout === 'compact' ? "space-x-1" : "space-x-1"
-          )}>
-            {isOutOfStock && onWatchItem && (
-              <button 
-                onClick={() => onWatchItem(Number(item.productId))}
-                className={`p-1 rounded-md transition-colors ${
-                  isWatched 
-                    ? 'bg-blue-100 border-blue-300 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-400 animate-pulse-subtle' 
-                    : 'text-primary hover:bg-primary/10'
-                }`}
-                aria-label={isWatched ? "Remove from watch list" : "Add to watch list"}
-              >
-                {isWatched ? (
-                  <EyeOff className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
-                ) : (
-                  <Eye className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
-                )}
-              </button>
-            )}
-            
-            {onSaveForLater && (
-              <button 
-                onClick={() => onSaveForLater(item.id)}
-                className="p-1 text-primary hover:bg-primary/10 rounded-md transition-colors"
-                aria-label="Save for later"
-              >
-                <BookmarkPlus className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
-              </button>
-            )}
-            
-            <button 
-              onClick={() => onRemove(item.id)}
-              className="p-1 text-destructive hover:bg-destructive/10 rounded-md transition-colors"
-              aria-label="Remove item"
-            >
-              <Trash2 className={cn("h-3.5 w-3.5", layout === 'compact' ? "h-3 w-3 sm:h-3.5 sm:w-3.5" : "")} />
-            </button>
-          </div>
+          <CartItemActions 
+            onRemove={() => onRemove(item.id)}
+            onSaveForLater={onSaveForLater ? () => onSaveForLater(item.id) : undefined}
+            onWatchItem={onWatchItem && isOutOfStock ? () => onWatchItem(Number(item.productId)) : undefined}
+            isWatched={isWatched}
+            isOutOfStock={isOutOfStock}
+          />
         </div>
       </div>
     </div>
