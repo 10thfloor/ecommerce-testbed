@@ -7,6 +7,7 @@ import CartHeader from './cart/CartHeader';
 import CartSummary from './cart/CartSummary';
 import CartReservationTimer from './cart/CartReservationTimer';
 import { useLayout } from '@/contexts/LayoutContext';
+import { useTranslation } from '@/hooks/useTranslation';
 import { cn } from '@/lib/utils';
 
 interface CartProps {
@@ -39,6 +40,7 @@ const Cart: React.FC<CartProps> = ({
   onCheckout
 }) => {
   const { toast } = useToast();
+  const { t, currency } = useTranslation();
   const total = calculateTotal(items, inventory);
   const [appliedDiscount, setAppliedDiscount] = useState<string | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number>(30 * 60); // 30 minutes in seconds
@@ -107,7 +109,7 @@ const Cart: React.FC<CartProps> = ({
     
     toast({
       title: "Order Completed",
-      description: `Processed ${totalQuantity} ${totalQuantity === 1 ? 'item' : 'items'} for ${formatCurrency(availableFinalTotal)}`,
+      description: `Processed ${totalQuantity} ${totalQuantity === 1 ? t('orders.item') : t('orders.items')} for ${formatCurrency(availableFinalTotal, currency)}`,
     });
   };
   
@@ -130,7 +132,7 @@ const Cart: React.FC<CartProps> = ({
       
       {items.length === 0 ? (
         <div className="text-center py-8 text-muted-foreground">
-          Your cart is empty. Add some items to get started.
+          {t('cart.empty')}
         </div>
       ) : (
         <>

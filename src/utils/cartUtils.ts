@@ -51,12 +51,30 @@ export const mockSavedForLaterItems: CartItem[] = [
   { id: 4, productId: 5, quantity: 1, price: 349.99, size: 'LG' }  // Low stock item
 ];
 
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
+import { Currency } from '@/contexts/LanguageContext';
+
+export const formatCurrency = (amount: number, currency: Currency = 'USD'): string => {
+  const formatOptions: Intl.NumberFormatOptions = {
     style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2
-  }).format(amount);
+    minimumFractionDigits: 2,
+  };
+  
+  switch (currency) {
+    case 'USD':
+      formatOptions.currency = 'USD';
+      break;
+    case 'EUR':
+      formatOptions.currency = 'EUR';
+      break;
+    case 'JPY':
+      formatOptions.currency = 'JPY';
+      formatOptions.minimumFractionDigits = 0; // JPY doesn't use decimal places
+      break;
+    default:
+      formatOptions.currency = 'USD';
+  }
+  
+  return new Intl.NumberFormat('en-US', formatOptions).format(amount);
 };
 
 export const calculateTotal = (items: CartItem[], inventory?: Record<number, number>): number => {

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import UserProfile from '@/components/UserProfile';
 import Cart from '@/components/Cart';
@@ -8,6 +7,7 @@ import ProductInventory from '@/components/ProductInventory';
 import StockWatch from '@/components/StockWatch';
 import RecommendedItems from '@/components/RecommendedItems';
 import OrderHistory from '@/components/OrderHistory';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { CartItem, SavedCart, Order } from '@/utils/cartUtils';
 import { Product } from '@/components/product/types';
 import { useLayout } from '@/contexts/LayoutContext';
@@ -70,11 +70,9 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onSaveProductForLater,
   onCheckout
 }) => {
-  // Extract just the IDs from stock watch items for simplified passing to ProductInventory
   const watchedItemIds = stockWatchItems.map(item => item.id);
   const { layout } = useLayout();
   
-  // Layout classes based on the current layout
   const getGridClasses = () => {
     switch (layout) {
       case 'compact':
@@ -87,7 +85,6 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
     }
   };
   
-  // Column span classes based on the current layout
   const getLeftColumnClasses = () => {
     switch (layout) {
       case 'compact':
@@ -114,8 +111,9 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   
   return (
     <>
-      <div className="cart-section mb-6">
+      <div className="cart-section mb-6 flex justify-between items-center">
         <UserProfile userId={userId} />
+        <LanguageSwitcher />
       </div>
       
       <div className={cn("grid gap-6", getGridClasses())}>

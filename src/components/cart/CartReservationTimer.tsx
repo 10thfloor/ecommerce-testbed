@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Clock } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface CartReservationTimerProps {
   timeRemaining: number;
@@ -11,11 +12,13 @@ const CartReservationTimer: React.FC<CartReservationTimerProps> = ({
   timeRemaining,
   formatTimeRemaining
 }) => {
+  const { t } = useTranslation();
+  
   return (
     <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
       <div className="flex items-center text-sm text-primary dark:text-primary">
         <Clock className="h-4 w-4 mr-2" />
-        <span>Items reserved for:</span>
+        <span>{t('cart.reserved')}</span>
       </div>
       <div className={`font-mono font-medium rounded-md px-3 py-1 ${
         timeRemaining < 300 
