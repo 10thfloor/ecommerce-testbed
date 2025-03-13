@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Order } from '@/utils/cartUtils';
-import { formatCurrency } from '@/utils/cartUtils';
+import { useTranslation } from '@/hooks/useTranslation';
 import { Receipt, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useProductName } from '@/hooks/useProductName';
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ interface OrderHistoryProps {
 const OrderHistoryItem = ({ order, inventory }: { order: Order, inventory: Record<number, number> }) => {
   const [expanded, setExpanded] = useState(false);
   const { layout } = useLayout();
+  const { t, language } = useTranslation();
   const isCompact = layout === 'compact';
   
   const toggleExpanded = () => {
@@ -34,14 +35,14 @@ const OrderHistoryItem = ({ order, inventory }: { order: Order, inventory: Recor
           
           <div>
             <div className="font-medium text-sm mb-0.5">
-              Order #{order.id.substring(0, 8)}
+              {t('orders.order')} #{order.id.substring(0, 8)}
             </div>
             
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" />
               <span>{order.date}</span>
               <span className="text-xs bg-secondary px-1.5 py-0.5 rounded-md">
-                {order.items.length} {order.items.length === 1 ? 'item' : 'items'}
+                {order.items.length} {order.items.length === 1 ? t('orders.item') : t('orders.items')}
               </span>
             </div>
           </div>
@@ -52,7 +53,7 @@ const OrderHistoryItem = ({ order, inventory }: { order: Order, inventory: Recor
             "text-sm font-medium",
             isCompact ? "text-xs" : "text-sm"
           )}>
-            {formatCurrency(order.total)}
+            {order.formattedTotal || order.total}
           </div>
           
           <Button 
@@ -86,15 +87,16 @@ const OrderHistoryItem = ({ order, inventory }: { order: Order, inventory: Recor
 
 const OrderHistory: React.FC<OrderHistoryProps> = ({ orders, inventory }) => {
   const { layout } = useLayout();
+  const { t } = useTranslation();
   
   if (orders.length === 0) {
     return (
       <div className="card-glass p-4 mb-6 animate-fade-in">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Order History</h2>
+          <h2 className="text-lg font-semibold">{t('orders.title')}</h2>
         </div>
         <div className="text-center py-6 text-muted-foreground">
-          Your order history is empty. Complete a checkout to see orders here.
+          {t('orders.empty')}
         </div>
       </div>
     );
@@ -103,9 +105,9 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders, inventory }) => {
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Order History</h2>
+        <h2 className="text-lg font-semibold">{t('orders.title')}</h2>
         <div className="text-sm text-muted-foreground">
-          {orders.length} {orders.length === 1 ? 'order' : 'orders'}
+          {orders.length} {orders.length === 1 ? t('orders.order') : t('orders.orders')}
         </div>
       </div>
       

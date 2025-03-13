@@ -6,6 +6,7 @@ import { ShoppingBag, Trash2, Plus, ShoppingCart } from 'lucide-react';
 import ReadOnlyCartItem from './ReadOnlyCartItem';
 import ShareMenu from './ShareMenu';
 import { Button } from "@/components/ui/button";
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface SavedCartItemProps {
   cart: SavedCart;
@@ -22,6 +23,8 @@ const SavedCartItem: React.FC<SavedCartItemProps> = ({
   onDeleteCart,
   onAddCartItems,
 }) => {
+  const { t, currency } = useTranslation();
+  
   const handleLoadCartClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onLoadCart(cart.id);
@@ -55,7 +58,7 @@ const SavedCartItem: React.FC<SavedCartItemProps> = ({
             <div className="flex items-center text-xs text-muted-foreground">
               <span className="mr-2">{cart.date}</span>
               <span className="text-xs bg-secondary px-1.5 py-0.5 rounded-md">
-                {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? 'item' : 'items'}
+                {getCartItemCount(cart.items)} {getCartItemCount(cart.items) === 1 ? t('savedcarts.cart') : t('savedcarts.carts')}
               </span>
             </div>
           </div>
@@ -114,8 +117,8 @@ const SavedCartItem: React.FC<SavedCartItemProps> = ({
         
         <div className="mt-4 flex justify-end">
           <div className="bg-primary/5 rounded-lg p-3">
-            <span className="text-muted-foreground mr-2">Total:</span>
-            <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items, inventory))}</span>
+            <span className="text-muted-foreground mr-2">{t('cart.total')}:</span>
+            <span className="font-bold text-lg">{formatCurrency(calculateTotal(cart.items, inventory), currency)}</span>
           </div>
         </div>
       </div>

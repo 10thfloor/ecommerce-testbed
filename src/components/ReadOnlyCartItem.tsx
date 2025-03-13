@@ -3,6 +3,7 @@ import React from 'react';
 import { CartItem as CartItemType } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
+import { useTranslation } from '@/hooks/useTranslation';
 import { PackageX, Eye, EyeOff } from 'lucide-react';
 
 interface ReadOnlyCartItemProps {
@@ -19,6 +20,7 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
   watchedItems = []
 }) => {
   const productName = useProductName(item.productId);
+  const { t, currency } = useTranslation();
   const isOutOfStock = inventory[Number(item.productId)] === 0;
   const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
@@ -49,11 +51,11 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">
-                {formatCurrency(item.price)} × {item.quantity}
+                {formatCurrency(item.price, currency)} × {item.quantity}
               </span>
               {lowStock && !isOutOfStock && (
                 <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                  Only {inventory[Number(item.productId)]} left
+                  {t('product.only')} {inventory[Number(item.productId)]} {t('product.left')}
                 </span>
               )}
             </div>
@@ -62,11 +64,11 @@ const ReadOnlyCartItem: React.FC<ReadOnlyCartItemProps> = ({
         
         <div className="flex items-center space-x-2">
           <div className="font-medium text-sm">
-            {formatCurrency(item.price * item.quantity)}
+            {formatCurrency(item.price * item.quantity, currency)}
           </div>
           
           <div className="text-xs bg-secondary px-1.5 py-0.5 rounded-md">
-            Qty: {item.quantity}
+            {t('product.qty')}: {item.quantity}
           </div>
 
           {isOutOfStock && onWatchItem && (
