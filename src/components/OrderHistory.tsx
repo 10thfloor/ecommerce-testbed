@@ -9,6 +9,7 @@ import ReadOnlyCartItem from './ReadOnlyCartItem';
 import { cn } from '@/lib/utils';
 import { useLayout } from '@/contexts/LayoutContext';
 import { useState } from 'react';
+import { formatCurrency } from '@/utils/cartUtils';
 
 interface OrderHistoryProps {
   orders: Order[];
@@ -18,7 +19,7 @@ interface OrderHistoryProps {
 const OrderHistoryItem = ({ order, inventory }: { order: Order, inventory: Record<number, number> }) => {
   const [expanded, setExpanded] = useState(false);
   const { layout } = useLayout();
-  const { t, language } = useTranslation();
+  const { t, language, currency } = useTranslation();
   const isCompact = layout === 'compact';
   
   const toggleExpanded = () => {
@@ -53,7 +54,7 @@ const OrderHistoryItem = ({ order, inventory }: { order: Order, inventory: Recor
             "text-sm font-medium",
             isCompact ? "text-xs" : "text-sm"
           )}>
-            {order.formattedTotal || order.total}
+            {formatCurrency(order.total, currency)}
           </div>
           
           <Button 
