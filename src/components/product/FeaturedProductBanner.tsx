@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ShoppingCart, Star } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
@@ -5,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Product, ProductSize } from './types';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface FeaturedProductBannerProps {
   products: Product[];
@@ -22,6 +24,7 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
   
   const [selectedSizes, setSelectedSizes] = useState<Record<number, ProductSize['name'] | undefined>>({});
   const { toast } = useToast();
+  const { currency } = useTranslation();
   
   if (featuredProducts.length === 0) return null;
 
@@ -78,7 +81,7 @@ const FeaturedProductBanner: React.FC<FeaturedProductBannerProps> = ({
                 </div>
                 
                 <div className="mb-3 flex items-center mt-2">
-                  <span className="font-bold mr-3">{formatCurrency(product.price)}</span>
+                  <span className="font-bold mr-3">{formatCurrency(product.price, currency)}</span>
                 </div>
               </div>
               

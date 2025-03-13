@@ -6,6 +6,7 @@ import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
 import { useLayout } from '@/contexts/LayoutContext';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface CartItemProps {
   item: CartItemType;
@@ -31,6 +32,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
   const { layout } = useLayout();
+  const { currency } = useTranslation();
   
   const handleIncrement = () => {
     if (isOutOfStock || inventory[Number(item.productId)] <= item.quantity) return;
@@ -78,7 +80,7 @@ const CartItem: React.FC<CartItemProps> = ({
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">
-                {formatCurrency(item.price)} × {item.quantity}
+                {formatCurrency(item.price, currency)} × {item.quantity}
               </span>
               {lowStock && !isOutOfStock && (
                 <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
@@ -90,7 +92,7 @@ const CartItem: React.FC<CartItemProps> = ({
           
           {layout === 'compact' && (
             <div className="font-medium text-sm ml-auto">
-              {formatCurrency(item.price * item.quantity)}
+              {formatCurrency(item.price * item.quantity, currency)}
             </div>
           )}
         </div>
@@ -101,7 +103,7 @@ const CartItem: React.FC<CartItemProps> = ({
         )}>
           {layout !== 'compact' && (
             <div className="font-medium text-sm">
-              {formatCurrency(item.price * item.quantity)}
+              {formatCurrency(item.price * item.quantity, currency)}
             </div>
           )}
           

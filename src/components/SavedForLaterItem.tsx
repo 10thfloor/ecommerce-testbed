@@ -5,6 +5,7 @@ import { CartItem } from '@/utils/cartUtils';
 import { formatCurrency } from '@/utils/cartUtils';
 import { useProductName } from '@/hooks/useProductName';
 import { Button } from './ui/button';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface SavedForLaterItemProps {
   item: CartItem;
@@ -27,6 +28,7 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
   const isOutOfStock = inventory[Number(item.productId)] === 0;
   const lowStock = inventory[Number(item.productId)] <= 3 && inventory[Number(item.productId)] > 0;
   const isWatched = watchedItems.includes(Number(item.productId));
+  const { t, currency } = useTranslation();
   
   return (
     <div className={`p-2.5 mb-2 animate-fade-in rounded-md ${
@@ -54,11 +56,11 @@ const SavedForLaterItem: React.FC<SavedForLaterItemProps> = ({
             </div>
             <div className="flex flex-col">
               <span className="text-xs text-muted-foreground">
-                {formatCurrency(item.price)}
+                {formatCurrency(item.price, currency)}
               </span>
               {lowStock && !isOutOfStock && (
                 <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
-                  Only {inventory[Number(item.productId)]} left
+                  {t('product.only')} {inventory[Number(item.productId)]} {t('product.left')}
                 </span>
               )}
             </div>

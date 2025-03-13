@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import CartDiscount from './CartDiscount';
 import { useLayout } from '@/contexts/LayoutContext';
 import { cn } from '@/lib/utils';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface CartSummaryProps {
   subtotal: number;
@@ -13,7 +14,7 @@ interface CartSummaryProps {
   discountAmount: number;
   availableItems: number;
   totalItems: number;
-  formatCurrency: (amount: number) => string;
+  formatCurrency: (amount: number, currency?: string) => string;
   onApplyDiscount: (code: string) => void;
   onRemoveDiscount: () => void;
   onCheckout: () => void;
@@ -34,6 +35,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
   const hasUnavailableItems = totalItems > availableItems;
   const { layout } = useLayout();
   const isCompact = layout === 'compact';
+  const { t, currency } = useTranslation();
   
   return (
     <div className="mt-6 border-t border-gray-200 dark:border-gray-800 pt-4">
@@ -44,8 +46,8 @@ const CartSummary: React.FC<CartSummaryProps> = ({
         <span className={cn(
           "text-muted-foreground",
           isCompact ? "text-xs" : "text-sm"
-        )}>Subtotal:</span>
-        <span className="font-medium">{formatCurrency(subtotal)}</span>
+        )}>{t('cart.subtotal')}:</span>
+        <span className="font-medium">{formatCurrency(subtotal, currency)}</span>
       </div>
       
       <CartDiscount
@@ -53,21 +55,21 @@ const CartSummary: React.FC<CartSummaryProps> = ({
         onApplyDiscount={onApplyDiscount}
         onRemoveDiscount={onRemoveDiscount}
         discountAmount={discountAmount}
-        formatCurrency={formatCurrency}
+        formatCurrency={(amount) => formatCurrency(amount, currency)}
       />
       
       <div className={cn(
         "flex justify-between items-center mt-4 pt-2 border-t border-gray-200 dark:border-gray-800",
         isCompact ? "text-sm" : ""
       )}>
-        <span className="font-medium">Total:</span>
+        <span className="font-medium">{t('cart.total')}:</span>
         <div className={cn(
           `bg-primary/5 rounded-lg p-2 font-bold ${
             appliedDiscount ? 'text-green-600 dark:text-green-400' : ''
           }`,
           isCompact ? "text-base" : "text-lg"
         )}>
-          {formatCurrency(finalTotal)}
+          {formatCurrency(finalTotal, currency)}
         </div>
       </div>
       
@@ -77,7 +79,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
           isCompact ? "text-xs" : "text-sm"
         )}>
           <p>
-            {totalItems - availableItems} {totalItems - availableItems === 1 ? 'item' : 'items'} in your cart {totalItems - availableItems === 1 ? 'is' : 'are'} out of stock and will not be included in checkout.
+            {totalItems - availableItems} {totalItems - availableItems === 1 ? t('cart.item') : t('cart.items')} {totalItems - availableItems === 1 ? t('cart.is') : t('cart.are')} {t('cart.out_of_stock')}
           </p>
         </div>
       )}
@@ -93,7 +95,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
       >
         <CreditCard className={cn("h-5 w-5", isCompact ? "h-4 w-4" : "")} />
         <span className="font-medium">
-          Checkout{availableItems > 0 ? ` (${availableItems} ${availableItems === 1 ? 'item' : 'items'})` : ''}
+          {t('cart.checkout')}{availableItems > 0 ? ` (${availableItems} ${availableItems === 1 ? t('cart.item') : t('cart.items')})` : ''}
         </span>
       </Button>
     </div>

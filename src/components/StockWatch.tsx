@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Product } from '@/components/product/types';
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface StockWatchProps {
   items: Product[];
@@ -22,6 +23,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
 }) => {
   const { toast } = useToast();
   const [emailNotifications, setEmailNotifications] = useState(true);
+  const { currency } = useTranslation();
 
   const toggleEmailNotifications = () => {
     const newState = !emailNotifications;
@@ -95,7 +97,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
                 <div className="flex items-start">
                   <div className="flex-1">
                     <h4 className="font-medium text-sm">{product.name}</h4>
-                    <p className="text-sm text-muted-foreground">{formatCurrency(product.price)}</p>
+                    <p className="text-sm text-muted-foreground">{formatCurrency(product.price, currency)}</p>
                     
                     {isInStock && (
                       <div className="text-xs font-medium text-green-600 dark:text-green-400 mt-1">

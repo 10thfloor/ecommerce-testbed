@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Product, ProductSize } from './types';
 import { Diamond, ShoppingCart, Clock } from 'lucide-react';
@@ -6,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { formatCurrency } from '@/utils/cartUtils';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ProductDropBannerProps {
   products: Product[];
@@ -14,6 +16,7 @@ interface ProductDropBannerProps {
 
 const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddToCart }) => {
   const { toast } = useToast();
+  const { currency } = useTranslation();
   const [selectedSizes, setSelectedSizes] = useState<Record<number, ProductSize['name'] | undefined>>({});
   
   // Only get products that are part of the BEAMS collection (collectionId: 1)
@@ -112,7 +115,7 @@ const ProductDropBanner: React.FC<ProductDropBannerProps> = ({ products, onAddTo
                 </div>
                 
                 <div className="flex items-center justify-between mt-auto">
-                  <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
+                  <span className="font-bold text-sm">{formatCurrency(product.price, currency)}</span>
                   
                   <Button
                     size="sm"

@@ -8,6 +8,7 @@ import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
 import { categories } from './categoryData';
 import { Badge } from '../ui/badge';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface ProductCardProps {
   product: Product;
@@ -42,6 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [selectedSize, setSelectedSize] = useState<ProductSize['name'] | undefined>();
   const { toast } = useToast();
+  const { currency } = useTranslation();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -135,7 +137,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         
         <div className="mt-auto">
           <div className="flex justify-between items-center mb-2">
-            <span className="font-bold text-sm">{formatCurrency(product.price)}</span>
+            <span className="font-bold text-sm">{formatCurrency(product.price, currency)}</span>
             <div className="flex space-x-2">
               {onSaveForLater && (
                 <button 

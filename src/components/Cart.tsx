@@ -89,8 +89,8 @@ const Cart: React.FC<CartProps> = ({
   const handleCheckout = () => {
     if (availableItems.length === 0) {
       toast({
-        title: "No Available Items",
-        description: "Your cart only contains out-of-stock items. Please add available items before checkout.",
+        title: t('cart.no_available_items'),
+        description: t('cart.no_available_items_description'),
         variant: "destructive",
       });
       return;
@@ -108,8 +108,8 @@ const Cart: React.FC<CartProps> = ({
     }
     
     toast({
-      title: "Order Completed",
-      description: `Processed ${totalQuantity} ${totalQuantity === 1 ? t('orders.item') : t('orders.items')} for ${formatCurrency(availableFinalTotal, currency)}`,
+      title: t('cart.order_completed'),
+      description: `${t('cart.processed')} ${totalQuantity} ${totalQuantity === 1 ? t('orders.item') : t('orders.items')} ${t('cart.for')} ${formatCurrency(availableFinalTotal, currency)}`,
     });
   };
   
