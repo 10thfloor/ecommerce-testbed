@@ -1,4 +1,3 @@
-
 import { Language } from '@/contexts/LanguageContext';
 
 interface TranslationObject {
@@ -125,5 +124,12 @@ export const productTranslations: TranslationObject = {
     en: 'are',
     fr: 'sont',
     ja: 'は'
-  }
+  },
+  
+  // Limited edition related
+  'product.limitedEditionItems': {
+    en: 'Limited Edition Items',
+    fr: 'Articles en Édition Limitée',
+    ja: '限定版アイテム'
+  },
 };
