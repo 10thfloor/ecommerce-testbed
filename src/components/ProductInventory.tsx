@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { products, getLimitedEditionProducts } from './product/productData';
@@ -8,6 +7,8 @@ import ProductInventoryHeader from './product/ProductInventoryHeader';
 import ProductPromotions from './product/ProductPromotions';
 import ProductFilterSection from './product/ProductFilterSection';
 import ProductResultSection from './product/ProductResultSection';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getLocalizedDescription } from '@/utils/productUtils';
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
@@ -23,6 +24,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   onSaveForLater
 }) => {
   const { toast } = useToast();
+  const { language } = useLanguage();
   const [notifiedItems, setNotifiedItems] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
@@ -75,14 +77,13 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(product => 
         product.name.toLowerCase().includes(query) || 
-        product.description.toLowerCase().includes(query)
+        getLocalizedDescription(product.description, language).toLowerCase().includes(query)
       );
     }
     
     return filtered;
-  }, [searchQuery, selectedCategories, showLimitedEditionOnly]);
+  }, [searchQuery, selectedCategories, showLimitedEditionOnly, language]);
 
-  // Get limited edition products for the Product Drop banner
   const limitedEditionProducts = useMemo(() => {
     return getLimitedEditionProducts();
   }, []);
