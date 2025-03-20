@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowRight, Mail, AtSign, LockKeyhole } from 'lucide-react';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -31,85 +31,176 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
-          <CardDescription>
-            Sign in to your account or create a new one
-          </CardDescription>
-        </CardHeader>
-        <Tabs defaultValue="login">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
-          </TabsList>
-          <TabsContent value="login">
-            <form onSubmit={handleLogin}>
-              <CardContent className="space-y-4 pt-4">
+    <div className="flex flex-col md:flex-row min-h-screen">
+      {/* Left panel */}
+      <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center bg-white">
+        <div className="max-w-md mx-auto w-full">
+          <div className="mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Welcome</h2>
+            <p className="text-gray-500">
+              Sign in to your account or create a new one to start shopping
+            </p>
+          </div>
+          
+          <Tabs defaultValue="login" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-8">
+              <TabsTrigger value="login">Login</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="login">
+              <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input 
-                    id="email"
-                    type="email" 
-                    placeholder="email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      id="email"
+                      type="email" 
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
                 </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input 
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="relative">
+                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      id="password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
                 </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full" disabled={loading}>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full flex items-center justify-center bg-primary hover:bg-primary/90" 
+                  disabled={loading}
+                >
                   {loading ? "Signing in..." : "Sign In"}
+                  {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
                 </Button>
-              </CardFooter>
-            </form>
-          </TabsContent>
-          <TabsContent value="signup">
-            <form onSubmit={handleSignUp}>
-              <CardContent className="space-y-4 pt-4">
+                
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                  </div>
+                </div>
+                
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <AtSign className="mr-2 h-4 w-4" />
+                  Sign in with Google
+                </Button>
+              </form>
+            </TabsContent>
+            
+            <TabsContent value="signup">
+              <form onSubmit={handleSignUp} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
-                  <Input 
-                    id="signup-email"
-                    type="email" 
-                    placeholder="email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      id="signup-email"
+                      type="email" 
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
                 </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
-                  <Input 
-                    id="signup-password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="relative">
+                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input 
+                      id="signup-password"
+                      type="password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10"
+                      required
+                    />
+                  </div>
                 </div>
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Creating account..." : "Create Account"}
+                
+                <div className="pt-2">
+                  <p className="text-sm text-gray-500 mb-6">
+                    Create an account to start shopping and manage your orders
+                  </p>
+                  
+                  <Button 
+                    type="submit" 
+                    className="w-full flex items-center justify-center bg-primary hover:bg-primary/90" 
+                    disabled={loading}
+                  >
+                    {loading ? "Creating account..." : "Create Account"}
+                    {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+                  </Button>
+                </div>
+                
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-white px-2 text-gray-500">Or sign up with</span>
+                  </div>
+                </div>
+                
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="w-full"
+                >
+                  <AtSign className="mr-2 h-4 w-4" />
+                  Sign up with Google
                 </Button>
-              </CardFooter>
-            </form>
-          </TabsContent>
-        </Tabs>
-      </Card>
+              </form>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+      
+      {/* Right panel with gradient background and design */}
+      <div className="hidden md:block w-1/2 bg-gradient-to-br from-purple-400 via-purple-600 to-indigo-700 p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          {/* Circular patterns */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-300 opacity-30"></div>
+          <div className="absolute top-1/3 left-1/3 w-80 h-80 rounded-full bg-purple-400 opacity-20"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full bg-indigo-500 opacity-20"></div>
+        </div>
+        
+        <div className="relative h-full flex flex-col justify-center items-center text-white">
+          <div className="text-center max-w-md">
+            <h2 className="text-4xl font-bold mb-6">Shop with confidence</h2>
+            <p className="text-lg opacity-90">
+              Browse our products, save items for later, and enjoy a seamless shopping experience.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
