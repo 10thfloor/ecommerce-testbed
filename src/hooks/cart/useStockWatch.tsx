@@ -14,6 +14,7 @@ export const useStockWatch = ({
 }: UseStockWatchProps) => {
   const { toast } = useToast();
   const [stockWatchItems, setStockWatchItems] = useState<Product[]>(initialStockWatchItems);
+  const [emailNotifications, setEmailNotifications] = useState<boolean>(true);
 
   const handleWatchItem = (product: Product) => {
     const isAlreadyWatching = stockWatchItems.some(item => item.id === product.id);
@@ -84,18 +85,22 @@ export const useStockWatch = ({
           )
         );
         
-        toast({
-          title: "Item Back in Stock!",
-          description: `${item.name} is now available to purchase.`,
-          variant: "default",
-        });
+        if (emailNotifications) {
+          toast({
+            title: "Item Back in Stock!",
+            description: `${item.name} is now available to purchase.`,
+            variant: "default",
+          });
+        }
       }
     });
   };
 
   return {
     stockWatchItems,
+    emailNotifications,
     setStockWatchItems,
+    setEmailNotifications,
     handleWatchItem,
     handleWatchProductId,
     handleRemoveFromWatch,

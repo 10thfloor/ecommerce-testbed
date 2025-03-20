@@ -302,18 +302,21 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          notifications_enabled: boolean
           product_id: number
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          notifications_enabled?: boolean
           product_id: number
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          notifications_enabled?: boolean
           product_id?: number
           user_id?: string
         }
@@ -324,7 +327,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_stock_notifications: {
+        Args: {
+          user_uuid: string
+        }
+        Returns: {
+          product_id: number
+          notifications_enabled: boolean
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

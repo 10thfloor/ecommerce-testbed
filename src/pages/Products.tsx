@@ -23,6 +23,8 @@ const Products = () => {
     setSavedForLaterItems,
     setStockWatchItems,
     setOrders,
+    emailNotifications,
+    setEmailNotifications,
     handleAddToCart,
     handleUpdateQuantity,
     handleRemoveItem,
@@ -50,7 +52,7 @@ const Products = () => {
   });
 
   // Integrate with Supabase
-  const { isSyncing } = useSupabaseSync({
+  const { isSyncing, updateNotificationPreferences } = useSupabaseSync({
     cartItems,
     savedCarts,
     savedForLaterItems,
@@ -60,8 +62,16 @@ const Products = () => {
     setSavedCarts,
     setSavedForLaterItems,
     setStockWatchItems,
-    setOrders
+    setOrders,
+    setEmailNotifications
   });
+
+  // Watch for changes to emailNotifications and sync with Supabase
+  React.useEffect(() => {
+    if (user && emailNotifications !== undefined) {
+      updateNotificationPreferences(emailNotifications);
+    }
+  }, [emailNotifications, user]);
 
   // Get watched product IDs
   const watchedProductIds = stockWatchItems.map(item => item.id);
@@ -77,6 +87,7 @@ const Products = () => {
         watchedProductIds={watchedProductIds}
         inventory={inventory}
         orders={orders}
+        emailNotifications={emailNotifications}
         onAddToCart={handleAddToCart}
         onSaveCart={handleSaveCart}
         onRemoveItem={handleRemoveItem}
@@ -95,6 +106,7 @@ const Products = () => {
         hasCartHistory={hasCartHistory}
         onSaveProductForLater={handleSaveProductForLater}
         onCheckout={handleCheckout}
+        onToggleEmailNotifications={setEmailNotifications}
       />
     </ShoppingLayout>
   );

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { 
   CartItem,
@@ -19,16 +18,16 @@ interface UseCartManagementProps {
   initialCartItems: CartItem[];
   initialSavedCarts: SavedCart[];
   initialSavedForLaterItems: CartItem[];
+  initialStockWatchItems: Product[];
   initialInventory: Record<number, number>;
-  initialStockWatchItems?: Product[];
 }
 
 export const useCartManagement = ({
-  initialCartItems,
-  initialSavedCarts,
-  initialSavedForLaterItems,
-  initialInventory,
-  initialStockWatchItems = []
+  initialCartItems = [],
+  initialSavedCarts = [],
+  initialSavedForLaterItems = [],
+  initialStockWatchItems = [],
+  initialInventory = {}
 }: UseCartManagementProps) => {
   // Use cart history hook
   const {
@@ -72,10 +71,19 @@ export const useCartManagement = ({
     saveToHistory
   });
 
-  // Use stock watch hook
-  const stockWatch = useStockWatch({
+  // Stock watch management
+  const { 
+    stockWatchItems, 
+    emailNotifications,
+    setStockWatchItems,
+    setEmailNotifications,
+    handleWatchItem, 
+    handleWatchProductId, 
+    handleRemoveFromWatch,
+    updateInventory
+  } = useStockWatch({
     initialStockWatchItems,
-    inventory: inventoryManagement.inventory
+    inventory
   });
 
   // Use saved carts hook
@@ -122,16 +130,20 @@ export const useCartManagement = ({
     cartItems: cartOperations.cartItems,
     savedCarts: savedCarts.savedCarts,
     savedForLaterItems: savedForLater.savedForLaterItems,
-    stockWatchItems: stockWatch.stockWatchItems,
+    stockWatchItems: stockWatchItems,
+    emailNotifications,
+    setStockWatchItems,
+    setEmailNotifications,
+    handleWatchItem,
+    handleWatchProductId,
+    handleRemoveFromWatch,
     inventory: inventoryManagement.inventory,
     orders: orderHistory.orders,
-    // Expose setter methods for Supabase sync
     setCartItems: cartOperations.setCartItems,
     setSavedCarts: savedCarts.setSavedCarts,
     setSavedForLaterItems: savedForLater.setSavedForLaterItems,
     setStockWatchItems: stockWatch.setStockWatchItems,
     setOrders: orderHistory.setOrders,
-    // Action handlers
     handleAddToCart: cartOperations.handleAddToCart,
     handleUpdateQuantity: cartOperations.handleUpdateQuantity,
     handleRemoveItem: cartOperations.handleRemoveItem,

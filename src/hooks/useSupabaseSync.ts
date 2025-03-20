@@ -22,6 +22,7 @@ interface UseSupabaseSyncProps {
   setSavedForLaterItems: (items: CartItem[]) => void;
   setStockWatchItems: (items: Product[]) => void;
   setOrders: (orders: Order[]) => void;
+  setEmailNotifications?: (enabled: boolean) => void;
 }
 
 export const useSupabaseSync = ({
@@ -34,7 +35,8 @@ export const useSupabaseSync = ({
   setSavedCarts,
   setSavedForLaterItems,
   setStockWatchItems,
-  setOrders
+  setOrders,
+  setEmailNotifications
 }: UseSupabaseSyncProps) => {
   const { user } = useAuth();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -63,7 +65,8 @@ export const useSupabaseSync = ({
     stockWatchItems,
     isInitialLoad,
     isSyncing,
-    setStockWatchItems
+    setStockWatchItems,
+    setEmailNotifications
   });
   
   const savedCartsSync = useSavedCartsSync({
@@ -112,7 +115,14 @@ export const useSupabaseSync = ({
     loadUserData();
   }, [user]);
   
+  // Expose the updateNotificationPreferences function
+  const updateNotificationPreferences = async (enabled: boolean) => {
+    if (!user) return;
+    return await stockWatchSync.updateNotificationPreferences(user.id, enabled);
+  };
+  
   return {
-    isSyncing
+    isSyncing,
+    updateNotificationPreferences
   };
 };

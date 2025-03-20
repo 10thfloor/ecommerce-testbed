@@ -4,12 +4,18 @@ import { supabase } from '@/integrations/supabase/client';
 import { Product } from '@/components/product/types';
 import { useToast } from '@/hooks/use-toast';
 
+interface StockWatchItem {
+  product_id: number;
+  notifications_enabled: boolean;
+}
+
 interface UseStockWatchSyncProps {
   userId: string | undefined;
   stockWatchItems: Product[];
   isInitialLoad: boolean;
   isSyncing: boolean;
   setStockWatchItems: (items: Product[]) => void;
+  setEmailNotifications?: (enabled: boolean) => void;
 }
 
 export const useStockWatchSync = ({
@@ -17,7 +23,8 @@ export const useStockWatchSync = ({
   stockWatchItems,
   isInitialLoad,
   isSyncing,
-  setStockWatchItems
+  setStockWatchItems,
+  setEmailNotifications
 }: UseStockWatchSyncProps) => {
   const { toast } = useToast();
   
@@ -30,6 +37,11 @@ export const useStockWatchSync = ({
         .eq('user_id', userId);
       
       if (stockWatchError) throw stockWatchError;
+      
+      // Set global email notification state based on the first item's setting (all items have the same setting)
+      if (stockWatchData && stockWatchData.length > 0 && setEmailNotifications) {
+        setEmailNotifications(stockWatchData[0].notifications_enabled);
+      }
       
       // We need to convert stock watch data to Product objects using the product IDs
       if (stockWatchData && stockWatchData.length > 0) {
@@ -85,8 +97,8 @@ export const useStockWatchSync = ({
     }
   };
 
-  // Save stock watch items to Supabase
-  const saveStockWatchItems = async (userId: string, stockWatchItems: Product[]) => {
+  // Save stock watch items to Supabase with notification preferences
+  const saveStockWatchItems = async (userId: string, stockWatchItems: Product[], notificationsEnabled: boolean = true) => {
     try {
       // First delete all existing stock watch items
       const { error: deleteError } = await supabase
@@ -100,7 +112,8 @@ export const useStockWatchSync = ({
       if (stockWatchItems.length > 0) {
         const stockWatchToInsert = stockWatchItems.map(item => ({
           user_id: userId,
-          product_id: item.id
+          product_id: item.id,
+          notifications_enabled: notificationsEnabled
         }));
         
         const { error: insertError } = await supabase
@@ -120,19 +133,50 @@ export const useStockWatchSync = ({
       return false;
     }
   };
+  
+  // Update notification preferences
+  const updateNotificationPreferences = async (userId: string, enabled: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('stock_watch')
+        .update({ notifications_enabled: enabled })
+        .eq('user_id', userId);
+      
+      if (error) throw error;
+      return true;
+    } catch (error: any) {
+      console.error('Error updating notification preferences:', error);
+      toast({
+        title: "Update Error",
+        description: "Failed to update notification preferences. " + error.message,
+        variant: "destructive",
+      });
+      return false;
+    }
+  };
 
   // Sync stock watch items when they change
   useEffect(() => {
     if (!userId || isInitialLoad || isSyncing) return;
     
     const syncStockWatchItems = async () => {
-      await saveStockWatchItems(userId, stockWatchItems);
+      // Get current notification preferences before saving
+      const { data } = await supabase
+        .from('stock_watch')
+        .select('notifications_enabled')
+        .eq('user_id', userId)
+        .limit(1);
+      
+      const notificationsEnabled = data && data.length > 0 ? data[0].notifications_enabled : true;
+      
+      await saveStockWatchItems(userId, stockWatchItems, notificationsEnabled);
     };
     
     syncStockWatchItems();
   }, [stockWatchItems, userId, isInitialLoad, isSyncing]);
 
   return {
-    loadStockWatchItems
+    loadStockWatchItems,
+    updateNotificationPreferences
   };
 };

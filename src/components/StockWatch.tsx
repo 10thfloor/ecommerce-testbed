@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Plus, Mail } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,8 @@ import { Product } from '@/components/product/types';
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { useTranslation } from '@/hooks/useTranslation';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface StockWatchProps {
   items: Product[];
@@ -24,17 +26,71 @@ const StockWatch: React.FC<StockWatchProps> = ({
   const { toast } = useToast();
   const [emailNotifications, setEmailNotifications] = useState(true);
   const { t, currency } = useTranslation();
+  const { user } = useAuth();
 
-  const toggleEmailNotifications = () => {
+  // Load notification preferences when component mounts
+  useEffect(() => {
+    const loadNotificationPreferences = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('stock_watch')
+          .select('notifications_enabled')
+          .eq('user_id', user.id)
+          .limit(1);
+          
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          setEmailNotifications(data[0].notifications_enabled);
+        }
+      } catch (error) {
+        console.error('Error loading notification preferences:', error);
+      }
+    };
+    
+    loadNotificationPreferences();
+  }, [user]);
+
+  const toggleEmailNotifications = async () => {
     const newState = !emailNotifications;
     setEmailNotifications(newState);
     
-    toast({
-      title: newState ? "Email Notifications On" : "Email Notifications Off",
-      description: newState 
-        ? "You'll receive emails when watched items are back in stock." 
-        : "You won't receive emails for stock updates.",
-    });
+    // Update the notification preference in the database
+    if (user) {
+      try {
+        const { error } = await supabase
+          .from('stock_watch')
+          .update({ notifications_enabled: newState })
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+        
+        toast({
+          title: newState ? "Email Notifications On" : "Email Notifications Off",
+          description: newState 
+            ? "You'll receive emails when watched items are back in stock." 
+            : "You won't receive emails for stock updates.",
+        });
+      } catch (error) {
+        console.error('Error updating notification preferences:', error);
+        toast({
+          title: "Update Error",
+          description: "Failed to update notification preferences.",
+          variant: "destructive",
+        });
+        // Revert the state if the update failed
+        setEmailNotifications(!newState);
+      }
+    } else {
+      toast({
+        title: newState ? "Email Notifications On" : "Email Notifications Off",
+        description: newState 
+          ? "You'll receive emails when watched items are back in stock." 
+          : "You won't receive emails for stock updates.",
+      });
+    }
   };
 
   if (items.length === 0) {
