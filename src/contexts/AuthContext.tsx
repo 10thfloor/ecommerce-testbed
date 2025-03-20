@@ -23,21 +23,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const setupAuth = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setUser(data.session?.user || null);
-      
-      const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
-        setSession(session);
-        setUser(session?.user || null);
+      try {
+        setLoading(true);
+        console.log('Auth: Setting up auth state listener');
+        
+        // First set up the auth state change listener
+        const { data: authListener } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+          console.log('Auth: Auth state changed', { event, user: newSession?.user?.email });
+          setSession(newSession);
+          setUser(newSession?.user || null);
+          setLoading(false);
+        });
+        
+        // Then check for existing session
+        const { data } = await supabase.auth.getSession();
+        console.log('Auth: Initial session check', { hasSession: !!data.session, user: data.session?.user?.email });
+        setSession(data.session);
+        setUser(data.session?.user || null);
         setLoading(false);
-      });
-      
-      setLoading(false);
-      
-      return () => {
-        authListener.subscription.unsubscribe();
-      };
+        
+        return () => {
+          console.log('Auth: Cleaning up auth listener');
+          authListener.subscription.unsubscribe();
+        };
+      } catch (error) {
+        console.error('Auth setup error:', error);
+        setLoading(false);
+      }
     };
     
     setupAuth();
@@ -46,6 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (email: string, password: string) => {
     try {
       setLoading(true);
+      console.log('Auth: Attempting signup for', email);
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -53,11 +66,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (error) throw error;
       
+      console.log('Auth: Signup successful', { user: data.user?.email });
       toast({
         title: "Account created",
         description: "Please check your email for the confirmation link."
       });
     } catch (error: any) {
+      console.error('Auth: Signup error', error);
       toast({
         title: "Error creating account",
         description: error.message,
@@ -72,6 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     try {
       setLoading(true);
+      console.log('Auth: Attempting signin for', email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -79,11 +95,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (error) throw error;
       
+      console.log('Auth: Signin successful', { user: data.user?.email });
       toast({
         title: "Welcome back!",
         description: "You have been successfully signed in."
       });
     } catch (error: any) {
+      console.error('Auth: Signin error', error);
       toast({
         title: "Error signing in",
         description: error.message,
@@ -98,14 +116,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       setLoading(true);
+      console.log('Auth: Attempting signout');
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
+      console.log('Auth: Signout successful');
       toast({
         title: "Signed out",
         description: "You have been successfully signed out."
       });
     } catch (error: any) {
+      console.error('Auth: Signout error', error);
       toast({
         title: "Error signing out",
         description: error.message,

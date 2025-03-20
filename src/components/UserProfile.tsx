@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, LogOut, LogIn, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,6 +15,11 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, className }) => {
   const { user, signOut, loading } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'login' | 'signup'>('login');
+  
+  // Add useEffect for debugging
+  useEffect(() => {
+    console.log('UserProfile - Auth state changed:', { user, loading });
+  }, [user, loading]);
   
   const handleOpenLogin = () => {
     setAuthModalTab('login');
