@@ -1,3 +1,4 @@
+
 import React from 'react';
 import UserProfile from '@/components/UserProfile';
 import Cart from '@/components/Cart';
@@ -22,6 +23,7 @@ interface ShoppingGridProps {
   watchedProductIds?: number[]; 
   inventory?: Record<number, number>;
   orders?: Order[];
+  emailNotifications?: boolean;
   onAddToCart: (productId: number, price: number) => void;
   onSaveCart: () => void;
   onRemoveItem: (id: string | number) => void;
@@ -40,6 +42,7 @@ interface ShoppingGridProps {
   hasCartHistory?: boolean;
   onSaveProductForLater?: (product: Product) => void;
   onCheckout?: (items: CartItem[], total: number) => void;
+  onToggleEmailNotifications?: (enabled: boolean) => void;
 }
 
 const ShoppingGrid: React.FC<ShoppingGridProps> = ({
@@ -51,6 +54,7 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   watchedProductIds = [],
   inventory = {},
   orders = [],
+  emailNotifications,
   onAddToCart,
   onSaveCart,
   onRemoveItem,
@@ -68,7 +72,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
   onUndoCart,
   hasCartHistory = false,
   onSaveProductForLater,
-  onCheckout
+  onCheckout,
+  onToggleEmailNotifications
 }) => {
   const watchedItemIds = stockWatchItems.map(item => item.id);
   const { layout } = useLayout();
@@ -159,6 +164,8 @@ const ShoppingGrid: React.FC<ShoppingGridProps> = ({
               onRemoveFromWatch={onRemoveFromWatch}
               onAddToCart={onAddToCart}
               inventory={inventory}
+              emailNotifications={emailNotifications}
+              onToggleEmailNotifications={onToggleEmailNotifications}
             />
           </div>
           

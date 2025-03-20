@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { 
   CartItem,
@@ -39,6 +40,12 @@ export const useCartManagement = ({
     setInventory: (inv) => inventoryManagement.setInventory(inv)
   });
 
+  // Stock watch management
+  const stockWatch = useStockWatch({
+    initialStockWatchItems,
+    inventory: initialInventory
+  });
+
   // Use inventory management hook
   const inventoryManagement = useInventoryManagement({
     initialInventory,
@@ -69,21 +76,6 @@ export const useCartManagement = ({
     setCartItems: cartOperations.setCartItems,
     setInventory: inventoryManagement.setInventory,
     saveToHistory
-  });
-
-  // Stock watch management
-  const { 
-    stockWatchItems, 
-    emailNotifications,
-    setStockWatchItems,
-    setEmailNotifications,
-    handleWatchItem, 
-    handleWatchProductId, 
-    handleRemoveFromWatch,
-    updateInventory
-  } = useStockWatch({
-    initialStockWatchItems,
-    inventory
   });
 
   // Use saved carts hook
@@ -130,19 +122,15 @@ export const useCartManagement = ({
     cartItems: cartOperations.cartItems,
     savedCarts: savedCarts.savedCarts,
     savedForLaterItems: savedForLater.savedForLaterItems,
-    stockWatchItems: stockWatchItems,
-    emailNotifications,
-    setStockWatchItems,
-    setEmailNotifications,
-    handleWatchItem,
-    handleWatchProductId,
-    handleRemoveFromWatch,
+    stockWatchItems: stockWatch.stockWatchItems,
+    emailNotifications: stockWatch.emailNotifications,
     inventory: inventoryManagement.inventory,
     orders: orderHistory.orders,
     setCartItems: cartOperations.setCartItems,
     setSavedCarts: savedCarts.setSavedCarts,
     setSavedForLaterItems: savedForLater.setSavedForLaterItems,
     setStockWatchItems: stockWatch.setStockWatchItems,
+    setEmailNotifications: stockWatch.setEmailNotifications,
     setOrders: orderHistory.setOrders,
     handleAddToCart: cartOperations.handleAddToCart,
     handleUpdateQuantity: cartOperations.handleUpdateQuantity,
@@ -156,7 +144,7 @@ export const useCartManagement = ({
     handleRemoveSavedItem: savedForLater.handleRemoveSavedItem,
     handleEmailCurrentCart: cartOperations.handleEmailCurrentCart,
     handleWatchItem: stockWatch.handleWatchItem,
-    handleWatchProductId: productOps.handleWatchProductId,
+    handleWatchProductId: stockWatch.handleWatchProductId,
     handleRemoveFromWatch: stockWatch.handleRemoveFromWatch,
     simulateInventoryChange: inventoryManagement.simulateInventoryChange,
     undoCartLoad,

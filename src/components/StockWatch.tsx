@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Plus, Mail } from 'lucide-react';
 import { formatCurrency } from '@/utils/cartUtils';
@@ -15,21 +14,33 @@ interface StockWatchProps {
   onRemoveFromWatch: (productId: number) => void;
   onAddToCart: (productId: number, price: number) => void;
   inventory: Record<number, number>;
+  emailNotifications?: boolean;
+  onToggleEmailNotifications?: (enabled: boolean) => void;
 }
 
 const StockWatch: React.FC<StockWatchProps> = ({ 
   items, 
   onRemoveFromWatch, 
   onAddToCart,
-  inventory
+  inventory,
+  emailNotifications: propEmailNotifications,
+  onToggleEmailNotifications
 }) => {
   const { toast } = useToast();
   const [emailNotifications, setEmailNotifications] = useState(true);
   const { t, currency } = useTranslation();
   const { user } = useAuth();
 
+  // Use prop value if provided, otherwise use local state
+  const notificationsEnabled = propEmailNotifications !== undefined 
+    ? propEmailNotifications 
+    : emailNotifications;
+
   // Load notification preferences when component mounts
   useEffect(() => {
+    // If we're receiving notifications as a prop, use that instead
+    if (propEmailNotifications !== undefined) return;
+    
     const loadNotificationPreferences = async () => {
       if (!user) return;
       
@@ -51,10 +62,18 @@ const StockWatch: React.FC<StockWatchProps> = ({
     };
     
     loadNotificationPreferences();
-  }, [user]);
+  }, [user, propEmailNotifications]);
 
   const toggleEmailNotifications = async () => {
-    const newState = !emailNotifications;
+    const newState = !notificationsEnabled;
+    
+    // If we have a prop handler, use that
+    if (onToggleEmailNotifications) {
+      onToggleEmailNotifications(newState);
+      return;
+    }
+    
+    // Otherwise use local state management
     setEmailNotifications(newState);
     
     // Update the notification preference in the database
@@ -128,10 +147,10 @@ const StockWatch: React.FC<StockWatchProps> = ({
           <Mail className="h-3 w-3 text-primary" />
           <span className="text-xs font-medium mr-1">{t('stock.notify')}</span>
           <Switch
-            checked={emailNotifications}
+            checked={notificationsEnabled}
             onCheckedChange={toggleEmailNotifications}
             className="h-4 w-7 data-[state=checked]:bg-primary"
-            aria-label={emailNotifications ? t('stock.turnOffNotifications') : t('stock.turnOnNotifications')}
+            aria-label={notificationsEnabled ? t('stock.turnOffNotifications') : t('stock.turnOnNotifications')}
           />
         </div>
       </div>
