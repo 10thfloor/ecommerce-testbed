@@ -2,6 +2,7 @@
 import React from 'react';
 import ProductsGrid from './ProductsGrid';
 import { Product } from './types';
+import { useProductAttributes } from '@/hooks/useProducts';
 
 interface ProductResultSectionProps {
   filteredProducts: Product[];

@@ -10,6 +10,7 @@ import { getProductBadge } from './utils/productBadgeUtils';
 import ProductBadge from './ProductBadge';
 import ProductHeader from './ProductHeader';
 import ProductActions from './ProductActions';
+import { useProductAttributes } from '@/hooks/useProducts';
 
 interface ProductCardProps {
   product: Product;
@@ -29,6 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedSize, setSelectedSize] = useState<ProductSize['name'] | undefined>();
   const { toast } = useToast();
   const { language, t } = useTranslation();
+  const { data: productAttributes } = useProductAttributes();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -47,9 +49,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setSelectedSize(size);
   };
 
-  // Only show product badges for products with ID 1, 3, 7 (to showcase the feature without overwhelming the UI)
-  const showBadge = [1, 3, 7].includes(product.id);
-  const badge = showBadge ? getProductBadge(product.id) : null;
+  // Get badge from product attributes in the database
+  const badge = getProductBadge(product.id, productAttributes);
 
   // Get category name
   const category = categories.find(c => c.id === product.categoryId);
@@ -61,7 +62,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const localizedDescription = getLocalizedDescription(product.description, language);
 
   // Determine if we should add the pulsing border
-  // Using CSS variables to animate only the border opacity
   const borderClass = badge ? `border-2 ${badge.borderColor}` : '';
   const animationClass = badge ? 'product-card-pulse' : '';
 

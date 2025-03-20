@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Product, ProductSize, Category, Collection } from "@/components/product/types";
 
@@ -34,6 +33,31 @@ export async function fetchProducts(): Promise<Product[]> {
       inventory: size.inventory
     }))
   }));
+}
+
+export async function fetchProductAttributes() {
+  const { data, error } = await supabase
+    .from('product_attributes')
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching product attributes:', error);
+    throw error;
+  }
+  
+  // Organize attributes by product_id for easier lookup
+  const attributesByProduct = data.reduce((acc: Record<number, any[]>, item) => {
+    if (!acc[item.product_id]) {
+      acc[item.product_id] = [];
+    }
+    acc[item.product_id].push({
+      type: item.attribute_type,
+      value: item.attribute_value
+    });
+    return acc;
+  }, {});
+  
+  return attributesByProduct;
 }
 
 export async function fetchCategories(): Promise<Category[]> {

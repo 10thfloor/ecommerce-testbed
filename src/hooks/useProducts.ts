@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { 
   fetchProducts, 
@@ -6,7 +5,8 @@ import {
   fetchCollections,
   getProductsByCategory,
   getLimitedEditionProducts,
-  getProductsByCollection
+  getProductsByCollection,
+  fetchProductAttributes
 } from "@/services/productsService";
 import { Product, Category, Collection } from "@/components/product/types";
 
@@ -14,6 +14,13 @@ export function useProducts() {
   return useQuery({
     queryKey: ['products'],
     queryFn: fetchProducts
+  });
+}
+
+export function useProductAttributes() {
+  return useQuery({
+    queryKey: ['product-attributes'],
+    queryFn: fetchProductAttributes
   });
 }
 

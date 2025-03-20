@@ -96,6 +96,38 @@ export type Database = {
         }
         Relationships: []
       }
+      product_attributes: {
+        Row: {
+          attribute_type: string
+          attribute_value: string
+          created_at: string
+          id: number
+          product_id: number
+        }
+        Insert: {
+          attribute_type: string
+          attribute_value: string
+          created_at?: string
+          id?: number
+          product_id: number
+        }
+        Update: {
+          attribute_type?: string
+          attribute_value?: string
+          created_at?: string
+          id?: number
+          product_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_attributes_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_sizes: {
         Row: {
           id: number
