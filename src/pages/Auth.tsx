@@ -31,13 +31,14 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-background to-secondary/50">
       {/* Left panel */}
-      <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center bg-white">
-        <div className="max-w-md mx-auto w-full">
+      <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
+        <div className="max-w-md mx-auto w-full card-glass p-8 rounded-xl backdrop-blur-sm">
           <div className="mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Welcome</h2>
-            <p className="text-gray-500">
+            <h2 className="text-3xl md:text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">Welcome</h2>
+            <div className="h-1 w-16 bg-primary rounded animate-pulse-subtle mb-4"></div>
+            <p className="text-muted-foreground">
               Sign in to your account or create a new one to start shopping
             </p>
           </div>
@@ -53,7 +54,7 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input 
                       id="email"
                       type="email" 
@@ -69,7 +70,7 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
-                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input 
                       id="password"
                       type="password"
@@ -84,7 +85,7 @@ const Auth = () => {
                 
                 <Button 
                   type="submit" 
-                  className="w-full flex items-center justify-center bg-primary hover:bg-primary/90" 
+                  className="w-full flex items-center justify-center" 
                   disabled={loading}
                 >
                   {loading ? "Signing in..." : "Sign In"}
@@ -93,10 +94,10 @@ const Auth = () => {
                 
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
+                    <div className="w-full border-t border-border"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-gray-500">Or continue with</span>
+                    <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
                   </div>
                 </div>
                 
@@ -116,7 +117,7 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input 
                       id="signup-email"
                       type="email" 
@@ -132,7 +133,7 @@ const Auth = () => {
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
-                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input 
                       id="signup-password"
                       type="password"
@@ -146,13 +147,13 @@ const Auth = () => {
                 </div>
                 
                 <div className="pt-2">
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-muted-foreground mb-6">
                     Create an account to start shopping and manage your orders
                   </p>
                   
                   <Button 
                     type="submit" 
-                    className="w-full flex items-center justify-center bg-primary hover:bg-primary/90" 
+                    className="w-full flex items-center justify-center" 
                     disabled={loading}
                   >
                     {loading ? "Creating account..." : "Create Account"}
@@ -162,10 +163,10 @@ const Auth = () => {
                 
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-200"></div>
+                    <div className="w-full border-t border-border"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white px-2 text-gray-500">Or sign up with</span>
+                    <span className="bg-card px-2 text-muted-foreground">Or sign up with</span>
                   </div>
                 </div>
                 
