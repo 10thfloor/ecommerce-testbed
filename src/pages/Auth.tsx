@@ -184,22 +184,13 @@ const Auth = () => {
         </div>
       </div>
       
-      {/* Right panel with gradient background and design */}
-      <div className="hidden md:block w-1/2 bg-gradient-to-br from-purple-400 via-purple-600 to-indigo-700 p-12 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          {/* Circular patterns */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-purple-300 opacity-30"></div>
-          <div className="absolute top-1/3 left-1/3 w-80 h-80 rounded-full bg-purple-400 opacity-20"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full bg-indigo-500 opacity-20"></div>
-        </div>
-        
-        <div className="relative h-full flex flex-col justify-center items-center text-white">
-          <div className="text-center max-w-md">
-            <h2 className="text-4xl font-bold mb-6">Shop with confidence</h2>
-            <p className="text-lg opacity-90">
-              Browse our products, save items for later, and enjoy a seamless shopping experience.
-            </p>
-          </div>
+      {/* Right panel with darker gradient background and no text */}
+      <div className="hidden md:block w-1/2 bg-gradient-to-br from-[#1A1F2C] via-[#221F26] to-[#403E43] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          {/* Subtle circular patterns */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/10 mix-blend-overlay"></div>
+          <div className="absolute top-1/3 left-1/3 w-80 h-80 rounded-full bg-accent/5 mix-blend-overlay"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full bg-primary/5 mix-blend-overlay"></div>
         </div>
       </div>
     </div>
