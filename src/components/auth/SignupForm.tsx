@@ -5,20 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { ArrowRight, Mail, LockKeyhole, AtSign } from 'lucide-react';
 
-interface SignupFormProps {
-  onSuccess?: () => void;
-}
-
-const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
+const SignupForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const { signUp } = useAuth();
+  const { signUp, loading } = useAuth();
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !password || !confirmPassword) {
@@ -48,58 +44,90 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
       return;
     }
     
-    try {
-      setIsLoading(true);
-      await signUp(email, password);
-      if (onSuccess) onSuccess();
-    } catch (error) {
-      // Error is already handled in the auth context
-      console.error('Signup error:', error);
-    } finally {
-      setIsLoading(false);
-    }
+    await signUp(email, password);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSignUp} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <Label htmlFor="signup-email">Email</Label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            id="signup-email"
+            type="email" 
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="pl-10"
+            required
+          />
+        </div>
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <Label htmlFor="signup-password">Password</Label>
+        <div className="relative">
+          <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            id="signup-password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="pl-10"
+            required
+          />
+        </div>
       </div>
       
       <div className="space-y-2">
         <Label htmlFor="confirm-password">Confirm Password</Label>
-        <Input
-          id="confirm-password"
-          type="password"
-          placeholder="••••••••"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
+        <div className="relative">
+          <LockKeyhole className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            id="confirm-password"
+            type="password"
+            placeholder="••••••••"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="pl-10"
+            required
+          />
+        </div>
       </div>
       
-      <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Creating account..." : "Create Account"}
+      <div className="pt-2">
+        <p className="text-sm text-muted-foreground mb-6">
+          Create an account to start shopping and manage your orders
+        </p>
+        
+        <Button 
+          type="submit" 
+          className="w-full flex items-center justify-center" 
+          disabled={loading}
+        >
+          {loading ? "Creating account..." : "Create Account"}
+          {!loading && <ArrowRight className="ml-2 h-4 w-4" />}
+        </Button>
+      </div>
+      
+      <div className="relative my-6">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border"></div>
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-card px-2 text-muted-foreground">Or sign up with</span>
+        </div>
+      </div>
+      
+      <Button 
+        type="button" 
+        variant="outline" 
+        className="w-full"
+      >
+        <AtSign className="mr-2 h-4 w-4" />
+        Sign up with Google
       </Button>
     </form>
   );
