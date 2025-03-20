@@ -1,22 +1,36 @@
 
-import { useMemo } from 'react';
-
-const productNameMap: Record<number, string> = {
-  1: "Alpha SV Jacket",
-  2: "Beta AR Pants",
-  3: "Atom LT Hoody",
-  4: "Cerium Down Vest",
-  5: "Gamma MX Softshell",
-  6: "Zeta SL Rain Jacket",
-  7: "Covert Fleece",
-  8: "BEAMS Alpine Insulated Jacket",
-  9: "BEAMS Arctic Parka",
-  10: "BEAMS Mountain Hat"
-};
+import { useMemo, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export function useProductName(productId: string | number): string {
-  return useMemo(() => {
-    const id = typeof productId === 'string' ? parseInt(productId, 10) : productId;
-    return productNameMap[id] || `Product ${productId}`;
+  const [productName, setProductName] = useState<string>(`Product ${productId}`);
+  
+  useEffect(() => {
+    const fetchProductName = async () => {
+      const id = typeof productId === 'string' ? parseInt(productId, 10) : productId;
+      
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('name')
+          .eq('id', id)
+          .single();
+        
+        if (error) {
+          console.error('Error fetching product name:', error);
+          return;
+        }
+        
+        if (data) {
+          setProductName(data.name);
+        }
+      } catch (error) {
+        console.error('Error in useProductName hook:', error);
+      }
+    };
+    
+    fetchProductName();
   }, [productId]);
+  
+  return productName;
 }

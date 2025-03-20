@@ -1,33 +1,7 @@
 
+import { supabase } from '@/integrations/supabase/client';
 import { Category } from './types';
 import { Tag, Package, TreePine, Gem } from 'lucide-react';
-
-export const categories: Category[] = [
-  {
-    id: 1,
-    name: "Jackets",
-    description: "Waterproof and insulated jackets for all conditions",
-    icon: "Package"
-  },
-  {
-    id: 2,
-    name: "Pants",
-    description: "Technical pants and bottoms for the outdoors",
-    icon: "Tag"
-  },
-  {
-    id: 3,
-    name: "Layers",
-    description: "Mid layers, base layers and insulation pieces",
-    icon: "TreePine"
-  },
-  {
-    id: 4,
-    name: "Accessories",
-    description: "Hats, gloves, and other essential gear",
-    icon: "Gem"
-  }
-];
 
 // Helper function to get icon component by name
 export const getCategoryIcon = (iconName: string) => {
@@ -43,4 +17,23 @@ export const getCategoryIcon = (iconName: string) => {
     default:
       return Package;
   }
+};
+
+// Function to fetch categories from Supabase
+export const fetchCategories = async (): Promise<Category[]> => {
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*');
+  
+  if (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+
+  return data.map(category => ({
+    id: category.id,
+    name: category.name,
+    description: category.description,
+    icon: category.icon
+  }));
 };

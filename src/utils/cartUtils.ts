@@ -19,38 +19,6 @@ export interface Order {
   total: number;
 }
 
-// Mock data for the shopping cart
-export const mockCartItems: CartItem[] = [
-  { id: 1, productId: 1, quantity: 1, price: 799.99, size: 'MD' },
-  { id: 2, productId: 6, quantity: 2, price: 399.99, size: 'LG' } // Out of stock item
-];
-
-export const mockSavedCarts: SavedCart[] = [
-  {
-    id: "d0b4f43b34bdc5c2",
-    date: "3/8/2025",
-    items: [
-      { id: 1, productId: 1, quantity: 1, price: 799.99, size: 'SM' },
-      { id: 2, productId: 6, quantity: 1, price: 399.99, size: 'MD' }, // Out of stock item
-      { id: 3, productId: 4, quantity: 2, price: 279.99, size: 'LG' }  // Low stock item
-    ]
-  },
-  {
-    id: "e5c3f28a9d71b4e6",
-    date: "3/10/2025",
-    items: [
-      { id: 4, productId: 2, quantity: 2, price: 449.99, size: 'XL' },
-      { id: 5, productId: 3, quantity: 1, price: 299.99, size: 'MD' }
-    ]
-  }
-];
-
-// Mock data for saved for later items
-export const mockSavedForLaterItems: CartItem[] = [
-  { id: 3, productId: 6, quantity: 1, price: 399.99, size: 'SM' }, // Out of stock item
-  { id: 4, productId: 5, quantity: 1, price: 349.99, size: 'LG' }  // Low stock item
-];
-
 import { Currency } from '@/contexts/LanguageContext';
 
 export const formatCurrency = (amount: number, currency: Currency = 'USD'): string => {

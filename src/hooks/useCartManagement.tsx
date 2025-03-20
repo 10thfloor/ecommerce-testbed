@@ -16,11 +16,11 @@ import { useCartSynchronization } from './cart/useCartSynchronization';
 import { useOrderHistory } from './cart/useOrderHistory';
 
 interface UseCartManagementProps {
-  initialCartItems: CartItem[];
-  initialSavedCarts: SavedCart[];
-  initialSavedForLaterItems: CartItem[];
-  initialStockWatchItems: Product[];
-  initialInventory: Record<number, number>;
+  initialCartItems?: CartItem[];
+  initialSavedCarts?: SavedCart[];
+  initialSavedForLaterItems?: CartItem[];
+  initialStockWatchItems?: Product[];
+  initialInventory?: Record<number, number>;
 }
 
 export const useCartManagement = ({

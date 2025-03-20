@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
@@ -10,6 +10,8 @@ import ProductResultSection from './product/ProductResultSection';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedDescription } from '@/utils/productUtils';
 import { useProducts, useCategories, useLimitedEditionProducts } from '@/hooks/useProducts';
+import { fetchCategories } from './product/categoryData';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
@@ -30,17 +32,49 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [showLimitedEditionOnly, setShowLimitedEditionOnly] = useState(false);
+  const [categoriesData, setCategoriesData] = useState<Record<number, number>>({});
 
   // Fetch data from Supabase
   const { data: products = [], isLoading: productsLoading } = useProducts();
   const { data: categories = [], isLoading: categoriesLoading } = useCategories();
   const { data: limitedEditionProducts = [], isLoading: limitedEditionLoading } = useLimitedEditionProducts();
 
+  useEffect(() => {
+    // Load category counts
+    const loadCategoryCounts = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('category_id, count')
+          .group('category_id');
+        
+        if (error) throw error;
+        
+        if (data) {
+          const counts = data.reduce((acc, item) => {
+            acc[item.category_id] = parseInt(item.count);
+            return acc;
+          }, {} as Record<number, number>);
+          
+          setCategoriesData(counts);
+        }
+      } catch (error) {
+        console.error('Error loading category counts:', error);
+      }
+    };
+    
+    loadCategoryCounts();
+  }, []);
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
   const productCountByCategory = useMemo(() => {
+    if (Object.keys(categoriesData).length > 0) {
+      return categoriesData;
+    }
+    
     return products.reduce((acc, product) => {
       const { categoryId } = product;
       if (!acc[categoryId]) {
@@ -49,7 +83,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       acc[categoryId]++;
       return acc;
     }, {} as Record<number, number>);
-  }, [products]);
+  }, [products, categoriesData]);
 
   const toggleCategory = (categoryId: number) => {
     setSelectedCategories(prev => {
@@ -181,6 +215,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
         onAddToCart={onAddToCart}
         onWatchItem={handleWatchItem}
         onSaveForLater={handleSaveForLater}
+        isLoading={productsLoading}
       />
       
       <SocialProofToast products={products} />

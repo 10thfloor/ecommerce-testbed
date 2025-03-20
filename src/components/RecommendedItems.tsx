@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Sparkles, Ban, Heart, Save, Trash, Zap } from 'lucide-react';
 import { Product } from '@/components/product/types';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from '@/integrations/supabase/client';
 
 interface RecommendedItemsProps {
   items?: Product[];
@@ -27,12 +28,21 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
   const { toast } = useToast();
   const [isExpanded, setIsExpanded] = useState(true);
   const [showPreferences, setShowPreferences] = useState(false);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
   const [preferences, setPreferences] = useState<UserPreferences>({
     interests: '',
     activities: '',
     favoriteColors: '',
     priceRange: ''
   });
+
+  useEffect(() => {
+    // Load preferences from localStorage on initial render
+    const savedPreferences = localStorage.getItem('userPreferences');
+    if (savedPreferences) {
+      setPreferences(JSON.parse(savedPreferences));
+    }
+  }, []);
 
   const handlePreferenceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -69,14 +79,6 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
       description: "Your preferences have been reset.",
     });
   };
-
-  // Load preferences from localStorage on initial render
-  React.useEffect(() => {
-    const savedPreferences = localStorage.getItem('userPreferences');
-    if (savedPreferences) {
-      setPreferences(JSON.parse(savedPreferences));
-    }
-  }, []);
 
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in">
@@ -212,9 +214,8 @@ const RecommendedItems: React.FC<RecommendedItemsProps> = ({
                   </p>
                 </div>
               ) : (
-                // This section will be populated with recommended items in the future
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Product recommendation grid will go here */}
+                  {/* Product recommendation grid will go here when we have recommendations */}
                 </div>
               )}
             </>
