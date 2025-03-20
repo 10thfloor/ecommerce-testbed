@@ -40,10 +40,16 @@ export const useSavedCarts = ({
     const date = new Date();
     const formattedDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     
+    // Create a deep copy of cart items to ensure they're completely independent
+    const savedCartItems = cartItems.map(item => ({
+      ...item,
+      id: `saved_${Date.now()}_${item.id}` // Generate new IDs for saved items
+    }));
+    
     const newSavedCart: SavedCart = {
       id: generateCartId(),
       date: formattedDate,
-      items: [...cartItems]
+      items: savedCartItems
     };
     
     setSavedCarts([...savedCarts, newSavedCart]);
@@ -77,7 +83,13 @@ export const useSavedCarts = ({
       
       if (!isValid) return;
       
-      setCartItems([...cartToLoad.items]);
+      // Create new cart items with fresh IDs to ensure independence
+      const newCartItems = cartToLoad.items.map(item => ({
+        ...item,
+        id: Date.now() + Math.random() // Generate completely new IDs
+      }));
+      
+      setCartItems(newCartItems);
       setInventory(tempInventory);
       setLastLoadedCartId(cartId);
       
@@ -102,7 +114,7 @@ export const useSavedCarts = ({
       cartToAddFrom.items.forEach(itemToAdd => {
         if (tempInventory[Number(itemToAdd.productId)] >= itemToAdd.quantity) {
           const existingItemIndex = updatedCartItems.findIndex(
-            item => item.productId === itemToAdd.productId
+            item => item.productId === itemToAdd.productId && item.size === itemToAdd.size
           );
           
           if (existingItemIndex !== -1) {
@@ -110,7 +122,7 @@ export const useSavedCarts = ({
           } else {
             updatedCartItems.push({
               ...itemToAdd,
-              id: Date.now() + Math.random()
+              id: Date.now() + Math.random() // Generate new IDs for added items
             });
           }
           
