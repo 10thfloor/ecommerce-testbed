@@ -89,10 +89,12 @@ export const useStockWatchSync = ({
   const saveStockWatchItems = async (userId: string, stockWatchItems: Product[]) => {
     try {
       // First delete all existing stock watch items
-      await supabase
+      const { error: deleteError } = await supabase
         .from('stock_watch')
         .delete()
         .eq('user_id', userId);
+      
+      if (deleteError) throw deleteError;
       
       // Then insert new stock watch items
       if (stockWatchItems.length > 0) {
@@ -101,15 +103,20 @@ export const useStockWatchSync = ({
           product_id: item.id
         }));
         
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('stock_watch')
           .insert(stockWatchToInsert);
         
-        if (error) throw error;
+        if (insertError) throw insertError;
       }
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving stock watch items:', error);
+      toast({
+        title: "Sync Error",
+        description: "Failed to save watched items to the server. " + error.message,
+        variant: "destructive",
+      });
       return false;
     }
   };
@@ -117,7 +124,12 @@ export const useStockWatchSync = ({
   // Sync stock watch items when they change
   useEffect(() => {
     if (!userId || isInitialLoad || isSyncing) return;
-    saveStockWatchItems(userId, stockWatchItems);
+    
+    const syncStockWatchItems = async () => {
+      await saveStockWatchItems(userId, stockWatchItems);
+    };
+    
+    syncStockWatchItems();
   }, [stockWatchItems, userId, isInitialLoad, isSyncing]);
 
   return {

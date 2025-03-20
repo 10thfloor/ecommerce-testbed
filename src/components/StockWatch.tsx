@@ -23,7 +23,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
 }) => {
   const { toast } = useToast();
   const [emailNotifications, setEmailNotifications] = useState(true);
-  const { currency } = useTranslation();
+  const { t, currency } = useTranslation();
 
   const toggleEmailNotifications = () => {
     const newState = !emailNotifications;
@@ -45,11 +45,11 @@ const StockWatch: React.FC<StockWatchProps> = ({
             <div className="bg-primary/10 rounded-lg p-1 mr-2">
               <Eye className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-lg font-medium">Stock Watch</h3>
+            <h3 className="text-lg font-medium">{t('stock.title')}</h3>
           </div>
         </div>
         <div className="text-center py-4 text-muted-foreground">
-          You're not watching any items.
+          {t('stock.emptyState')}
         </div>
       </div>
     );
@@ -62,20 +62,20 @@ const StockWatch: React.FC<StockWatchProps> = ({
           <div className="bg-primary/10 rounded-lg p-1 mr-2">
             <Eye className="h-4 w-4 text-primary" />
           </div>
-          <h3 className="text-lg font-medium">Stock Watch</h3>
+          <h3 className="text-lg font-medium">{t('stock.title')}</h3>
           <span className="ml-2 text-xs bg-secondary px-1.5 py-0.5 rounded-md">
-            {items.length} {items.length === 1 ? 'item' : 'items'}
+            {items.length} {items.length === 1 ? t('stock.item') : t('stock.items')}
           </span>
         </div>
 
         <div className="flex items-center gap-1">
           <Mail className="h-3 w-3 text-primary" />
-          <span className="text-xs font-medium mr-1">Notify</span>
+          <span className="text-xs font-medium mr-1">{t('stock.notify')}</span>
           <Switch
             checked={emailNotifications}
             onCheckedChange={toggleEmailNotifications}
             className="h-4 w-7 data-[state=checked]:bg-primary"
-            aria-label={emailNotifications ? "Turn off email notifications" : "Turn on email notifications"}
+            aria-label={emailNotifications ? t('stock.turnOffNotifications') : t('stock.turnOnNotifications')}
           />
         </div>
       </div>
@@ -101,7 +101,7 @@ const StockWatch: React.FC<StockWatchProps> = ({
                     
                     {isInStock && (
                       <div className="text-xs font-medium text-green-600 dark:text-green-400 mt-1">
-                        Now in stock!
+                        {t('stock.nowInStock')}
                       </div>
                     )}
                   </div>
