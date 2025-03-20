@@ -1,14 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import ShoppingLayout from '@/components/ShoppingLayout';
 import ProductInventory from '@/components/ProductInventory';
 import { useCartManagement } from '@/hooks/useCartManagement';
 import { Product } from '@/components/product/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSupabaseSync } from '@/hooks/useSupabaseSync';
+import { useProducts } from '@/hooks/useProducts';
 
 const Products = () => {
-  const [userId] = React.useState("user-123");
   const { user } = useAuth();
   
   const { 
@@ -17,10 +17,14 @@ const Products = () => {
     savedForLaterItems,
     stockWatchItems,
     inventory,
+    setCartItems,
+    setSavedCarts,
+    setSavedForLaterItems,
     setStockWatchItems,
     handleAddToCart,
     handleWatchItem,
-    handleSaveProductForLater
+    handleSaveProductForLater,
+    setOrders
   } = useCartManagement({
     initialCartItems: [],
     initialSavedCarts: [],
@@ -35,9 +39,9 @@ const Products = () => {
     savedCarts,
     savedForLaterItems,
     stockWatchItems,
-    setCartItems: () => {},
-    setSavedCarts: () => {},
-    setSavedForLaterItems: () => {},
+    setCartItems,
+    setSavedCarts,
+    setSavedForLaterItems,
     setStockWatchItems
   });
 

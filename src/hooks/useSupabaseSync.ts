@@ -90,14 +90,42 @@ export const useSupabaseSync = ({
         
         // We need to convert stock watch data to Product objects using the product IDs
         if (stockWatchData && stockWatchData.length > 0) {
-          // For now, using existing product data from the local mock data
-          // Typically, you would fetch the full product data from a products table 
           const productIds = stockWatchData.map(item => item.product_id);
-          const watchedProducts = stockWatchItems.filter(product => 
-            productIds.includes(product.id)
-          );
           
-          if (watchedProducts.length !== stockWatchItems.length) {
+          // Fetch the actual product data for these IDs
+          const { data: productsData, error: productsError } = await supabase
+            .from('products')
+            .select(`
+              *,
+              product_sizes(*)
+            `)
+            .in('id', productIds);
+          
+          if (productsError) throw productsError;
+          
+          if (productsData && productsData.length > 0) {
+            const watchedProducts = productsData.map(product => {
+              return {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                description: {
+                  en: product.description_en,
+                  fr: product.description_fr,
+                  ja: product.description_ja
+                },
+                image: product.image,
+                inventory: product.inventory,
+                sizes: product.product_sizes.map((size: any) => ({
+                  name: size.name as any,
+                  inventory: size.inventory
+                })),
+                categoryId: product.category_id,
+                collectionId: product.collection_id,
+                isLimitedEdition: product.is_limited_edition
+              } as Product;
+            });
+            
             setStockWatchItems(watchedProducts);
           }
         }
@@ -140,11 +168,11 @@ export const useSupabaseSync = ({
         }
         
         setIsInitialLoad(false);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error loading user data:', error);
         toast({
           title: "Sync Error",
-          description: "Failed to load your data from the server.",
+          description: "Failed to load your data from the server. " + error.message,
           variant: "destructive",
         });
       } finally {
