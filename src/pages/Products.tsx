@@ -1,10 +1,8 @@
 
 import React from 'react';
 import ShoppingLayout from '@/components/ShoppingLayout';
-import ProductInventory from '@/components/ProductInventory';
 import ShoppingGrid from '@/components/ShoppingGrid';
 import { useCartManagement } from '@/hooks/useCartManagement';
-import { Product } from '@/components/product/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSupabaseSync } from '@/hooks/useSupabaseSync';
 import { isUserAuthenticated, getDefaultUserId } from '@/utils/authUtils';
