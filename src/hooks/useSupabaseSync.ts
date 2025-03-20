@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { CartItem, SavedCart } from '@/utils/cartUtils';
+import { CartItem, SavedCart, Order } from '@/utils/cartUtils';
 import { Product } from '@/components/product/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -11,10 +11,12 @@ interface UseSupabaseSyncProps {
   savedCarts: SavedCart[];
   savedForLaterItems: CartItem[];
   stockWatchItems: Product[];
+  orders: Order[];
   setCartItems: (items: CartItem[]) => void;
   setSavedCarts: (carts: SavedCart[]) => void;
   setSavedForLaterItems: (items: CartItem[]) => void;
   setStockWatchItems: (items: Product[]) => void;
+  setOrders: (orders: Order[]) => void;
 }
 
 export const useSupabaseSync = ({
@@ -22,10 +24,12 @@ export const useSupabaseSync = ({
   savedCarts,
   savedForLaterItems,
   stockWatchItems,
+  orders,
   setCartItems,
   setSavedCarts,
   setSavedForLaterItems,
-  setStockWatchItems
+  setStockWatchItems,
+  setOrders
 }: UseSupabaseSyncProps) => {
   const { user } = useAuth();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
