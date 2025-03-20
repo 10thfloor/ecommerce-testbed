@@ -88,5 +88,30 @@ export const cartTranslations: TranslationObject = {
     en: 'are',
     fr: 'sont',
     ja: 'は'
+  },
+  'cart.order_completed': {
+    en: 'Order Completed',
+    fr: 'Commande terminée',
+    ja: '注文完了'
+  },
+  'cart.processed': {
+    en: 'Successfully processed',
+    fr: 'Traité avec succès',
+    ja: '正常に処理されました'
+  },
+  'cart.for': {
+    en: 'for',
+    fr: 'pour',
+    ja: 'の'
+  },
+  'cart.no_available_items': {
+    en: 'No Available Items',
+    fr: 'Aucun article disponible',
+    ja: '利用可能なアイテムはありません'
+  },
+  'cart.no_available_items_description': {
+    en: 'All items in your cart are out of stock.',
+    fr: 'Tous les articles de votre panier sont en rupture de stock.',
+    ja: 'カート内のすべてのアイテムは在庫切れです。'
   }
 };

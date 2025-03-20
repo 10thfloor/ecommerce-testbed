@@ -36,5 +36,24 @@ const translations = {
 };
 
 export const translate = (key: string, language: Language = 'en'): string => {
-  return translations[language][key] || key;
+  // Check if the language exists in our translations
+  if (!translations[language]) {
+    console.warn(`Language ${language} not found, falling back to English`);
+    language = 'en';
+  }
+  
+  // Check if the key exists for this language
+  if (translations[language][key] === undefined) {
+    console.warn(`Translation key "${key}" missing for language "${language}"`);
+    
+    // Try to get English version as a fallback
+    if (language !== 'en' && translations.en[key]) {
+      return translations.en[key];
+    }
+    
+    // If we don't have a translation, use a friendly version of the key
+    return key.split('.').pop() || key;
+  }
+  
+  return translations[language][key];
 };
