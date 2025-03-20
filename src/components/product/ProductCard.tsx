@@ -46,6 +46,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Check if a size is selected
     if (!selectedSize) {
       toast({
         title: t('product.selectSizeFirst'),
@@ -54,6 +56,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
       });
       return;
     }
+    
+    // Check if the selected size has inventory
+    const selectedSizeObj = product.sizes.find(size => size.name === selectedSize);
+    if (!selectedSizeObj || selectedSizeObj.inventory <= 0) {
+      toast({
+        title: t('product.outOfStock'),
+        description: t('product.sizeOutOfStock'),
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Add to cart
     onAddToCart(product.id, product.price, selectedSize);
   };
 

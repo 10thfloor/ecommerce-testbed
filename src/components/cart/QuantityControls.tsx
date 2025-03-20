@@ -22,24 +22,27 @@ const QuantityControls: React.FC<QuantityControlsProps> = ({
   const { layout } = useLayout();
   const isCompact = layout === 'compact';
   
+  // Determine if we can increment (need to have stock available)
+  const canIncrement = !isOutOfStock && maxQuantity > 0 && quantity < maxQuantity;
+  
   return (
     <div className={`bg-secondary rounded-md flex items-center h-7 ${isOutOfStock ? 'opacity-50' : ''}`}>
       <button 
         onClick={onDecrement}
         className="p-1 hover:bg-muted rounded-l-md transition-colors"
         aria-label="Decrease quantity"
-        disabled={isOutOfStock}
+        disabled={isOutOfStock || quantity <= 1}
       >
         <Minus className="h-3 w-3" />
       </button>
       <span className="px-2 font-medium text-xs">{quantity}</span>
       <button 
         onClick={onIncrement}
-        className={`p-1 ${!isOutOfStock && quantity < maxQuantity ? 'hover:bg-muted' : ''} rounded-r-md transition-colors`}
+        className={`p-1 ${canIncrement ? 'hover:bg-muted' : ''} rounded-r-md transition-colors`}
         aria-label="Increase quantity"
-        disabled={isOutOfStock || quantity >= maxQuantity}
+        disabled={!canIncrement}
       >
-        <Plus className={`h-3 w-3 ${quantity >= maxQuantity ? 'text-muted-foreground' : ''}`} />
+        <Plus className={`h-3 w-3 ${!canIncrement ? 'text-muted-foreground' : ''}`} />
       </button>
     </div>
   );

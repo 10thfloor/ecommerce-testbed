@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -23,7 +24,8 @@ export const useCartOperations = ({
   const [inventory, setInventory] = useState<Record<number, number>>(initialInventory);
 
   const handleAddToCart = (productId: number, price: number, size?: string) => {
-    if (inventory[productId] <= 0) {
+    // Check if item is in stock
+    if (!inventory[productId] || inventory[productId] <= 0) {
       toast({
         title: "Out of Stock",
         description: `Product #${productId} is currently out of stock.`,
@@ -46,41 +48,58 @@ export const useCartOperations = ({
     );
     
     if (existingItemIndex !== -1) {
-      if (cartItems[existingItemIndex].quantity < inventory[productId]) {
+      // Item already exists in cart, update quantity if stock allows
+      if (inventory[productId] > 0) {
         const updatedItems = [...cartItems];
         updatedItems[existingItemIndex].quantity += 1;
         setCartItems(updatedItems);
         
+        // Update inventory
         const updatedInventory = { ...inventory };
         updatedInventory[productId] -= 1;
         setInventory(updatedInventory);
+        
+        // Save to history
+        saveToHistory(updatedItems, updatedInventory);
+        
+        toast({
+          title: "Quantity Updated",
+          description: `Increased quantity of ${size} size of product #${productId} in your cart.`,
+        });
       } else {
         toast({
           title: "Inventory Limit Reached",
-          description: `Sorry, we only have ${inventory[productId]} of this item in stock.`,
+          description: `Sorry, we don't have any more of this item in stock.`,
           variant: "destructive",
         });
-        return;
       }
     } else {
-      const newItem: CartItem = {
-        id: Date.now(),
-        productId,
-        quantity: 1,
-        price,
-        size
-      };
-      setCartItems([...cartItems, newItem]);
-      
-      const updatedInventory = { ...inventory };
-      updatedInventory[productId] -= 1;
-      setInventory(updatedInventory);
+      // Item doesn't exist in cart, add it
+      if (inventory[productId] > 0) {
+        const newItem: CartItem = {
+          id: Date.now(),
+          productId,
+          quantity: 1,
+          price,
+          size
+        };
+        const updatedItems = [...cartItems, newItem];
+        setCartItems(updatedItems);
+        
+        // Update inventory
+        const updatedInventory = { ...inventory };
+        updatedInventory[productId] -= 1;
+        setInventory(updatedInventory);
+        
+        // Save to history
+        saveToHistory(updatedItems, updatedInventory);
+        
+        toast({
+          title: "Item Added",
+          description: `Added ${size} size of product #${productId} to your cart.`,
+        });
+      }
     }
-    
-    toast({
-      title: "Item Added",
-      description: `Added ${size} size of product #${productId} to your cart.`,
-    });
   };
 
   const handleUpdateQuantity = (id: string | number, quantity: number) => {
@@ -90,7 +109,8 @@ export const useCartOperations = ({
     const productId = cartItem.productId;
     const currentQuantity = cartItem.quantity;
     
-    const availableInventory = inventory[Number(productId)] + currentQuantity;
+    // Calculate available inventory + what's already in the cart
+    const availableInventory = (inventory[Number(productId)] || 0) + currentQuantity;
     
     if (quantity > availableInventory) {
       toast({
@@ -101,25 +121,34 @@ export const useCartOperations = ({
       return;
     }
     
-    setCartItems(
-      cartItems.map(item => 
-        item.id === id ? { ...item, quantity } : item
-      )
+    const updatedItems = cartItems.map(item => 
+      item.id === id ? { ...item, quantity } : item
     );
+    setCartItems(updatedItems);
     
+    // Update inventory to reflect the new quantity
     const updatedInventory = { ...inventory };
     updatedInventory[Number(productId)] = availableInventory - quantity;
     setInventory(updatedInventory);
+    
+    // Save to history
+    saveToHistory(updatedItems, updatedInventory);
   };
 
   const handleRemoveItem = (id: string | number) => {
     const itemToRemove = cartItems.find(item => item.id === id);
     if (itemToRemove) {
+      // Return quantity to inventory
       const updatedInventory = { ...inventory };
-      updatedInventory[Number(itemToRemove.productId)] += itemToRemove.quantity;
+      updatedInventory[Number(itemToRemove.productId)] = (updatedInventory[Number(itemToRemove.productId)] || 0) + itemToRemove.quantity;
       setInventory(updatedInventory);
       
-      setCartItems(cartItems.filter(item => item.id !== id));
+      // Remove item from cart
+      const updatedItems = cartItems.filter(item => item.id !== id);
+      setCartItems(updatedItems);
+      
+      // Save to history
+      saveToHistory(updatedItems, updatedInventory);
       
       toast({
         title: "Item Removed",

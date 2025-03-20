@@ -1,4 +1,3 @@
-
 import { Language } from '@/contexts/LanguageContext';
 
 interface TranslationObject {
@@ -47,8 +46,8 @@ export const productTranslations: TranslationObject = {
     ja: '残り'
   },
   'product.outOfStock': {
-    en: 'Out of stock',
-    fr: 'Rupture de stock',
+    en: 'Out of Stock',
+    fr: 'Rupture de Stock',
     ja: '在庫切れ'
   },
   'product.addToCart': {
@@ -83,8 +82,8 @@ export const productTranslations: TranslationObject = {
   },
   'product.selectSizeFirst': {
     en: 'Select Size First',
-    fr: 'Sélectionnez d\'abord la taille',
-    ja: '最初にサイズを選択'
+    fr: 'Sélectionnez d\'abord une taille',
+    ja: 'まずサイズを選択してください'
   },
   'product.limitedEdition': {
     en: 'Limited Edition',
@@ -132,5 +131,10 @@ export const productTranslations: TranslationObject = {
     en: 'Limited Edition Items',
     fr: 'Articles en Édition Limitée',
     ja: '限定版アイテム'
+  },
+  'product.sizeOutOfStock': {
+    en: 'The selected size is out of stock',
+    fr: 'La taille sélectionnée est en rupture de stock',
+    ja: '選択したサイズは在庫切れです'
   },
 };

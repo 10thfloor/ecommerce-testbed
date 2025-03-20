@@ -37,7 +37,7 @@ const CartItem: React.FC<CartItemProps> = ({
   const { currency } = useTranslation();
   
   const handleIncrement = () => {
-    if (isOutOfStock || inventory[Number(item.productId)] <= item.quantity) return;
+    if (isOutOfStock || inventory[Number(item.productId)] <= 0) return;
     onUpdateQuantity(item.id, item.quantity + 1);
   };
 
