@@ -18,6 +18,10 @@ const AuthModal: React.FC<AuthModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'login' | 'signup'>(defaultTab);
 
+  const handleSuccess = () => {
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -38,10 +42,10 @@ const AuthModal: React.FC<AuthModalProps> = ({
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
           <TabsContent value="login" className="py-4">
-            <LoginForm onSuccess={() => onOpenChange(false)} />
+            <LoginForm onSuccess={handleSuccess} />
           </TabsContent>
           <TabsContent value="signup" className="py-4">
-            <SignupForm onSuccess={() => onOpenChange(false)} />
+            <SignupForm onSuccess={handleSuccess} />
           </TabsContent>
         </Tabs>
       </DialogContent>

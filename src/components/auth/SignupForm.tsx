@@ -7,7 +7,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowRight, Mail, LockKeyhole, AtSign } from 'lucide-react';
 
-const SignupForm = () => {
+interface SignupFormProps {
+  onSuccess?: () => void;
+}
+
+const SignupForm: React.FC<SignupFormProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -44,7 +48,14 @@ const SignupForm = () => {
       return;
     }
     
-    await signUp(email, password);
+    try {
+      await signUp(email, password);
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      // Error is already handled in the signUp function
+    }
   };
 
   return (

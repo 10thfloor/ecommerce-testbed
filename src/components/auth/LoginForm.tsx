@@ -7,7 +7,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { ArrowRight, Mail, LockKeyhole, AtSign } from 'lucide-react';
 
-const LoginForm = () => {
+interface LoginFormProps {
+  onSuccess?: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { signIn, loading } = useAuth();
@@ -25,7 +29,14 @@ const LoginForm = () => {
       return;
     }
     
-    await signIn(email, password);
+    try {
+      await signIn(email, password);
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      // Error is already handled in the signIn function
+    }
   };
 
   return (
