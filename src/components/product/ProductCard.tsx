@@ -80,6 +80,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           description={localizedDescription}
           category={category}
           isLimitedEdition={product.isLimitedEdition}
+          isOutOfStock={!hasSizeInStock}
         />
         
         <SizeSelector

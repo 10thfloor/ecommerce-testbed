@@ -1,44 +1,50 @@
 
 import React from 'react';
+import { PackageX } from 'lucide-react';
 import { Badge } from '../ui/badge';
-import { Diamond } from 'lucide-react';
-import { useTranslation } from '@/hooks/useTranslation';
 import { Category } from './types';
 
 interface ProductHeaderProps {
   name: string;
   description: string;
-  category?: Category;
+  category?: Category | null;
   isLimitedEdition?: boolean;
+  isOutOfStock?: boolean;
 }
 
-const ProductHeader: React.FC<ProductHeaderProps> = ({ 
-  name, 
-  description, 
-  category, 
-  isLimitedEdition 
+const ProductHeader: React.FC<ProductHeaderProps> = ({
+  name,
+  description,
+  category,
+  isLimitedEdition = false,
+  isOutOfStock = false,
 }) => {
-  const { t } = useTranslation();
-  
   return (
-    <div className="mb-2">
-      {/* Category badge */}
+    <div className="mb-3">
+      <div className="flex items-center gap-2 mb-1">
+        <h3 className="font-medium text-sm line-clamp-1">{name}</h3>
+        
+        {isOutOfStock && (
+          <div className="flex items-center text-amber-600 dark:text-amber-400">
+            <PackageX className="h-3.5 w-3.5 mr-0.5" />
+            <span className="text-xs font-medium">Out of Stock</span>
+          </div>
+        )}
+        
+        {isLimitedEdition && (
+          <Badge variant="outline" className="bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/30 text-[10px] py-0 h-4">
+            Limited
+          </Badge>
+        )}
+      </div>
+      
+      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{description}</p>
+      
       {category && (
-        <div className="text-xs font-medium rounded-full px-2 py-0.5 inline-block mb-1.5 bg-secondary/70 text-foreground/70">
+        <div className="text-xs text-muted-foreground bg-secondary/50 py-0.5 px-2 rounded-sm w-fit">
           {category.name}
         </div>
       )}
-      
-      {/* Limited Edition Badge */}
-      {isLimitedEdition && (
-        <Badge className="mb-1.5 ml-1 bg-purple-500/70 hover:bg-purple-500/80 font-normal">
-          <Diamond className="h-3 w-3 mr-1" />
-          {t('product.limitedEdition')}
-        </Badge>
-      )}
-      
-      <h4 className="font-medium text-base mb-1">{name}</h4>
-      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{description}</p>
     </div>
   );
 };
