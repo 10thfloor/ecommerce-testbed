@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { User, LogOut, LogIn } from 'lucide-react';
+import { User, LogOut, LogIn, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -42,10 +42,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, className }) => {
               <span className="font-medium">{user.email}</span>
             </>
           ) : (
-            <>
-              <span className="text-xs text-muted-foreground">Guest User</span>
-              <span className="font-medium">User ID: {userId}</span>
-            </>
+            <span className="font-medium">Guest</span>
           )}
         </div>
         
@@ -69,7 +66,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, className }) => {
                 className="h-8 px-2"
               >
                 <LogIn className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Login</span>
+                <span>Login</span>
               </Button>
               <Button 
                 variant="default" 
@@ -77,7 +74,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId, className }) => {
                 onClick={handleOpenSignup}
                 className="h-8 px-2"
               >
-                <span className="hidden sm:inline">Sign Up</span>
+                <UserPlus className="h-4 w-4 mr-1" />
+                <span>Sign Up</span>
               </Button>
             </div>
           )}
