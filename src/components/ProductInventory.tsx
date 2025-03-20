@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { Product } from './product/types';
@@ -43,16 +42,21 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     // Load category counts
     const loadCategoryCounts = async () => {
       try {
+        // Instead of using group, we'll count products by category manually
         const { data, error } = await supabase
           .from('products')
-          .select('category_id, count')
-          .group('category_id');
+          .select('category_id');
         
         if (error) throw error;
         
         if (data) {
+          // Count occurrences of each category_id
           const counts = data.reduce((acc, item) => {
-            acc[item.category_id] = parseInt(item.count);
+            const categoryId = item.category_id;
+            if (!acc[categoryId]) {
+              acc[categoryId] = 0;
+            }
+            acc[categoryId]++;
             return acc;
           }, {} as Record<number, number>);
           

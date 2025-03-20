@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
-import { Product, ProductSize } from '@/components/product/types';
+import React, { useState, useEffect } from 'react';
+import { Product, ProductSize, Category } from '@/components/product/types';
 import SizeSelector from './SizeSelector';
 import { useToast } from '@/hooks/use-toast';
-import { categories } from './categoryData';
+import { fetchCategories } from './categoryData';
 import { useTranslation } from '@/hooks/useTranslation';
 import { getLocalizedDescription } from '@/utils/productUtils';
 import { getProductBadge } from './utils/productBadgeUtils';
@@ -29,8 +29,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onSaveForLater
 }) => {
   const [selectedSize, setSelectedSize] = useState<ProductSize['name'] | undefined>();
+  const [category, setCategory] = useState<Category | undefined>();
   const { toast } = useToast();
   const { language, t } = useTranslation();
+
+  // Fetch category information for this product
+  useEffect(() => {
+    const loadCategory = async () => {
+      const categories = await fetchCategories();
+      const foundCategory = categories.find(c => c.id === product.categoryId);
+      setCategory(foundCategory);
+    };
+    
+    loadCategory();
+  }, [product.categoryId]);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -51,9 +63,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   // Get badge from product attributes in the database
   const badge = getProductBadge(product.id, productAttributes);
-
-  // Get category name
-  const category = categories.find(c => c.id === product.categoryId);
   
   // Calculate if any size has inventory
   const hasSizeInStock = product.sizes.some(size => size.inventory > 0);

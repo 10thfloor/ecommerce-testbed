@@ -37,3 +37,16 @@ export const fetchCategories = async (): Promise<Category[]> => {
     icon: category.icon
   }));
 };
+
+// Export categories array for component use
+export const categories: Category[] = [];
+
+// Initialize categories
+(async () => {
+  try {
+    const fetchedCategories = await fetchCategories();
+    categories.push(...fetchedCategories);
+  } catch (error) {
+    console.error('Error initializing categories:', error);
+  }
+})();
