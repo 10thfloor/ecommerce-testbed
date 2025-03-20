@@ -43,7 +43,8 @@ const CartItemDetails: React.FC<CartItemDetailsProps> = ({
         )}
         {isOutOfStock && (
           <div className="ml-2 flex items-center text-amber-600 dark:text-amber-400">
-            <PackageX className="h-3 w-3" />
+            <PackageX className="h-4 w-4 mr-1" />
+            <span className="text-xs font-medium">Out of Stock</span>
           </div>
         )}
       </div>
