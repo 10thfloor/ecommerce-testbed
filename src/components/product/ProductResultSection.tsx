@@ -21,6 +21,8 @@ const ProductResultSection = ({
   onWatchItem,
   onSaveForLater
 }: ProductResultSectionProps) => {
+  const { data: productAttributes } = useProductAttributes();
+
   if (filteredProducts.length === 0) {
     return (
       <div className="bg-secondary/20 text-center py-8 rounded-lg text-muted-foreground mt-4">
@@ -34,6 +36,7 @@ const ProductResultSection = ({
       <ProductsGrid 
         products={filteredProducts}
         watchedItems={watchedItems}
+        productAttributes={productAttributes}
         onAddToCart={onAddToCart}
         onWatchItem={onWatchItem}
         onSaveForLater={onSaveForLater}

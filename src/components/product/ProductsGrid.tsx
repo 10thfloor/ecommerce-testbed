@@ -6,6 +6,7 @@ import { Product } from './types';
 interface ProductsGridProps {
   products: Product[];
   watchedItems: number[];
+  productAttributes?: Record<number, any[]>;
   onAddToCart: (productId: number, price: number, size?: string) => void;
   onWatchItem?: (product: Product) => void;
   onSaveForLater?: (product: Product) => void;
@@ -14,6 +15,7 @@ interface ProductsGridProps {
 const ProductsGrid: React.FC<ProductsGridProps> = ({ 
   products, 
   watchedItems, 
+  productAttributes,
   onAddToCart, 
   onWatchItem,
   onSaveForLater
@@ -25,6 +27,7 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({
           key={product.id}
           product={product}
           isWatched={watchedItems.includes(product.id)}
+          productAttributes={productAttributes}
           onAddToCart={onAddToCart}
           onWatchItem={onWatchItem}
           onSaveForLater={onSaveForLater}

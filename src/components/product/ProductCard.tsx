@@ -10,11 +10,11 @@ import { getProductBadge } from './utils/productBadgeUtils';
 import ProductBadge from './ProductBadge';
 import ProductHeader from './ProductHeader';
 import ProductActions from './ProductActions';
-import { useProductAttributes } from '@/hooks/useProducts';
 
 interface ProductCardProps {
   product: Product;
   isWatched: boolean;
+  productAttributes?: Record<number, any[]>;
   onAddToCart: (productId: number, price: number, size?: string) => void;
   onWatchItem?: (product: Product) => void;
   onSaveForLater?: (product: Product) => void;
@@ -23,6 +23,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ 
   product, 
   isWatched, 
+  productAttributes,
   onAddToCart, 
   onWatchItem,
   onSaveForLater
@@ -30,7 +31,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [selectedSize, setSelectedSize] = useState<ProductSize['name'] | undefined>();
   const { toast } = useToast();
   const { language, t } = useTranslation();
-  const { data: productAttributes } = useProductAttributes();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
