@@ -156,10 +156,10 @@ export const useSavedCarts = ({
 
   return {
     savedCarts,
+    setSavedCarts,
     handleSaveCart,
     handleLoadCart,
     handleAddCartItems,
     handleDeleteCart
   };
 };
-

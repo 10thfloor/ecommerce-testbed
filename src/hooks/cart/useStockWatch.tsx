@@ -95,6 +95,7 @@ export const useStockWatch = ({
 
   return {
     stockWatchItems,
+    setStockWatchItems,
     handleWatchItem,
     handleWatchProductId,
     handleRemoveFromWatch,

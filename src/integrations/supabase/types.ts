@@ -9,7 +9,170 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      cart_items: {
+        Row: {
+          created_at: string
+          id: string
+          price: number
+          product_id: number
+          quantity: number
+          size: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          price: number
+          product_id: number
+          quantity: number
+          size?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          price?: number
+          product_id?: number
+          quantity?: number
+          size?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_cart_items: {
+        Row: {
+          created_at: string
+          id: string
+          price: number
+          product_id: number
+          quantity: number
+          saved_cart_id: string
+          size: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          price: number
+          product_id: number
+          quantity: number
+          saved_cart_id: string
+          size?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          price?: number
+          product_id?: number
+          quantity?: number
+          saved_cart_id?: string
+          size?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_cart_items_saved_cart_id_fkey"
+            columns: ["saved_cart_id"]
+            isOneToOne: false
+            referencedRelation: "saved_carts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_carts: {
+        Row: {
+          cart_id: string
+          created_at: string
+          date: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          cart_id: string
+          created_at?: string
+          date: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          cart_id?: string
+          created_at?: string
+          date?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      saved_for_later: {
+        Row: {
+          created_at: string
+          id: string
+          price: number
+          product_id: number
+          quantity: number
+          size: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          price: number
+          product_id: number
+          quantity: number
+          size?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          price?: number
+          product_id?: number
+          quantity?: number
+          size?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      stock_watch: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

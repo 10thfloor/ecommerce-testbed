@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ShoppingLayout from '@/components/ShoppingLayout';
 import ShoppingGrid from '@/components/ShoppingGrid';
 import { useCartManagement } from '@/hooks/useCartManagement';
@@ -9,6 +9,8 @@ import {
   mockSavedForLaterItems,
 } from '@/utils/cartUtils';
 import { Product } from '@/components/product/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSupabaseSync } from '@/hooks/useSupabaseSync';
 
 // Initial product inventory
 const productInventory: Record<number, number> = {
@@ -58,6 +60,7 @@ const initialStockWatchItems: Product[] = [
 
 const Index = () => {
   const [userId] = useState("user-123");
+  const { user } = useAuth();
   
   const { 
     cartItems,
@@ -66,6 +69,11 @@ const Index = () => {
     stockWatchItems,
     inventory,
     orders,
+    setCartItems,
+    setSavedCarts,
+    setSavedForLaterItems,
+    setStockWatchItems,
+    setOrders,
     handleAddToCart,
     handleUpdateQuantity,
     handleRemoveItem,
@@ -86,20 +94,35 @@ const Index = () => {
     handleSaveProductForLater,
     handleCheckout
   } = useCartManagement({
-    initialCartItems: mockCartItems,
-    initialSavedCarts: mockSavedCarts,
-    initialSavedForLaterItems: mockSavedForLaterItems,
+    initialCartItems: user ? [] : mockCartItems,
+    initialSavedCarts: user ? [] : mockSavedCarts,
+    initialSavedForLaterItems: user ? [] : mockSavedForLaterItems,
     initialInventory: productInventory,
-    initialStockWatchItems: initialStockWatchItems
+    initialStockWatchItems: user ? [] : initialStockWatchItems
+  });
+
+  // Integrate with Supabase
+  const { isSyncing } = useSupabaseSync({
+    cartItems,
+    savedCarts,
+    savedForLaterItems,
+    stockWatchItems,
+    setCartItems,
+    setSavedCarts,
+    setSavedForLaterItems,
+    setStockWatchItems
   });
 
   // Get watched product IDs
   const watchedProductIds = stockWatchItems.map(item => item.id);
 
+  // Get the actual user ID (either from auth or guest ID)
+  const currentUserId = user ? user.id : userId;
+
   return (
     <ShoppingLayout title="E-Commerce Testbed">
       <ShoppingGrid
-        userId={userId}
+        userId={currentUserId}
         cartItems={cartItems}
         savedCarts={savedCarts}
         savedForLaterItems={savedForLaterItems}

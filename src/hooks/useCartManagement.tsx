@@ -125,6 +125,13 @@ export const useCartManagement = ({
     stockWatchItems: stockWatch.stockWatchItems,
     inventory: inventoryManagement.inventory,
     orders: orderHistory.orders,
+    // Expose setter methods for Supabase sync
+    setCartItems: cartOperations.setCartItems,
+    setSavedCarts: savedCarts.setSavedCarts,
+    setSavedForLaterItems: savedForLater.setSavedForLaterItems,
+    setStockWatchItems: stockWatch.setStockWatchItems,
+    setOrders: orderHistory.setOrders,
+    // Action handlers
     handleAddToCart: cartOperations.handleAddToCart,
     handleUpdateQuantity: cartOperations.handleUpdateQuantity,
     handleRemoveItem: cartOperations.handleRemoveItem,

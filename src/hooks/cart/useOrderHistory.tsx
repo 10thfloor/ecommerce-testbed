@@ -27,6 +27,7 @@ export const useOrderHistory = ({
 
   return {
     orders,
+    setOrders,
     addOrder
   };
 };
