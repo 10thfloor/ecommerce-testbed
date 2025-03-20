@@ -46,13 +46,11 @@ const Auth = () => {
         </div>
       </div>
       
-      {/* Right panel with darker gradient background and no text */}
-      <div className="hidden md:block w-1/2 bg-gradient-to-br from-[#1A1F2C] via-[#221F26] to-[#403E43] relative overflow-hidden">
+      {/* Right panel with purple gradient background similar to product drops */}
+      <div className="hidden md:block w-1/2 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          {/* Subtle circular patterns */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/10 mix-blend-overlay"></div>
-          <div className="absolute top-1/3 left-1/3 w-80 h-80 rounded-full bg-accent/5 mix-blend-overlay"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full bg-primary/5 mix-blend-overlay"></div>
+          <div className="absolute transform rotate-45 -left-1/4 -top-24 w-full h-full border-4 border-purple-300 rounded-full"></div>
+          <div className="absolute transform rotate-12 left-1/2 -top-12 w-full h-full border-4 border-indigo-300 rounded-full"></div>
         </div>
       </div>
     </div>
