@@ -10,6 +10,7 @@ import {
   fetchProductAttributes
 } from "@/services/productsService";
 import { Product, Category, Collection } from "@/components/product/types";
+import { supabase } from "@/integrations/supabase/client";
 
 export function useProducts() {
   return useQuery({
