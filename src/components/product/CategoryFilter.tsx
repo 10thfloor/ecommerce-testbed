@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { categories, getCategoryIcon } from './categoryData';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Filter, X } from 'lucide-react';
+import { Filter } from 'lucide-react';
+import { useCategories } from '@/hooks/useProducts';
 
 interface CategoryFilterProps {
   selectedCategories: number[];
@@ -12,102 +12,53 @@ interface CategoryFilterProps {
   productCountByCategory: Record<number, number>;
 }
 
-const CategoryFilter: React.FC<CategoryFilterProps> = ({ 
-  selectedCategories, 
+const CategoryFilter: React.FC<CategoryFilterProps> = ({
+  selectedCategories,
   onSelectCategory,
   onClearCategories,
   productCountByCategory
 }) => {
-  const totalProducts = Object.values(productCountByCategory).reduce((a, b) => a + b, 0);
-  const hasFilters = selectedCategories.length > 0;
+  const { data: categories = [], isLoading } = useCategories();
   
-  const toggleCategory = (categoryId: number) => {
-    onSelectCategory(categoryId);
-  };
+  if (isLoading) {
+    return <div className="text-muted-foreground text-sm">Loading categories...</div>;
+  }
   
   return (
-    <div className="mb-4 bg-secondary/10 rounded-lg p-3">
-      <div className="flex items-center justify-between mb-2">
+    <div className="bg-secondary/30 rounded-lg p-4 space-y-3">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Filter className="h-3.5 w-3.5 text-primary" />
-          <h3 className="text-xs font-medium text-muted-foreground">Categories</h3>
+          <Filter className="h-4 w-4 text-primary" />
+          <span className="font-medium text-sm">Filter by Category</span>
         </div>
         
-        <div className="h-7">
-          {hasFilters && (
-            <Button
-              variant="ghost"
-              size="xs"
-              className="py-1.5 px-3 bg-primary/10 hover:bg-primary/20 text-primary font-medium rounded-md text-xs transition-colors"
-              onClick={onClearCategories}
-            >
-              Clear all
-            </Button>
-          )}
-        </div>
+        {selectedCategories.length > 0 && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onClearCategories}
+            className="h-7 text-xs"
+          >
+            Clear All
+          </Button>
+        )}
       </div>
       
-      <div className="flex flex-nowrap overflow-x-auto gap-1.5 pb-1">
-        <Button
-          variant={!hasFilters ? "outline" : "ghost"}
-          size="xs"
-          className={`rounded-full whitespace-nowrap h-7 transition-all duration-200 ${
-            !hasFilters 
-              ? "bg-blue-500/5 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10" 
-              : "hover:bg-secondary/80"
-          }`}
-          onClick={onClearCategories}
-        >
-          All
-          <Badge 
-            variant="secondary" 
-            className={`ml-1 text-[10px] px-1.5 ${
-              !hasFilters
-                ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                : "bg-secondary"
-            }`}
-          >
-            {totalProducts}
-          </Badge>
-        </Button>
-        
-        {categories.map((category) => {
-          const Icon = getCategoryIcon(category.icon);
+      <div className="flex flex-wrap gap-2">
+        {categories.map(category => {
+          const isSelected = selectedCategories.includes(category.id);
           const count = productCountByCategory[category.id] || 0;
           
-          if (count === 0) return null;
-          
-          const isSelected = selectedCategories.includes(category.id);
-          
           return (
-            <Button
+            <Badge
               key={category.id}
-              variant={isSelected ? "outline" : "ghost"}
-              size="xs"
-              className={`rounded-full whitespace-nowrap h-7 transition-all duration-200 ${
-                isSelected
-                  ? "bg-blue-500/5 border-blue-500/20 text-blue-700 dark:text-blue-400 hover:bg-blue-500/10"
-                  : "hover:bg-secondary/80"
-              }`}
-              onClick={() => toggleCategory(category.id)}
+              variant={isSelected ? "default" : "outline"}
+              className={`cursor-pointer ${isSelected ? 'bg-primary' : 'hover:bg-secondary'}`}
+              onClick={() => onSelectCategory(category.id)}
             >
-              <Icon className="h-3 w-3 mr-1" />
               {category.name}
-              <Badge 
-                variant="secondary"
-                className={`ml-1 text-[10px] px-1.5 ${
-                  isSelected
-                    ? "bg-blue-500/10 text-blue-700 dark:text-blue-400"
-                    : "bg-secondary"
-                }`}
-              >
-                {count}
-              </Badge>
-              
-              {isSelected && (
-                <X className="h-3 w-3 ml-1 opacity-70" />
-              )}
-            </Button>
+              {count > 0 && <span className="ml-1 opacity-70">({count})</span>}
+            </Badge>
           );
         })}
       </div>

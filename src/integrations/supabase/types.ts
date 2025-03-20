@@ -39,6 +39,152 @@ export type Database = {
         }
         Relationships: []
       }
+      categories: {
+        Row: {
+          description: string | null
+          icon: string | null
+          id: number
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          icon?: string | null
+          id?: number
+          name: string
+        }
+        Update: {
+          description?: string | null
+          icon?: string | null
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      collections: {
+        Row: {
+          description: string | null
+          end_date: string
+          id: number
+          image: string | null
+          is_active: boolean
+          name: string
+          start_date: string
+          theme_primary: string | null
+          theme_secondary: string | null
+        }
+        Insert: {
+          description?: string | null
+          end_date: string
+          id?: number
+          image?: string | null
+          is_active?: boolean
+          name: string
+          start_date: string
+          theme_primary?: string | null
+          theme_secondary?: string | null
+        }
+        Update: {
+          description?: string | null
+          end_date?: string
+          id?: number
+          image?: string | null
+          is_active?: boolean
+          name?: string
+          start_date?: string
+          theme_primary?: string | null
+          theme_secondary?: string | null
+        }
+        Relationships: []
+      }
+      product_sizes: {
+        Row: {
+          id: number
+          inventory: number
+          name: string
+          product_id: number
+        }
+        Insert: {
+          id?: number
+          inventory?: number
+          name: string
+          product_id: number
+        }
+        Update: {
+          id?: number
+          inventory?: number
+          name?: string
+          product_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_sizes_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          category_id: number
+          collection_id: number | null
+          created_at: string
+          description_en: string
+          description_fr: string
+          description_ja: string
+          id: number
+          image: string
+          inventory: number
+          is_limited_edition: boolean | null
+          name: string
+          price: number
+        }
+        Insert: {
+          category_id: number
+          collection_id?: number | null
+          created_at?: string
+          description_en: string
+          description_fr: string
+          description_ja: string
+          id?: number
+          image: string
+          inventory?: number
+          is_limited_edition?: boolean | null
+          name: string
+          price: number
+        }
+        Update: {
+          category_id?: number
+          collection_id?: number | null
+          created_at?: string
+          description_en?: string
+          description_fr?: string
+          description_ja?: string
+          id?: number
+          image?: string
+          inventory?: number
+          is_limited_edition?: boolean | null
+          name?: string
+          price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

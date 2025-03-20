@@ -1,6 +1,6 @@
+
 import React, { useState, useMemo } from 'react';
 import { useToast } from "@/hooks/use-toast";
-import { products, getLimitedEditionProducts } from './product/productData';
 import { Product } from './product/types';
 import SocialProofToast from './product/SocialProofToast';
 import ProductInventoryHeader from './product/ProductInventoryHeader';
@@ -9,6 +9,7 @@ import ProductFilterSection from './product/ProductFilterSection';
 import ProductResultSection from './product/ProductResultSection';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getLocalizedDescription } from '@/utils/productUtils';
+import { useProducts, useCategories, useLimitedEditionProducts } from '@/hooks/useProducts';
 
 interface ProductInventoryProps {
   onAddToCart: (productId: number, price: number) => void;
@@ -30,6 +31,11 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [showLimitedEditionOnly, setShowLimitedEditionOnly] = useState(false);
 
+  // Fetch data from Supabase
+  const { data: products = [], isLoading: productsLoading } = useProducts();
+  const { data: categories = [], isLoading: categoriesLoading } = useCategories();
+  const { data: limitedEditionProducts = [], isLoading: limitedEditionLoading } = useLimitedEditionProducts();
+
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
@@ -43,7 +49,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
       acc[categoryId]++;
       return acc;
     }, {} as Record<number, number>);
-  }, []);
+  }, [products]);
 
   const toggleCategory = (categoryId: number) => {
     setSelectedCategories(prev => {
@@ -82,20 +88,19 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
     }
     
     return filtered;
-  }, [searchQuery, selectedCategories, showLimitedEditionOnly, language]);
-
-  const limitedEditionProducts = useMemo(() => {
-    return getLimitedEditionProducts();
-  }, []);
+  }, [searchQuery, selectedCategories, showLimitedEditionOnly, products, language]);
 
   const featuredProducts = useMemo(() => {
     // For featured products, exclude limited editions since they have their own section
-    const availableProducts = products.filter(p => p.inventory > 0 && !p.isLimitedEdition);
+    const availableProducts = products.filter(p => {
+      const hasSizeInStock = p.sizes.some(size => size.inventory > 0);
+      return hasSizeInStock && !p.isLimitedEdition;
+    });
       
     return [...availableProducts]
       .sort((a, b) => b.price - a.price)
       .slice(0, 2);
-  }, []);
+  }, [products]);
 
   const handleWatchItem = (product: Product) => {
     const productId = product.id;
@@ -135,6 +140,17 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({
   const allWatchedItems = [...new Set([...watchedItems, ...notifiedItems])];
 
   const limitedEditionCount = limitedEditionProducts.length;
+
+  // Show loading state
+  if (productsLoading || categoriesLoading || limitedEditionLoading) {
+    return (
+      <div className="card-glass p-4 mb-6 animate-fade-in h-full">
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">Loading products...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="card-glass p-4 mb-6 animate-fade-in h-full">
